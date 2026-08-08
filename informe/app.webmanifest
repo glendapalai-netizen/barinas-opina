@@ -1,0 +1,15 @@
+{
+  "name": "OPINA · Informe de CADTEBA",
+  "short_name": "Informe",
+  "description": "El tablero de la consulta, para la Junta Directiva",
+  "start_url": "/informe/",
+  "scope": "/informe/",
+  "display": "standalone",
+  "background_color": "#070B10",
+  "theme_color": "#070B10",
+  "lang": "es",
+  "icons": [
+    { "src": "/icono-informe.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icono-informe.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

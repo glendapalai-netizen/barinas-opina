@@ -1,0 +1,15 @@
+{
+  "name": "BARINAS OPINA",
+  "short_name": "OPINA",
+  "description": "La consulta del turismo de Barinas · CADTEBA",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0B1119",
+  "theme_color": "#0B1119",
+  "lang": "es",
+  "icons": [
+    { "src": "/icono-opina.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icono-opina.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -327,6 +327,13 @@ navegador, se saltaría en dos minutos y sería peor que una clave compartida.
 **Los municipios con una sola respuesta se marcan.** El informe dice lo que
 sabe y no finge saber más.
 
+**Los dos iconos se distinguen a 40 píxeles.** El de la consulta es una O
+fucsia con la B naranja adentro; el del informe, una I fucsia con la B naranja
+pegada al lado. Se dibujan con formas —la O es un anillo, la I es una barra— y
+no con una tipografía: a tamaño de teléfono una letra dibujada aguanta y una
+compuesta se ensucia. Van sobre negro pleno, sin margen, para que el recorte
+redondeado del teléfono no se coma nada.
+
 **El logotipo va en versales**: BARINAS OPINA, azul y naranja, como las letras
 de las marcas.
 
