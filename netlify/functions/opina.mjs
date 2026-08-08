@@ -55,6 +55,16 @@ const SECTOR_DIRECCION = {
 // Guardar es barato; lo caro sería perder una respuesta, así que cada una va
 // a su propia llave y el contador se recalcula, nunca se asume.
 
+// El respaldo se espera, pero nunca se deja que tumbe la respuesta.
+//
+// Antes se mandaba sin esperar, y el recado no llegaba nunca: la función se
+// congela apenas devuelve, y al envío no le daba tiempo de salir. Se espera,
+// pues —son unas décimas— y si falla, se anota en la bitácora y se sigue como
+// si nada. Lo guardado aquí ya está a salvo antes de llegar a esta línea.
+async function respaldar(hacer) {
+  try { await hacer(); } catch (e) { console.warn("respaldo airtable:", e.message); }
+}
+
 const LIMITE = 20_000; // ninguna respuesta legítima pesa más que esto
 
 export default async (req) => {
@@ -138,9 +148,7 @@ export default async (req) => {
       const cuando = Date.now();
       const recado = { cuando, nombre, telefono, mensaje, leido: false };
       await store.setJSON(`m/${cuando}-${crypto.randomUUID().slice(0, 8)}`, recado);
-      // El respaldo va después de guardar y sin esperar: si Airtable falla, el
-      // recado ya está a salvo aquí.
-      guardarRecado(recado).catch(() => {});
+      await respaldar(() => guardarRecado(recado));
       return Response.json({ ok: true });
     }
 
@@ -194,7 +202,7 @@ export default async (req) => {
     await store.setJSON(id, fila);
 
     const direcciones = [...new Set(fila.rubro.map(r => SECTOR_DIRECCION[r]).filter(Boolean))];
-    guardarRespuesta(id, fila, direcciones).catch(() => {});
+    await respaldar(() => guardarRespuesta(id, fila, direcciones));
 
     const { blobs } = await store.list({ prefix: "r/" });
     return Response.json({ ok: true, id, total: blobs.length });

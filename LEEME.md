@@ -190,10 +190,17 @@ dentro de Respuestas, que se ve igual y nunca se desincroniza.
 escritorio de trabajo. Si algún día no coinciden, manda el sitio — el error
 clásico es empezar a editar en Airtable y terminar con dos verdades.
 
-Por eso el respaldo **falla en silencio**: se manda después de guardar y sin
-esperar respuesta. Perder la copia de una respuesta es molesto; perder la
-respuesta porque Airtable estaba caído sería imperdonable. Sin
-`AIRTABLE_LLAVE` configurada no hace nada y nadie se entera.
+Por eso el respaldo **falla en silencio**: se manda después de guardar y su
+error se anota en la bitácora, pero nunca sube. Perder la copia de una
+respuesta es molesto; perder la respuesta porque Airtable estaba caído sería
+imperdonable. Sin `AIRTABLE_LLAVE` configurada no hace nada y nadie se entera.
+
+**Se espera, aunque no haga falta el resultado.** Al principio se mandaba sin
+esperar, para no hacerle perder tiempo a quien responde, y el recado no llegaba
+nunca: la función se congela apenas devuelve y al envío no le daba tiempo de
+salir. La respuesta sí llegaba, pero de pura casualidad —después hace otra cosa
+que le daba ese respiro— y una casualidad no es un mecanismo. Ahora se espera
+en los dos casos.
 
 ---
 
@@ -339,7 +346,7 @@ color distinto, igual que cada letra de los logos toma el suyo.
 - [x] Dominio propio: `opina.cadteba.org` (Wix) o `opina.cadteba.info` (Squarespace)
 - [ ] Configurar `SECRETO_ACCESO` en Netlify
 - [ ] Borrar las respuestas de prueba antes de repartir el enlace
-- [ ] Poner `AIRTABLE_LLAVE` en Netlify para que arranque el respaldo
+- [x] Poner `AIRTABLE_LLAVE` en Netlify para que arranque el respaldo
 - [ ] Encaminar cada recado a la dirección de CADTEBA que le toca (el campo ya está en Airtable, falta llenarlo solo)
 - [ ] Asistente de Gemini dentro de la consulta, para explicar los tributos y las
       leyes mientras se responde. Sin dar asesoría tributaria: explica y remite.
