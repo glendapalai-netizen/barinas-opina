@@ -1,5 +1,55 @@
 import { getStore } from "@netlify/blobs";
 import { revisarPase } from "./acceso.mjs";
+import { guardarRespuesta, guardarRecado } from "./airtable.mjs";
+
+// La misma tabla que usan la consulta y el tablero. Vive aquí también porque el
+// respaldo en Airtable guarda la dirección ya resuelta: allá no hay quien la
+// deduzca al leer.
+const SECTOR_DIRECCION = {
+  "Hoteleros":                                "Gestión de Calidad y Hospitalidad",
+  "Restaurantes | Catering":                  "Gestión de Calidad y Hospitalidad",
+  "Auditoría de Calidad":                     "Gestión de Calidad y Hospitalidad",
+
+  "Clínicas":                                 "Turismo de Salud, Bienestar y Vida",
+  "Spa":                                      "Turismo de Salud, Bienestar y Vida",
+  "Profesional de la salud":                  "Turismo de Salud, Bienestar y Vida",
+  "Salud holística":                          "Turismo de Salud, Bienestar y Vida",
+  "Farmacéutico":                             "Turismo de Salud, Bienestar y Vida",
+  "Laboratorios Bio análisis":                "Turismo de Salud, Bienestar y Vida",
+
+  "Deportes y fitness":                       "Deportes Extremos y Aventura",
+  "Deportes extremos":                        "Deportes Extremos y Aventura",
+
+  "Agroindustria":                            "Agroturismo y Producción",
+  "Campo y ganadería":                        "Agroturismo y Producción",
+  "Cacao | Café | Cereales":                  "Agroturismo y Producción",
+  "Alimentos y bebidas masivo":               "Agroturismo y Producción",
+  "Industria química":                        "Agroturismo y Producción",
+
+  "Arquitectura | Construcción | Ferretero":  "Infraestructura, Seguridad y Desarrollo Sustentable",
+  "Mecánica y eléctrica":                     "Infraestructura, Seguridad y Desarrollo Sustentable",
+  "Transporte y maquinaria pesada":           "Infraestructura, Seguridad y Desarrollo Sustentable",
+  "Inmobiliario":                             "Infraestructura, Seguridad y Desarrollo Sustentable",
+  "Inversión y finanzas":                     "Infraestructura, Seguridad y Desarrollo Sustentable",
+  "Petrolero":                                "Infraestructura, Seguridad y Desarrollo Sustentable",
+  "Sector público":                           "Infraestructura, Seguridad y Desarrollo Sustentable",
+
+  "Educación":                                "Educación, Cultura y Economía Naranja",
+  "Economía naranja":                         "Educación, Cultura y Economía Naranja",
+  "Fotografía | Cine | Audiovisual":          "Educación, Cultura y Economía Naranja",
+  "Ciencias económicas y sociales":           "Educación, Cultura y Economía Naranja",
+  "ONG":                                      "Educación, Cultura y Economía Naranja",
+  "Filantrópico":                             "Educación, Cultura y Economía Naranja",
+
+  "Transporte turístico":                     "Mercadeo, Productos y Relaciones Internacionales",
+  "Operador turístico | Guías | Agencias viaje": "Mercadeo, Productos y Relaciones Internacionales",
+  "Mercadeo":                                 "Mercadeo, Productos y Relaciones Internacionales",
+  "Comercio Exterior":                        "Mercadeo, Productos y Relaciones Internacionales",
+  "Comercio | Boutiques | Moda":              "Mercadeo, Productos y Relaciones Internacionales",
+  "Supermercados | Alimentos | Misceláneos":  "Mercadeo, Productos y Relaciones Internacionales",
+  "Agencia festejos | Decoración | Eventos":  "Mercadeo, Productos y Relaciones Internacionales",
+  "Consultoría legal":                        "Mercadeo, Productos y Relaciones Internacionales",
+};
 
 // Recoge las respuestas de la consulta y lleva la cuenta.
 // Guardar es barato; lo caro sería perder una respuesta, así que cada una va
@@ -86,8 +136,11 @@ export default async (req) => {
         return Response.json({ error: "faltan datos" }, { status: 400 });
       }
       const cuando = Date.now();
-      await store.setJSON(`m/${cuando}-${crypto.randomUUID().slice(0, 8)}`,
-                          { cuando, nombre, telefono, mensaje, leido: false });
+      const recado = { cuando, nombre, telefono, mensaje, leido: false };
+      await store.setJSON(`m/${cuando}-${crypto.randomUUID().slice(0, 8)}`, recado);
+      // El respaldo va después de guardar y sin esperar: si Airtable falla, el
+      // recado ya está a salvo aquí.
+      guardarRecado(recado).catch(() => {});
       return Response.json({ ok: true });
     }
 
@@ -139,6 +192,9 @@ export default async (req) => {
 
     if (!id) id = `r/${cuando}-${crypto.randomUUID().slice(0, 8)}`;
     await store.setJSON(id, fila);
+
+    const direcciones = [...new Set(fila.rubro.map(r => SECTOR_DIRECCION[r]).filter(Boolean))];
+    guardarRespuesta(id, fila, direcciones).catch(() => {});
 
     const { blobs } = await store.list({ prefix: "r/" });
     return Response.json({ ok: true, id, total: blobs.length });

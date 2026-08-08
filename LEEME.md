@@ -167,6 +167,36 @@ en el siguiente despliegue aparece con su clave de estreno.
 
 ---
 
+## El respaldo en Airtable
+
+Base **BARINAS OPINA · CADTEBA** (`app1PC3zwRyMHoG1g`), dos tablas:
+
+| | |
+|---|---|
+| **Respuestas** | una fila por persona. Se busca por «Llave» y se pisa, igual que en el sitio: quien completa después cae en su misma fila. |
+| **Recados** | una fila por mensaje, y llega con estado «Sin atender». Aquí sí se edita: se atiende, se asigna a una dirección, se cierra. |
+
+Son dos y no una porque son dos cosas distintas. Una respuesta es un dato: se
+recoge, se cuenta y no se vuelve a tocar. Un recado es una tarea: alguien pidió
+algo y alguien tiene que contestarle. Juntas, cada recado cargaría treinta
+columnas vacías y no habría forma limpia de preguntar qué falta por atender.
+
+No hay tabla de contactos aparte, aunque la lista de quienes dejaron WhatsApp
+sea la que más se va a usar: el contacto ya viene pegado a su respuesta, y
+separarlo obliga a mantener dos copias a mano. Eso es una **vista filtrada**
+dentro de Respuestas, que se ve igual y nunca se desincroniza.
+
+**La fuente sigue siendo opina.cadteba.org.** Airtable es la copia y el
+escritorio de trabajo. Si algún día no coinciden, manda el sitio — el error
+clásico es empezar a editar en Airtable y terminar con dos verdades.
+
+Por eso el respaldo **falla en silencio**: se manda después de guardar y sin
+esperar respuesta. Perder la copia de una respuesta es molesto; perder la
+respuesta porque Airtable estaba caído sería imperdonable. Sin
+`AIRTABLE_LLAVE` configurada no hace nada y nadie se entera.
+
+---
+
 ## Variables de entorno
 
 | Nombre | Para qué |
@@ -309,8 +339,8 @@ color distinto, igual que cada letra de los logos toma el suyo.
 - [x] Dominio propio: `opina.cadteba.org` (Wix) o `opina.cadteba.info` (Squarespace)
 - [ ] Configurar `SECRETO_ACCESO` en Netlify
 - [ ] Borrar las respuestas de prueba antes de repartir el enlace
-- [ ] Respaldo en Airtable (falta decidir espacio de trabajo y si una tabla o dos)
-- [ ] Encaminar cada recado a la dirección de CADTEBA que le toca
+- [ ] Poner `AIRTABLE_LLAVE` en Netlify para que arranque el respaldo
+- [ ] Encaminar cada recado a la dirección de CADTEBA que le toca (el campo ya está en Airtable, falta llenarlo solo)
 - [ ] Asistente de Gemini dentro de la consulta, para explicar los tributos y las
       leyes mientras se responde. Sin dar asesoría tributaria: explica y remite.
 - [ ] Enlace y código QR en la lámina de una página
