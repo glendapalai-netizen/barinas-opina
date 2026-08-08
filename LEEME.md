@@ -92,12 +92,20 @@ fila, esté completa o no.
 **Ninguna identificación es obligatoria.** El nombre y el teléfono son para
 mandar el informe, nada más. Quien no quiera dejar nada, opina igual.
 
-**El sector se busca, no se escoge de una lista.** Son los 37 con que la Cámara
-ya trabaja en Luma —desde hoteleros hasta ferretero, farmacéutico o mecánica y
-eléctrica— y treinta y siete botones no se leen en un teléfono. Se escriben las
-primeras letras, se filtra, se marca; lo marcado queda arriba a la vista.
-Turismo somos todos: a esto también responde un mecánico o alguien de una
-farmacia, y tienen dónde ubicarse.
+**El sector es un desplegable de uno solo.** Son los 37 con que la Cámara ya
+trabaja en Luma —desde hoteleros hasta ferretero, farmacéutico o mecánica y
+eléctrica—. Turismo somos todos: a esto también responde un mecánico o alguien
+de una farmacia, y tienen dónde ubicarse.
+
+Fue primero un buscador con teclado, y estaba mal: en el teléfono el teclado
+tapa media pantalla y se lleva por delante el botón de seguir. La persona
+escribe, escoge, y no encuentra cómo avanzar. El desplegable de siempre abre la
+rueda del sistema, que no trae teclado y se cierra sola. Se ve más humilde y
+funciona mejor.
+
+Uno solo, además de por lo anterior, porque con varios había que decidir cuál
+manda al deducir la dirección — y esa duda la resolvía el programa por su
+cuenta. Así la resuelve quien responde, que es quien sabe.
 
 **La dirección de CADTEBA no se pregunta: se deduce.** `SECTOR_DIRECCION` dice
 a cuál de las siete direcciones técnicas pertenece cada sector, y esa tabla

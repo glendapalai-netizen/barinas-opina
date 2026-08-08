@@ -289,38 +289,26 @@
 
   /* El recuadro que asoma al marcar «Otro» */
 
-  /* Buscador de sectores: treinta y siete no caben en botones */
-  .buscador { position: relative; }
-  .buscador input {
-    width: 100%; padding: 15px 17px; border-radius: 16px; font: inherit; color: var(--tinta);
-    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
+  /* El desplegable del sector: alto de dedo y con su flecha propia */
+  .desplegable { position: relative; }
+  .desplegable select {
+    width: 100%; padding: 17px 52px 17px 17px; border-radius: 16px;
+    font: inherit; color: var(--tinta); line-height: 1.35; cursor: pointer;
+    appearance: none; -webkit-appearance: none;
+    background: linear-gradient(168deg, rgba(255,255,255,.09) 0%, rgba(255,255,255,.04) 100%);
+    border: 1px solid rgba(255,255,255,.14);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.20), 0 8px 20px -10px rgba(0,0,0,.7);
   }
-  .buscador input::placeholder { color: var(--tinta-suave); }
-  .buscador input:focus { outline: none; border-color: color-mix(in srgb, var(--acento) 70%, transparent); }
-  .buscador .lista {
-    margin-top: 10px; max-height: 46vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    display: flex; flex-direction: column; gap: 7px; padding-right: 2px;
+  .desplegable select:focus {
+    outline: none; border-color: color-mix(in srgb, var(--acento) 70%, transparent);
   }
-  .buscador .renglon {
-    width: 100%; text-align: left; padding: 13px 15px; border-radius: 13px; cursor: pointer;
-    font: inherit; color: var(--tinta); line-height: 1.35;
-    background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.11);
+  /* La rueda del sistema es blanca: los renglones tienen que verse en ella */
+  .desplegable option { background: #12181F; color: #F2F6F8; }
+  .desplegable svg {
+    position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+    width: 20px; height: 20px; color: var(--acento); pointer-events: none;
   }
-  .buscador .renglon:active { transform: scale(.99); }
-  .buscador .nada { color: var(--tinta-suave); font-size: .9rem; padding: 14px 2px; }
 
-  /* Lo ya marcado, arriba y a la vista: si no, uno no sabe qué lleva escogido */
-  .marcados { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-  .marcados:empty { margin-bottom: 0; }
-  .marca {
-    display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
-    padding: 9px 13px; border-radius: 999px; font: inherit; font-size: .88rem; font-weight: 700;
-    color: var(--tinta); line-height: 1.2;
-    background: color-mix(in srgb, var(--acento) 24%, transparent);
-    border: 1px solid color-mix(in srgb, var(--acento) 62%, transparent);
-  }
-  .marca svg { width: 13px; height: 13px; opacity: .75; flex: 0 0 13px; }
   .otro-caja { margin-top: 12px; animation: entra .25s ease both; }
 
   /* ── La carita ──────────────────────────────────────────────────────── */
@@ -542,14 +530,15 @@
 <section class="paso" data-id="rubro" data-color="verde">
   <span class="cuenta">Tu actividad · 1 de 4</span>
   <h2>¿A qué <em>sector</em> perteneces?</h2>
-  <p class="ayuda">Escribe las primeras letras y aparece. Puedes marcar más de uno.
-    Turismo somos todos: aquí está el mecánico, la ferretería y la farmacia, no solo la posada.</p>
+  <p class="ayuda">Escoge el que más se parezca a lo tuyo. Turismo somos todos:
+    aquí está el mecánico, la ferretería y la farmacia, no solo la posada.</p>
 
-  <div class="marcados" id="marcadosSector"></div>
-  <div class="buscador">
-    <input id="buscaSector" type="text" autocomplete="off" spellcheck="false"
-           placeholder="Busca tu sector — ferre, hotel, salud…" aria-label="Busca tu sector">
-    <div class="lista" id="listaSector" role="listbox"></div>
+  <div class="desplegable">
+    <select id="sector" aria-label="Tu sector">
+      <option value="">Toca aquí para escoger…</option>
+    </select>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
   </div>
 
   <div class="otro-caja" id="otroRubroCaja" hidden>
@@ -1010,48 +999,28 @@
     });
   });
 
-  // ── El buscador de sectores ──────────────────────────────────────────────
-  // Treinta y siete opciones no caben como botones: es un rollo de pantalla y
-  // nadie llega al final. Se escribe, se filtra, se marca. Lo marcado queda
-  // arriba a la vista, porque si no, no se sabe qué se lleva escogido.
-  const sinTilde = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-  function pintarMarcados() {
-    const caja = $("marcadosSector");
-    caja.innerHTML = R.rubro.map(t =>
-      `<button type="button" class="marca" data-valor="${t}">
-         ${t}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-              stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`).join("");
-    caja.querySelectorAll(".marca").forEach(b => {
-      b.onclick = () => {
-        R.rubro = R.rubro.filter(x => x !== b.dataset.valor);
-        pintarMarcados(); pintarLista(); revisarOtro("rubro"); revisar();
-      };
-    });
+  // ── El sector ────────────────────────────────────────────────────────────
+  //
+  // Un desplegable de los de siempre, y no un buscador con teclado. En el
+  // teléfono el teclado tapa media pantalla y se lleva por delante el botón de
+  // seguir: la persona escribe, escoge, y no encuentra cómo avanzar. El
+  // desplegable abre la rueda del sistema, que no trae teclado y se cierra sola.
+  //
+  // Uno solo, además. Con varios había que decidir cuál manda al deducir la
+  // dirección, y esa duda la resolvía el programa por su cuenta. Así lo decide
+  // quien responde, que es quien sabe.
+  {
+    const caja = $("sector");
+    caja.innerHTML = '<option value="">Toca aquí para escoger…</option>' +
+      SECTORES.map(t => `<option value="${t}">${t}</option>`).join("");
+    caja.onchange = () => {
+      // Se guarda igual en lista de uno: así lo respondido antes, cuando se
+      // podía marcar varios, se sigue leyendo sin tener que convertir nada.
+      R.rubro = caja.value ? [caja.value] : [];
+      revisarOtro("rubro");
+      revisar();
+    };
   }
-
-  function pintarLista() {
-    const q = sinTilde($("buscaSector").value.trim());
-    const caja = $("listaSector");
-    const cabe = SECTORES.filter(t => !R.rubro.includes(t) && (!q || sinTilde(t).includes(q)));
-    if (!cabe.length) {
-      caja.innerHTML = `<p class="nada">Nada con eso. Prueba con otra palabra, o marca «Otro».</p>`;
-      return;
-    }
-    caja.innerHTML = cabe.map(t =>
-      `<button type="button" class="renglon" data-valor="${t}" role="option">${t}</button>`).join("");
-    caja.querySelectorAll(".renglon").forEach(b => {
-      b.onclick = () => {
-        R.rubro = [...R.rubro, b.dataset.valor];
-        $("buscaSector").value = "";
-        pintarMarcados(); pintarLista(); revisarOtro("rubro"); revisar();
-        $("buscaSector").focus();
-      };
-    });
-  }
-
-  $("buscaSector").oninput = pintarLista;
-  pintarLista();
 
   // La pregunta 3 se arma con lo que él mismo marcó en la 1
   // Un renglón por servicio con sus cuatro notas. Se pinta una sola vez y se
