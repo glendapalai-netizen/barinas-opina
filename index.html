@@ -2,7 +2,7 @@
 <html lang="es"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FBF3DE">
+<meta name="theme-color" content="#0B1119">
 <title>BARINAS OPINA · consulta del sector turismo</title>
 
 <meta name="description" content="Se está discutiendo un nuevo modelo tributario en Venezuela. Tu negocio tiene 3 minutos para que el turismo de Barinas lleve números. CADTEBA · Turismo somos todos.">
@@ -24,26 +24,37 @@
      de CADTEBA. Cada pantalla toma un color distinto, igual que cada letra
      de los logos toma el suyo. ═══ */
   :root {
-    --crema: #FBF3DE;
-    --papel: #FFFFFF;
-    --tinta: #1D2A34;
-    --tinta-suave: #6C7A83;
-    --borde: #E6DAC0;
+    /* El fondo es la noche del llano — el mismo azul casi negro del video,
+       para que la portada y el resto de la app sean una sola pieza. */
+    --crema: #0B1119;          /* el fondo */
+    --papel: rgba(255,255,255,.055);   /* la cara de las tarjetas */
+    --tinta: #F2F6F8;          /* la letra */
+    --tinta-suave: #93A3AF;    /* la letra de apoyo */
+    --borde: rgba(255,255,255,.14);
 
-    --naranja: #F5900A;   /* el chigüire, la M de MÁS */
-    --azul:    #0C34D6;   /* las alas, la A de LLANO */
-    --coral:   #F0472E;   /* la garza, la O de NO */
-    --verde:   #2E8F14;   /* las hojas, el QUE */
-    --turquesa:#00A0AE;   /* de Turismo somos todos */
-    --magenta: #C4187C;   /* de Turismo somos todos */
-    --oro:     #B8862F;   /* de CADTEBA */
+    /* Los mismos colores de las marcas, subidos de tono para la noche: sobre
+       crema el azul original se leía bien, sobre negro se hunde. Es la
+       traducción del color al fondo, no otro color. */
+    --naranja: #FFA42B;   /* el chigüire, la M de MÁS */
+    --azul:    #4C79FF;   /* las alas, la A de LLANO */
+    --coral:   #FF6B52;   /* la garza, la O de NO */
+    --verde:   #56C93A;   /* las hojas, el QUE */
+    --turquesa:#22C4D2;   /* de Turismo somos todos */
+    --magenta: #F0479F;   /* de Turismo somos todos */
+    --oro:     #D8A548;   /* de CADTEBA, subido de tono para la noche */
 
     --acento: var(--naranja);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html { -webkit-text-size-adjust: 100%; }
   body {
-    background: var(--crema);
+    /* Dos luces tenues arriba, del naranja del atardecer y del turquesa,
+       para que el negro no sea un negro plano de pantalla apagada. */
+    background:
+      radial-gradient(120% 55% at 50% -8%, rgba(245,144,10,.10), transparent 70%),
+      radial-gradient(90% 45% at 88% 4%, rgba(0,160,174,.09), transparent 70%),
+      var(--crema);
+    background-attachment: fixed;
     color: var(--tinta);
     font: 16px/1.6 "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -67,8 +78,8 @@
   }
 
   /* Barra de avance, del color de la pantalla en que va */
-  .tope { position: sticky; top: 0; z-index: 30; background: var(--crema); }
-  .avance { height: 5px; background: #EFE4CA; }
+  .tope { position: sticky; top: 0; z-index: 30; background: rgba(11,17,25,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .avance { height: 5px; background: rgba(255,255,255,.1); }
   .avance i { display: block; height: 100%; width: 0; background: var(--acento); transition: width .35s ease, background .35s ease; }
 
   main { width: 100%; max-width: 560px; margin: 0 auto; padding: 24px 20px 132px; }
@@ -82,7 +93,7 @@
   .cuenta {
     display: inline-block; font-size: .7rem; font-weight: 800; letter-spacing: .1em;
     text-transform: uppercase; padding: 6px 14px; border-radius: 99px;
-    background: var(--acento); color: #fff; margin-bottom: 16px;
+    background: var(--acento); color: #0B1119; margin-bottom: 16px;
   }
   .paso h2 { font-size: clamp(1.5rem, 6.4vw, 2rem); margin-bottom: 10px; }
   .paso h2 em { font-style: normal; color: var(--acento); }
@@ -94,11 +105,13 @@
     display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
     padding: 15px 17px; border-radius: 16px; cursor: pointer;
     color: var(--tinta); font-size: .96rem; font-family: inherit; line-height: 1.4;
-    background: linear-gradient(168deg, #fff 0%, #FDFAF2 60%, #F8F2E4 100%);
-    border: 1.5px solid rgba(230,218,192,.85);
+    background: linear-gradient(168deg, rgba(255,255,255,.09) 0%, rgba(255,255,255,.04) 100%);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.13);
     box-shadow:
-      inset 0 1.5px 0 #fff, inset 0 -1.5px 0 rgba(184,134,47,.09),
-      0 1px 2px rgba(29,42,52,.05), 0 6px 16px -8px rgba(29,42,52,.22);
+      inset 0 1px 0 rgba(255,255,255,.20),      /* el filo encendido de arriba */
+      inset 0 -1px 0 rgba(0,0,0,.28),           /* el canto en sombra de abajo */
+      0 8px 20px -10px rgba(0,0,0,.7);
     transition: border-color .14s ease, background .14s ease, transform .1s ease;
   }
   .op:active { transform: scale(.99); }
@@ -108,25 +121,33 @@
     transition: background .14s ease, border-color .14s ease;
   }
   .op.una .caja { border-radius: 50%; }
-  .op .caja svg { width: 14px; height: 14px; opacity: 0; color: #fff; }
-  .op[aria-pressed="true"] { border-color: var(--acento); background: color-mix(in srgb, var(--acento) 8%, #fff); }
+  .op .caja svg { width: 14px; height: 14px; opacity: 0; }
+  .op[aria-pressed="true"] { border-color: color-mix(in srgb, var(--acento) 70%, transparent);
+    background: linear-gradient(168deg, color-mix(in srgb, var(--acento) 26%, transparent), color-mix(in srgb, var(--acento) 12%, transparent));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 0 0 1px color-mix(in srgb, var(--acento) 28%, transparent), 0 10px 26px -12px color-mix(in srgb, var(--acento) 80%, transparent); }
   .op[aria-pressed="true"] .caja { background: var(--acento); border-color: var(--acento); }
+  .op .caja svg { color: #0B1119; }
   .op[aria-pressed="true"] .caja svg { opacity: 1; }
   .op b { font-weight: 700; }
   .op small { display: block; color: var(--tinta-suave); font-size: .79rem; font-weight: 400; margin-top: 1px; }
 
   input[type="text"], input[type="email"], input[type="tel"], textarea {
     width: 100%; padding: 16px 17px; border-radius: 16px; font-family: inherit; font-size: 1rem;
-    background: var(--papel); border: 2px solid var(--borde); color: var(--tinta); outline: none;
+    background: rgba(255,255,255,.055); color: var(--tinta); outline: none;
+    border: 1px solid rgba(255,255,255,.15);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 2px 8px rgba(0,0,0,.28);
   }
-  input:focus, textarea:focus { border-color: var(--acento); }
+  input:focus, textarea:focus {
+    border-color: color-mix(in srgb, var(--acento) 65%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 0 0 3px color-mix(in srgb, var(--acento) 20%, transparent);
+  }
   textarea { resize: none; min-height: 100px; }
-  ::placeholder { color: #A9B3B9; }
+  ::placeholder { color: #6C7C88; }
 
   /* El porqué de cada pregunta */
   details.porque {
-    margin-top: 20px; background: color-mix(in srgb, var(--acento) 7%, var(--crema));
-    border: 2px dashed color-mix(in srgb, var(--acento) 35%, var(--crema));
+    margin-top: 20px; background: color-mix(in srgb, var(--acento) 9%, transparent);
+    border: 1.5px dashed color-mix(in srgb, var(--acento) 42%, transparent);
     border-radius: 15px; padding: 14px 16px;
   }
   details.porque summary {
@@ -149,18 +170,20 @@
      coral. Se califican todos a la vista, para que uno compare mientras marca. */
   .servicio {
     border-radius: 16px; padding: 13px 15px; margin-bottom: 10px;
-    background: linear-gradient(168deg, #fff 0%, #FDFAF2 60%, #F8F2E4 100%);
-    border: 1.5px solid rgba(230,218,192,.85);
+    background: linear-gradient(168deg, rgba(255,255,255,.09) 0%, rgba(255,255,255,.04) 100%);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.13);
     box-shadow:
-      inset 0 1.5px 0 #fff, inset 0 -1.5px 0 rgba(184,134,47,.09),
-      0 1px 2px rgba(29,42,52,.05), 0 6px 16px -8px rgba(29,42,52,.22);
+      inset 0 1px 0 rgba(255,255,255,.20), inset 0 -1px 0 rgba(0,0,0,.28),
+      0 8px 20px -10px rgba(0,0,0,.7);
   }
   .servicio .nombre { font-weight: 800; font-size: .95rem; margin-bottom: 10px; }
   .servicio .notas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .servicio .nota {
     padding: 11px 2px; border-radius: 11px; cursor: pointer; font-family: inherit;
     font-size: .74rem; font-weight: 800; line-height: 1.2;
-    border: 2px solid var(--borde); background: var(--papel); color: var(--tinta-suave);
+    border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.05); color: var(--tinta-suave);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
     transition: background .14s ease, color .14s ease, border-color .14s ease;
   }
   .servicio .nota:active { transform: scale(.96); }
@@ -170,15 +193,19 @@
 
   /* Deslizador de consenso */
   .afirma {
-    background: var(--papel); border: 3px solid var(--acento); border-radius: 22px;
+    border: 2px solid color-mix(in srgb, var(--acento) 55%, transparent); border-radius: 22px;
     padding: 30px 22px; text-align: center; margin-bottom: 16px;
-    box-shadow: 0 6px 0 color-mix(in srgb, var(--acento) 22%, var(--crema));
+    background: linear-gradient(168deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22),
+                0 16px 40px -18px color-mix(in srgb, var(--acento) 85%, transparent);
   }
   .afirma p { font-size: 1.2rem; font-weight: 700; line-height: 1.38; text-wrap: balance; }
   .tres { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 9px; }
   .tres button {
     padding: 16px 6px; border-radius: 15px; font-family: inherit; font-size: .87rem; font-weight: 800;
-    cursor: pointer; border: 2px solid var(--borde); background: var(--papel); color: var(--tinta-suave);
+    cursor: pointer; border: 1px solid rgba(255,255,255,.15); color: var(--tinta-suave);
+    background: rgba(255,255,255,.05); box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
   }
   .tres button.si { border-color: var(--verde); color: var(--verde); }
   .tres button.no { border-color: var(--coral); color: var(--coral); }
@@ -229,7 +256,7 @@
   .telon {
     position: fixed; inset: 0; z-index: 0; overflow: hidden;
     opacity: 0; visibility: hidden; transition: opacity .55s ease, visibility .55s;
-    background: #0d1520;
+    background: #0B1119;
   }
   body.con-telon .telon { opacity: 1; visibility: visible; }
   .telon .foto {
@@ -250,65 +277,63 @@
                               rgba(8,14,22,.52) 78%, rgba(8,14,22,.74) 100%);
   }
   /* Mientras el telón está puesto, la app se aparta y deja ver */
-  body.con-telon { background: #0d1520; }
+
   body.con-telon .tope, body.con-telon .cenefa { opacity: 0; pointer-events: none; }
   body.con-telon main { position: relative; z-index: 10; }
-  body.con-telon .pie { background: linear-gradient(to top, rgba(8,14,22,.92) 55%, transparent); }
+  body.con-telon .pie { background: linear-gradient(to top, rgba(8,14,22,.9) 55%, transparent); }
   @media (prefers-reduced-motion: reduce) { .telon video { display: none; } }
 
   /* Barra de abajo */
   .pie {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
     padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
-    background: linear-gradient(to top, var(--crema) 66%, transparent);
-    display: flex; gap: 10px; max-width: 560px; margin: 0 auto;
+    background: linear-gradient(to top, rgba(11,17,25,.96) 58%, transparent);
+    display: flex; gap: 10px; align-items: center; justify-content: center;
+    max-width: 560px; margin: 0 auto;
   }
-  /* El botón es una pieza de cristal de color: el degradado le da la curva,
-     el filo blanco de arriba el brillo, y la sombra debajo el grosor. */
+  /* El botón es una pieza de cristal de color: se ve el fondo a través de él,
+     el filo de arriba recoge la luz y el de abajo queda en sombra. */
   .btn {
     position: relative; overflow: hidden;
     flex: 1; padding: 17px; border-radius: 18px; font-family: inherit;
-    font-size: 1.02rem; font-weight: 800; cursor: pointer; border: none; color: #fff;
+    font-size: 1.02rem; font-weight: 800; cursor: pointer; border: none; color: #08111C;
     background:
-      linear-gradient(180deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,0) 46%),
-      linear-gradient(180deg, color-mix(in srgb, var(--acento) 88%, #fff) 0%,
-                              var(--acento) 52%,
-                              color-mix(in srgb, var(--acento) 82%, #000) 100%);
+      linear-gradient(180deg, rgba(255,255,255,.32) 0%, rgba(255,255,255,0) 52%),
+      linear-gradient(180deg, color-mix(in srgb, var(--acento) 72%, transparent) 0%,
+                              color-mix(in srgb, var(--acento) 55%, transparent) 100%);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.55),
-      inset 0 -1px 0 rgba(0,0,0,.18),
-      0 4px 0 color-mix(in srgb, var(--acento) 62%, #000),
-      0 10px 22px -6px color-mix(in srgb, var(--acento) 55%, transparent);
-    text-shadow: 0 1px 2px rgba(0,0,0,.22);
-    transition: filter .3s ease, box-shadow .2s ease;
+      inset 0 1px 0 rgba(255,255,255,.45),
+      inset 0 -1px 0 rgba(0,0,0,.22),
+      0 0 0 1px color-mix(in srgb, var(--acento) 45%, transparent),
+      0 12px 30px -10px color-mix(in srgb, var(--acento) 75%, transparent);
+    text-shadow: 0 1px 2px rgba(255,255,255,.22);
+    transition: background .3s ease, box-shadow .2s ease;
   }
   /* El reflejo que cruza la cara del cristal */
   .btn::after {
-    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 46%;
-    border-radius: inherit inherit 0 0; pointer-events: none;
-    background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0));
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 48%;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0));
   }
   .btn:disabled {
-    background: linear-gradient(180deg, #E4DAC4 0%, #D5CAB2 100%);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 4px 0 #C3B79D;
-    color: rgba(255,255,255,.9); text-shadow: none;
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.45); text-shadow: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 0 0 1px rgba(255,255,255,.09);
   }
   .btn.atras {
-    flex: 0 0 58px; color: var(--tinta-suave); font-size: 1.3rem;
-    background: linear-gradient(180deg, #fff 0%, #F6F0E2 100%);
+    flex: 0 0 58px; font-size: 1.3rem; color: var(--tinta); text-shadow: none;
+    background: rgba(255,255,255,.07);
     box-shadow:
-      inset 0 1px 0 #fff, inset 0 0 0 1px rgba(255,255,255,.9),
-      0 4px 0 var(--borde), 0 8px 16px -6px rgba(29,42,52,.2);
+      inset 0 1px 0 rgba(255,255,255,.26), inset 0 -1px 0 rgba(0,0,0,.22),
+      0 0 0 1px rgba(255,255,255,.13), 0 10px 24px -12px rgba(0,0,0,.8);
     text-shadow: none;
   }
-  .btn:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,255,255,.4); }
-
-  /* Sobre el video el botón de atrás también se vuelve cristal transparente */
-  body.con-telon .btn.atras {
-    background: rgba(255,255,255,.1); color: #fff;
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 18px rgba(0,0,0,.3);
-  }
+  /* Cuando el botón de atrás no aplica, se quita del todo: si solo se
+     escondiera, seguiría ocupando su lugar y «Comenzar» quedaría corrido. */
+  .btn.atras[hidden] { display: none; }
+  .btn:active { transform: translateY(1px); }
 
   /* ═══ Portada sobre el video ═══════════════════════════════════════════
      Todo va en blanco porque el fondo es el atardecer. El texto lleva sombra
@@ -837,7 +862,7 @@
       : donde() === "acuerdos" && af < AFIRMACIONES.length ? "Responde arriba"
       : donde() === "servicios" && !listo() ? "Falta calificar alguno"
       : "Seguir";
-    $("atras").style.visibility = i > 0 && i < ultimo ? "visible" : "hidden";
+    $("atras").hidden = !(i > 0 && i < ultimo);
     $("avance").style.width = (i / ultimo) * 100 + "%";
     $("pie").style.display = i === ultimo ? "none" : "flex";
     // Cada pantalla toma su color, como cada letra del logo
@@ -848,7 +873,7 @@
   function telon(puesto) {
     document.body.classList.toggle("con-telon", puesto);
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = puesto ? "#0d1520" : "#FBF3DE";
+    if (meta) meta.content = "#0B1119";
 
     const v = $("fondoVideo");
     if (!v) return;                 // el teléfono no pudo con el video: queda la foto
