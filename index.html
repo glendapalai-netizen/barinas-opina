@@ -283,6 +283,54 @@
   body.con-telon .pie { background: linear-gradient(to top, rgba(8,14,22,.9) 55%, transparent); }
   @media (prefers-reduced-motion: reduce) { .telon video { display: none; } }
 
+  /* El recuadro que asoma al marcar «Otro» */
+  .otro-caja { margin-top: 12px; animation: entra .25s ease both; }
+
+  /* ── La carita ──────────────────────────────────────────────────────── */
+  .valorar { margin: 34px 0 6px; }
+  .cara-caja { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .cara { width: 124px; height: 124px; }
+  .cara .borde { fill: none; stroke: currentColor; stroke-width: 5; opacity: .85; }
+  .cara .trazo { fill: none; stroke: currentColor; stroke-width: 6; stroke-linecap: round; }
+  .cara .pupila { fill: currentColor; transition: r .12s ease; }
+  .humor { font-weight: 900; font-size: 1.02rem; color: var(--acento); min-height: 1.6em; }
+
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none; width: 100%; margin: 16px 0 6px;
+    background: transparent;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 8px; border-radius: 99px; background: rgba(255,255,255,.12);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.5);
+  }
+  input[type="range"]::-moz-range-track {
+    height: 8px; border-radius: 99px; background: rgba(255,255,255,.12);
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 30px; height: 30px; border-radius: 50%; margin-top: -11px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--acento) 90%, #fff), var(--acento));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 4px 14px -2px color-mix(in srgb, var(--acento) 75%, transparent);
+    cursor: grab;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 30px; height: 30px; border: none; border-radius: 50%; background: var(--acento);
+  }
+  .extremos { display: flex; justify-content: space-between; font-size: .74rem;
+              color: var(--tinta-suave); font-weight: 700; }
+
+  /* ── Escribirle a la Cámara ──────────────────────────────────────────── */
+  details.escribir { margin-top: 26px; text-align: left; }
+  .recado { font-size: .84rem; font-weight: 700; margin-top: 12px; }
+  .recado.bien { color: var(--verde); }
+  .recado.mal { color: var(--coral); }
+
+  /* ── Pie legal ───────────────────────────────────────────────────────── */
+  .pie-legal { margin-top: 38px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.12); }
+  .pie-legal p { color: var(--tinta-suave); font-size: .78rem; line-height: 1.65; margin-top: 12px; }
+  .pie-legal strong { color: var(--tinta); }
+  .pie-legal a { color: var(--acento); text-decoration: none; font-weight: 700; }
+  .pie-legal .finito { font-size: .72rem; opacity: .8; margin-top: 14px; }
+
   /* Barra de abajo */
   .pie {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
@@ -452,28 +500,21 @@
   </div>
 </section>
 
-<section class="paso" data-id="negocio" data-color="turquesa">
-  <span class="cuenta">Tu negocio · 1 de 5</span>
-  <h2>¿Cómo se llama tu negocio?</h2>
-  <p class="ayuda">Si eres guía o prestas el servicio por tu cuenta, pon tu nombre.</p>
-  <input type="text" id="negocio" placeholder="Ej: Posada El Garcero" autocomplete="organization">
-</section>
-
 <section class="paso" data-id="rubro" data-color="verde">
-  <span class="cuenta">Tu negocio · 2 de 5</span>
-  <h2>¿A qué te dedicas?</h2>
-  <p class="ayuda">Puedes marcar más de una.</p>
+  <span class="cuenta">Tu actividad · 1 de 4</span>
+  <h2>¿A qué <em>sector</em> perteneces?</h2>
+  <p class="ayuda">Puedes marcar más de uno. Sin nombres todavía: eso va al final y es opcional.</p>
   <div class="ops" data-campo="rubro" data-multi="1"></div>
 </section>
 
 <section class="paso" data-id="municipio" data-color="azul">
-  <span class="cuenta">Tu negocio · 3 de 5</span>
+  <span class="cuenta">Tu actividad · 2 de 4</span>
   <h2>¿En qué municipio estás?</h2>
   <div class="ops" data-campo="municipio"></div>
 </section>
 
 <section class="paso" data-id="tamano" data-color="magenta">
-  <span class="cuenta">Tu negocio · 4 de 5</span>
+  <span class="cuenta">Tu actividad · 3 de 4</span>
   <h2>¿Cuántas personas trabajan contigo?</h2>
   <p class="ayuda">Contándote a ti.</p>
   <div class="ops" data-campo="tamano"></div>
@@ -484,7 +525,7 @@
 </section>
 
 <section class="paso" data-id="temporada" data-color="oro">
-  <span class="cuenta">Tu negocio · 5 de 5</span>
+  <span class="cuenta">Tu actividad · 4 de 4</span>
   <h2>¿Cuándo <em>de verdad</em> te llegan turistas?</h2>
   <p class="ayuda">Aquí no vale el año completo. Vale cuándo hay gente de verdad.</p>
 
@@ -509,6 +550,10 @@
   <h2>¿Cuáles impuestos te <em>aprietan más</em> hoy?</h2>
   <p class="ayuda">Marca hasta tres. Los que de verdad te duelen.</p>
   <div class="ops" data-campo="impuestos" data-multi="3"></div>
+  <div class="otro-caja" id="otroImpuestosCaja" hidden>
+    <p class="rotulo">¿Cuál otro?</p>
+    <input type="text" id="otro_impuestos" placeholder="Escribe cuál" maxlength="120">
+  </div>
   <details class="porque">
     <summary>¿Por qué te preguntamos esto?</summary>
     <p>Con las respuestas de todos, CADTEBA puede decir con datos cuáles son los tres tributos que más ahogan al turismo en Barinas, en vez de una opinión suelta.</p>
@@ -531,8 +576,12 @@
 <section class="paso" data-id="cambios" data-color="naranja">
   <span class="cuenta">Pregunta 2 de 4</span>
   <h2>¿Qué haría falta para fortalecer el turismo aquí?</h2>
-  <p class="ayuda">Marca todas las que veas necesarias.</p>
-  <div class="ops" data-campo="cambios" data-multi="1"></div>
+  <p class="ayuda">Marca hasta cinco. Las que de verdad moverían la aguja.</p>
+  <div class="ops" data-campo="cambios" data-multi="5"></div>
+  <div class="otro-caja" id="otroCambiosCaja" hidden>
+    <p class="rotulo">¿Cuál otra?</p>
+    <input type="text" id="otro_cambios" placeholder="Escribe cuál" maxlength="120">
+  </div>
 </section>
 
 <section class="paso" data-id="uno" data-color="azul">
@@ -540,6 +589,10 @@
   <h2>Si pudieras cambiar <em>uno solo</em>, ¿cuál?</h2>
   <p class="ayuda">Elige uno y cuéntanos en una línea por qué.</p>
   <div class="ops" data-campo="uno"></div>
+  <div class="otro-caja" id="otroUnoCaja" hidden>
+    <p class="rotulo">¿Cuál?</p>
+    <input type="text" id="otro_uno" placeholder="Escribe cuál" maxlength="120">
+  </div>
   <div style="margin-top:14px"><textarea id="porque_uno" placeholder="¿Por qué ése? (opcional, pero es lo que más pesa en el informe)"></textarea></div>
 </section>
 
@@ -548,6 +601,10 @@
   <h2>¿Qué te haría invertir o contratar más gente?</h2>
   <p class="ayuda">Marca todas las que apliquen.</p>
   <div class="ops" data-campo="inversion" data-multi="1"></div>
+  <div class="otro-caja" id="otroInversionCaja" hidden>
+    <p class="rotulo">¿Cuál otra?</p>
+    <input type="text" id="otro_inversion" placeholder="Escribe cuál" maxlength="120">
+  </div>
 </section>
 
 <!-- ══ Servicios públicos ══ -->
@@ -584,14 +641,21 @@
 <!-- ══ Contacto ══ -->
 <section class="paso" data-id="contacto" data-color="turquesa">
   <span class="cuenta">Para cerrar</span>
-  <h2>¿Cómo te ubicamos?</h2>
-  <p class="ayuda">Para mandarte el informe cuando esté listo, y avisarte de lo que se vaya logrando.</p>
-  <div class="ops" style="gap:12px">
-    <input type="text" id="nombre" placeholder="Tu nombre" autocomplete="name">
-    <input type="tel" id="telefono" placeholder="Tu WhatsApp" autocomplete="tel">
-    <input type="email" id="correo" placeholder="Tu correo (opcional)" autocomplete="email">
+  <h2>¿Quieres que te <em>llegue el informe</em>?</h2>
+  <p class="ayuda">Tu opinión <strong>ya quedó guardada</strong>. Esto es aparte y es todo opcional:
+     sirve para mandarte los resultados y avisarte de lo que se vaya logrando. Si prefieres no dejar
+     nada, sigue de largo.</p>
+  <div class="ops" style="gap:10px">
+    <input type="text"  id="nombre"   placeholder="Tu nombre" autocomplete="name">
+    <input type="text"  id="negocio"  placeholder="Nombre de tu emprendimiento o servicio" autocomplete="organization">
+    <input type="tel"   id="telefono" placeholder="WhatsApp" autocomplete="tel">
+    <input type="email" id="correo"   placeholder="Correo" autocomplete="email">
+    <input type="text"  id="instagram" placeholder="Instagram" autocapitalize="none" spellcheck="false">
+    <input type="text"  id="web"      placeholder="Página web" autocapitalize="none" spellcheck="false">
   </div>
   <div style="margin-top:16px" class="ops" data-campo="afiliado"></div>
+  <p class="aviso">Nada de esto es obligatorio y nada se vende. Lo guarda CADTEBA para escribirte
+     sobre esta consulta y sobre el gremio.</p>
 </section>
 
 <!-- ══ Cierre ══ -->
@@ -603,15 +667,59 @@
     <h2>Tu voz quedó registrada</h2>
     <p style="color:var(--tinta-suave); margin-top:10px">Gracias. Esto es lo que CADTEBA lleva a la mesa.</p>
     <div style="margin:30px 0 4px"><span class="contador" id="cuantos">—</span></div>
-    <p style="color:var(--tinta-suave)">negocios turísticos de Barinas ya opinaron</p>
-    <div style="margin-top:28px" class="ops">
-      <button class="btn" id="compartir">Pásasela a otro del gremio</button>
+    <p style="color:var(--tinta-suave)">respuestas del turismo de Barinas</p>
+
+    <!-- ══ La carita ══
+         Se arrastra el dedo y la cara cambia de humor. Es la forma más
+         honesta de preguntar qué le pareció a alguien: no hay que leer una
+         escala ni decidir si «4» es bueno o regular. -->
+    <div class="valorar">
+      <p class="rotulo" style="text-align:center">¿Qué te pareció esta consulta de CADTEBA?</p>
+      <div class="cara-caja">
+        <svg class="cara" id="cara" viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="76" class="borde"/>
+          <path id="cejaI" class="trazo" d=""/>
+          <path id="cejaD" class="trazo" d=""/>
+          <circle id="ojoI" class="pupila" cx="72" cy="90" r="7"/>
+          <circle id="ojoD" class="pupila" cx="128" cy="90" r="7"/>
+          <path id="boca" class="trazo" d=""/>
+        </svg>
+        <p class="humor" id="humor">—</p>
+      </div>
+      <input type="range" id="animo" min="0" max="10" value="5" step="1"
+             aria-label="Qué te pareció la consulta">
+      <div class="extremos"><span>No me convenció</span><span>Me encantó</span></div>
     </div>
-    <p class="aviso" style="border:0; padding-top:14px">Mientras más seamos, más peso tiene Barinas en esa reforma.</p>
-    <div class="marcas-pie">
-      <img src="/marcas/cadteba.png" alt="CADTEBA">
-      <img class="mq" src="/marcas/masquellano.png" alt="Barinas, más que llano">
+
+    <div style="margin-top:26px" class="ops">
+      <button class="btn" id="compartir">Pásasela a otro</button>
     </div>
+    <p class="aviso" style="border:0; padding-top:14px">Mientras más seamos, más peso tiene Barinas en esa mesa.</p>
+
+    <!-- ══ Escribirle a la Cámara ══ -->
+    <details class="porque escribir">
+      <summary>¿Quieres comunicarte con la Cámara?</summary>
+      <p>Escríbenos aquí y CADTEBA te responde. Esto sí necesita tus datos, porque si no, no
+         hay a dónde contestarte.</p>
+      <div class="ops" style="gap:10px; margin-top:12px">
+        <input type="text" id="m_nombre" placeholder="Tu nombre" autocomplete="name">
+        <input type="tel"  id="m_telefono" placeholder="Tu teléfono" autocomplete="tel">
+        <textarea id="m_mensaje" placeholder="Tu mensaje"></textarea>
+      </div>
+      <button class="btn" id="enviarMensaje" style="margin-top:12px">Enviar mensaje</button>
+      <p class="recado" id="recado"></p>
+    </details>
+
+    <footer class="pie-legal">
+      <div class="marcas-pie">
+        <img src="/marcas/cadteba.png" alt="CADTEBA">
+        <img class="mq" src="/marcas/masquellano.png" alt="Barinas, más que llano">
+      </div>
+      <p><strong>Cámara de Desarrollo Turístico del Estado Barinas · CADTEBA</strong><br>
+         Barinas, Venezuela · <a href="https://cadteba.org" target="_blank" rel="noopener">cadteba.org</a></p>
+      <p class="finito">© 2026 CADTEBA. Todos los derechos reservados.<br>
+         Desarrollado por <a href="https://bhgve.com" target="_blank" rel="noopener">BHG Estudio</a>.</p>
+    </footer>
   </div>
 </section>
 
@@ -665,6 +773,8 @@
       ["Estabilidad: que no cambien las reglas cada año", ""],
       ["Trámites más rápidos y menos permisos", ""],
       ["Incentivos por contratar gente joven", ""],
+      ["Exonerar de impuestos a los emprendimientos turísticos nuevos", "durante sus primeros años de operación"],
+      ["Exoneraciones a quien demuestre vínculo con el turismo", "aunque su actividad principal sea otra"],
       ["Suprimir el IGTF", "está planteado en la mesa nacional"],
       ["Bajar las retenciones de IVA del 75%", ""],
       ["Declarar el IVA cada 30 días y no cada 15", ""],
@@ -704,6 +814,12 @@
       ["Más del 75%", ""],
     ],
 
+    uno: [
+      ["IVA", "el impuesto al valor agregado"],
+      ["ISLR", "impuesto sobre la renta"],
+      ["Otro", "indica cuál abajo"],
+    ],
+
     calidad_servicios: [
       ["Adecuada", "se puede trabajar sin sobresaltos"],
       ["Aceptable con limitaciones", "se trabaja, pero uno se las arregla"],
@@ -735,10 +851,24 @@
   ];
 
   const R = { rubro: [], impuestos: [], cambios: [], inversion: [], acuerdos: {}, servicios: {}, momentos: [] };
+  let idRespuesta = null;   // la llave de esta respuesta, para poder completarla después
+  let af = 0;               // por cuál frase del deslizador va
   const pasos = [...document.querySelectorAll(".paso")];
   const donde = () => pasos[i].dataset.id;          // en qué pantalla vamos
   const ultimo = pasos.length - 1;                  // el cierre
   let i = 0;
+
+  // Cada «Otro» tiene su recuadro, que solo asoma cuando se marca. Sin esto,
+  // «Otro» es un agujero en el informe: se sabe que hay algo más pero no qué.
+  const OTROS = { impuestos: "otroImpuestosCaja", cambios: "otroCambiosCaja",
+                  inversion: "otroInversionCaja", uno: "otroUnoCaja" };
+  function revisarOtro(campo) {
+    const caja = $(OTROS[campo]);
+    if (!caja) return;
+    const marcado = Array.isArray(R[campo]) ? R[campo].includes("Otro") : R[campo] === "Otro";
+    caja.hidden = !marcado;
+    if (!marcado) caja.querySelector("input").value = "";
+  }
 
   const tilde = '<span class="caja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 5 5L20 7"/></svg></span>';
 
@@ -758,9 +888,10 @@
     caja.querySelectorAll(".op").forEach(b => {
       b.onclick = () => {
         if (multi) {
-          const puestos = caja.querySelectorAll('[aria-pressed="true"]');
           const ya = b.getAttribute("aria-pressed") === "true";
-          if (!ya && tope > 1 && puestos.length >= tope) return;
+          const cuenta = [...caja.querySelectorAll('[aria-pressed="true"]')]
+                           .filter(x => x.dataset.valor !== "Otro").length;
+          if (!ya && b.dataset.valor !== "Otro" && tope > 1 && cuenta >= tope) return;
           b.setAttribute("aria-pressed", ya ? "false" : "true");
           R[campo] = [...caja.querySelectorAll('[aria-pressed="true"]')].map(x => x.dataset.valor);
         } else {
@@ -768,29 +899,13 @@
           b.setAttribute("aria-pressed", "true");
           R[campo] = b.dataset.valor;
         }
+        revisarOtro(campo);
         revisar();
       };
     });
   });
 
   // La pregunta 3 se arma con lo que él mismo marcó en la 1
-  function armarUno() {
-    const caja = document.querySelector('[data-campo="uno"]');
-    const suyos = R.impuestos.length ? R.impuestos : OPCIONES.impuestos.map(o => o[0]);
-    caja.innerHTML = suyos.map(t =>
-      `<button type="button" class="op una" data-valor="${t}" aria-pressed="false">${tilde}<span><b>${t}</b></span></button>`
-    ).join("");
-    caja.querySelectorAll(".op").forEach(b => {
-      b.onclick = () => {
-        caja.querySelectorAll(".op").forEach(x => x.setAttribute("aria-pressed", "false"));
-        b.setAttribute("aria-pressed", "true");
-        R.uno = b.dataset.valor;
-        revisar();
-      };
-    });
-  }
-
-  let af = 0;
   // Un renglón por servicio con sus cuatro notas. Se pinta una sola vez y se
   // queda a la vista: la gente compara un servicio con otro mientras califica.
   function pintarServicios() {
@@ -849,7 +964,7 @@
       case "servicios": return SERVICIOS.every(x => R.servicios[x]);
       case "servicios-general": return !!R.calidad_servicios;
       case "acuerdos":  return af >= AFIRMACIONES.length;
-      case "contacto":  return $("nombre").value.trim().length > 1 && $("telefono").value.trim().length > 6;
+      case "contacto":  return true;   // todo opcional, a propósito
       default: return true;
     }
   }
@@ -858,7 +973,7 @@
     $("seguir").disabled = !listo();
     $("seguir").textContent =
         donde() === "portada"  ? "Comenzar"
-      : donde() === "contacto" ? "Enviar mi opinión"
+      : donde() === "contacto" ? "Listo, terminar"
       : donde() === "acuerdos" && af < AFIRMACIONES.length ? "Responde arriba"
       : donde() === "servicios" && !listo() ? "Falta calificar alguno"
       : "Seguir";
@@ -896,7 +1011,8 @@
     pasos[i].classList.add("on");
     window.scrollTo({ top: 0, behavior: "instant" });
     telon(donde() === "portada");
-    if (donde() === "uno") armarUno();
+    if (donde() === "contacto") guardarDeCorrido();
+    if (donde() === "cierre") pintarCara();
     if (donde() === "servicios" && !$("serviciosBox").innerHTML) pintarServicios();
     if (donde() === "acuerdos" && !$("afirmaBox").innerHTML) pintarAfirmacion();
     revisar();
@@ -906,37 +1022,131 @@
   $("atras").onclick = () => ir(Math.max(0, i - 1));
   ["negocio", "nombre", "telefono", "correo"].forEach(id => { $(id).oninput = revisar; });
 
-  async function enviar() {
-    const btn = $("seguir");
-    btn.disabled = true; btn.textContent = "Enviando…";
-    const cuerpo = {
-      negocio: $("negocio").value.trim(),
+  // Todo lo respondido, en un solo objeto. Se usa dos veces: al guardar de
+  // corrido antes de pedir datos, y al completar con el contacto.
+  function loQueHayHasta() {
+    const val = id => { const e = $(id); return e ? e.value.trim() : ""; };
+    return {
+      id: idRespuesta,
       rubro: R.rubro, municipio: R.municipio, tamano: R.tamano,
-      impuestos: R.impuestos, cambios: R.cambios,
-      uno: R.uno, porque_uno: $("porque_uno").value.trim(),
-      inversion: R.inversion, acuerdos: R.acuerdos,
       momentos: R.momentos, dias: R.dias || "", ocupacion: R.ocupacion || "",
+      impuestos: R.impuestos, otro_impuestos: val("otro_impuestos"),
+      cambios: R.cambios, otro_cambios: val("otro_cambios"),
+      uno: R.uno, otro_uno: val("otro_uno"), porque_uno: val("porque_uno"),
+      inversion: R.inversion, otro_inversion: val("otro_inversion"),
       servicios: R.servicios,
       calidad_servicios: R.calidad_servicios || "",
-      prioridad_servicio: $("prioridad_servicio").value.trim(),
-      nombre: $("nombre").value.trim(),
-      telefono: $("telefono").value.trim(),
-      correo: $("correo").value.trim(),
+      prioridad_servicio: val("prioridad_servicio"),
+      acuerdos: R.acuerdos,
+      valoracion: R.valoracion === undefined ? "" : R.valoracion,
+      negocio: val("negocio"), nombre: val("nombre"), telefono: val("telefono"),
+      correo: val("correo"), instagram: val("instagram"), web: val("web"),
       afiliado: R.afiliado || "",
     };
+  }
+
+  async function mandar(cuerpo) {
+    const r = await fetch("/api/opina", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify(cuerpo),
+    });
+    const d = await r.json();
+    if (d.id) idRespuesta = d.id;      // desde aquí, cada envío completa el mismo registro
+    return d;
+  }
+
+  // Se guarda ANTES de pedir los datos de contacto. Si la persona cierra ahí
+  // —y va a pasar— su opinión ya está contada. Antes se perdía entera.
+  let guardando = false;
+  async function guardarDeCorrido() {
+    if (guardando || idRespuesta) return;
+    guardando = true;
+    try { await mandar(loQueHayHasta()); } catch (e) { /* se reintenta al final */ }
+    guardando = false;
+  }
+
+  async function enviar() {
+    const btn = $("seguir");
+    btn.disabled = true; btn.textContent = "Guardando…";
     try {
-      const r = await fetch("/api/opina", {
-        method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify(cuerpo),
-      });
-      const d = await r.json();
+      const d = await mandar(loQueHayHasta());
       $("cuantos").textContent = d.total || "—";
     } catch (e) { $("cuantos").textContent = "—"; }
     ir(ultimo);
   }
 
+  // ── La carita ────────────────────────────────────────────────────────
+  // No hay once dibujos: hay uno solo cuyos trazos se recalculan. La boca es
+  // una curva cuya comba va de hacia abajo a hacia arriba, las cejas suben o
+  // se fruncen, y los ojos se achican al reír y se abren al asombro.
+  const HUMORES = [
+    "Perdimos el tiempo", "No me convenció", "Le falta", "Regular", "Va bien",
+    "Está bien", "Me gustó", "Muy buena", "Excelente", "Buenísima", "¡Me encantó!",
+  ];
+
+  function pintarCara() {
+    const v = Number($("animo").value);      // 0 a 10
+    const t = v / 10;                        // 0 = triste, 1 = feliz
+    const acento = getComputedStyle(document.documentElement).getPropertyValue("--acento");
+
+    // La boca: el punto de control sube o baja según el ánimo.
+    const comba = 128 + (t - .5) * 96;        // de 80 (triste) a 176 (feliz)
+    const ancho = 26 + t * 12;                // sonríe más ancho que como frunce
+    $("boca").setAttribute("d",
+      `M ${100 - ancho} 132 Q 100 ${comba} ${100 + ancho} 132`);
+
+    // Las cejas: planas en el medio, arqueadas arriba, fruncidas abajo.
+    const alto = 68 - (t - .5) * 12;
+    const arco = (t - .5) * 16;
+    $("cejaI").setAttribute("d", `M 58 ${alto + arco} Q 72 ${alto - arco * 1.6} 86 ${alto + arco * .4}`);
+    $("cejaD").setAttribute("d", `M 114 ${alto + arco * .4} Q 128 ${alto - arco * 1.6} 142 ${alto + arco}`);
+
+    // Los ojos: se achican de la risa y se abren del asombro.
+    const r = t > .8 ? 9 - (t - .8) * 15 : 6 + t * 3.5;
+    $("ojoI").setAttribute("r", Math.max(3, r));
+    $("ojoD").setAttribute("r", Math.max(3, r));
+
+    $("cara").style.color = acento;
+    $("humor").textContent = HUMORES[v];
+    R.valoracion = v;
+    clearTimeout(pintarCara.espera);
+    // Se manda una sola vez cuando la persona suelta el dedo, no en cada paso.
+    pintarCara.espera = setTimeout(() => { mandar(loQueHayHasta()).catch(() => {}); }, 900);
+  }
+  $("animo").oninput = pintarCara;
+
+  // ── El recado para la Cámara ─────────────────────────────────────────
+  $("enviarMensaje").onclick = async () => {
+    const nom = $("m_nombre").value.trim();
+    const tel = $("m_telefono").value.trim();
+    const msg = $("m_mensaje").value.trim();
+    const aviso = $("recado");
+    if (nom.length < 2 || tel.length < 7 || msg.length < 5) {
+      aviso.className = "recado mal";
+      aviso.textContent = "Faltan tu nombre, tu teléfono o el mensaje.";
+      return;
+    }
+    const b = $("enviarMensaje");
+    b.disabled = true; b.textContent = "Enviando…";
+    try {
+      const r = await fetch("/api/opina?mensaje=1", {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ nombre: nom, telefono: tel, mensaje: msg }),
+      });
+      if (!r.ok) throw new Error();
+      aviso.className = "recado bien";
+      aviso.textContent = "Listo, la Cámara lo recibió. Te van a escribir.";
+      $("m_mensaje").value = "";
+      b.hidden = true;
+    } catch (e) {
+      aviso.className = "recado mal";
+      aviso.textContent = "No se pudo enviar. Intenta de nuevo en un momento.";
+      b.disabled = false; b.textContent = "Enviar mensaje";
+    }
+  };
+
   $("compartir").onclick = () => {
-    const msg = "El turismo de Barinas está opinando sobre la reforma de impuestos. Son 3 minutos y casi todo es tocar 👉 " + location.origin;
+    const msg = "El turismo de Barinas está opinando sobre el nuevo modelo tributario. Son 3 minutos y casi todo es tocar 👉 " + location.origin;
     if (navigator.share) navigator.share({ text: msg });
     else location.href = "https://wa.me/?text=" + encodeURIComponent(msg);
   };

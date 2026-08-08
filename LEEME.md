@@ -70,7 +70,7 @@ El recorrido:
 | Pantalla | Qué recoge |
 |---|---|
 | `portada` | por qué se está preguntando |
-| `negocio` `rubro` `municipio` `tamano` | quién responde |
+| `rubro` `municipio` `tamano` | a qué sector pertenece — **sin pedir nombres** |
 | `temporada` | momentos del año, días con afluencia real, ocupación |
 | `impuestos` | cuáles aprietan más (hasta tres) |
 | `cambios` | qué haría falta |
@@ -79,8 +79,17 @@ El recorrido:
 | `servicios` | los seis servicios, con las cuatro notas del diagnóstico nacional |
 | `servicios-general` | calidad general y prioridad a atender |
 | `acuerdos` | deslizador de consenso: de acuerdo · paso · en desacuerdo |
-| `contacto` | nombre, WhatsApp, correo, afiliación |
-| `cierre` | gracias, contador y botón para compartir |
+| `contacto` | **todo opcional**: nombre, prestador, WhatsApp, correo, Instagram, web |
+| `cierre` | gracias, contador, la carita de valoración, compartir, recado a la Cámara y pie legal |
+
+**La respuesta se guarda ANTES de pedir el contacto.** Al entrar a `contacto` se
+manda lo respondido y el servidor devuelve la llave; el envío final sobrescribe
+ese mismo registro. Antes, quien cerraba en la última pantalla se perdía entero
+— le exigíamos el dato y encima perdíamos la opinión. Ahora una persona es una
+fila, esté completa o no.
+
+**Ninguna identificación es obligatoria.** El nombre y el teléfono son para
+mandar el informe, nada más. Quien no quiera dejar nada, opina igual.
 
 **Las pantallas se identifican por nombre (`data-id`), no por número.** Al
 principio iban numeradas y cada pregunta nueva rompía la navegación. Si mañana

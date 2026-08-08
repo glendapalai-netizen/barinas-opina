@@ -274,6 +274,18 @@
     </div>
   </section>
 
+  <section class="bloque" style="--acento:var(--verde)">
+    <h2>Cómo calificaron <em>la consulta</em></h2>
+    <p class="nota">La carita del final, de 0 a 10. Sirve para saber si el instrumento gusta antes de repetirlo con otro tema.</p>
+    <div id="gValoracion"></div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--magenta)">
+    <h2>Recados para la <em>Cámara</em></h2>
+    <p class="nota">Lo que dejó la gente en «¿quieres comunicarte con la Cámara?». Estos sí esperan respuesta.</p>
+    <div id="gMensajes"></div>
+  </section>
+
   <section class="bloque" style="--acento:var(--tinta)">
     <h2>Respuesta por respuesta</h2>
     <p class="nota">La base completa, con los datos de contacto. Esta parte no se publica: es para el trabajo de la cámara.</p>
@@ -582,12 +594,35 @@
         <cite>${esc(f.negocio || "Sin nombre")}${f.municipio ? " · " + esc(f.municipio) : ""}${f.uno ? " · sobre: " + esc(f.uno) : ""}</cite>
       </div>`).join("") : '<p class="vacio">Todavía nadie ha escrito su porqué.</p>';
 
+    // Valoración de la consulta
+    const notas = filas.map(f => f.valoracion).filter(v => v !== "" && v !== undefined && v !== null).map(Number);
+    $("gValoracion").innerHTML = notas.length
+      ? `<div class="titular" style="--oro:var(--verde)">
+           <b>${(notas.reduce((a, b) => a + b, 0) / notas.length).toFixed(1)}</b>
+           <p>de 10, promedio de <strong>${notas.length}</strong> ${notas.length === 1 ? "persona" : "personas"} que la calificaron.
+              ${pct(notas.filter(n => n >= 8).length, notas.length)}% le puso 8 o más.</p>
+         </div>`
+      : '<p class="vacio">Todavía nadie ha calificado la consulta.</p>';
+
+    // Recados
+    const recados = DATOS.mensajes || [];
+    $("gMensajes").innerHTML = recados.length ? recados.map(m => `
+      <div class="voz">
+        <p>«${esc(m.mensaje)}»</p>
+        <cite>${esc(m.nombre)} · ${esc(m.telefono)} · ${new Date(m.cuando).toLocaleDateString("es-VE")}</cite>
+      </div>`).join("") : '<p class="vacio">No hay recados todavía.</p>';
+
     // Tabla
     const cols = [
-      ["cuando", "Fecha"], ["negocio", "Negocio"], ["rubro", "Rubro"], ["municipio", "Municipio"],
-      ["tamano", "Tamaño"], ["impuestos", "Los que aprietan"], ["uno", "Prioridad 1"],
-      ["porque_uno", "Por qué"], ["cambios", "Qué hace falta"], ["inversion", "Para invertir"],
-      ["nombre", "Contacto"], ["telefono", "WhatsApp"], ["correo", "Correo"], ["afiliado", "Afiliación"],
+      ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["municipio", "Municipio"],
+      ["tamano", "Tamaño"], ["dias", "Días al año"], ["ocupacion", "Ocupación"],
+      ["impuestos", "Los que aprietan"], ["otro_impuestos", "Otro tributo"],
+      ["uno", "Prioridad 1"], ["otro_uno", "Cuál"], ["porque_uno", "Por qué"],
+      ["cambios", "Qué hace falta"], ["otro_cambios", "Otra medida"],
+      ["inversion", "Para invertir"], ["otro_inversion", "Otra"],
+      ["valoracion", "Nota"],
+      ["nombre", "Contacto"], ["telefono", "WhatsApp"], ["correo", "Correo"],
+      ["instagram", "Instagram"], ["web", "Web"], ["afiliado", "Afiliación"],
     ];
     const celda = (f, c) => c === "cuando"
       ? new Date(f.cuando).toLocaleDateString("es-VE")
