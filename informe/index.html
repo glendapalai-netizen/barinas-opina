@@ -1,165 +1,300 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#FBF3DE">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070B10">
 <meta name="robots" content="noindex, nofollow">
-<title>BARINAS OPINA · informe para CADTEBA</title>
+<title>BARINAS OPINA · Tablero de CADTEBA</title>
 <link rel="icon" type="image/png" href="/icono.png">
 
 <style>
-  /* Misma paleta y mismo pulso que la consulta: crema, planos de color y
-     grecas. Lo que cambia es el oficio — aquí se lee, no se responde. */
-  :root {
-    --crema:#FBF3DE; --papel:#FFFFFF; --tinta:#1D2A34; --tinta-suave:#6C7A83; --borde:#E6DAC0;
-    --naranja:#F5900A; --azul:#0C34D6; --coral:#F0472E; --verde:#2E8F14;
-    --turquesa:#00A0AE; --magenta:#C4187C; --oro:#B8862F;
+/* ══════════════════════════════════════════════════════════════════════════
+   TABLERO · La misma noche de la consulta, en clave de instrumento.
+   Cristal sobre el atardecer, rail de navegación a la izquierda en pantalla
+   grande y muelle flotante abajo en el teléfono. Al imprimir se voltea a
+   blanco: este documento termina en papel, en una reunión.
+   ══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --fondo:#070B10; --tinta:#F2F6F8; --suave:#93A3AF; --linea:rgba(255,255,255,.09);
+  --naranja:#FFA42B; --azul:#4C79FF; --coral:#FF6B52; --verde:#56C93A;
+  --turquesa:#22C4D2; --magenta:#F0479F; --oro:#D8A548;
+  --acento:var(--oro);
+  --vidrio:rgba(255,255,255,.055);
+  --radio:22px;
+}
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html { -webkit-text-size-adjust:100%; }
+body {
+  min-height:100dvh; background:var(--fondo); color:var(--tinta);
+  font:15px/1.6 "Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3 { font-weight:900; line-height:1.1; letter-spacing:-.022em; text-wrap:balance; }
+button { font:inherit; }
+
+/* El atardecer, quieto y muy al fondo */
+.telon { position:fixed; inset:0; z-index:0; overflow:hidden; }
+.telon img { width:100%; height:100%; object-fit:cover; object-position:center 30%; }
+.telon::after {
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(90% 60% at 20% 0%, rgba(255,164,43,.10), transparent 70%),
+    linear-gradient(180deg, rgba(7,11,16,.58) 0%, rgba(7,11,16,.80) 40%, rgba(7,11,16,.94) 100%);
+}
+
+/* ── Cristal ─────────────────────────────────────────────────────────────── */
+.vidrio {
+  position:relative; overflow:hidden; border-radius:var(--radio);
+  background:var(--vidrio);
+  backdrop-filter:blur(26px) saturate(140%); -webkit-backdrop-filter:blur(26px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 14px 34px -14px rgba(0,0,0,.8);
+}
+/* El filo: anillo de luz arriba y abajo, como el canto de un cristal */
+.vidrio::before {
+  content:""; position:absolute; inset:0; border-radius:inherit; padding:1.2px; pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(255,255,255,.42) 0%, rgba(255,255,255,.13) 24%,
+    rgba(255,255,255,0) 46%, rgba(255,255,255,0) 58%,
+    rgba(255,255,255,.13) 80%, rgba(255,255,255,.42) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+}
+
+/* ── Puerta ──────────────────────────────────────────────────────────────── */
+.puerta { position:relative; z-index:2; max-width:420px; margin:14vh auto; padding:34px 26px; text-align:center; }
+.puerta h2 { font-size:1.5rem; margin-bottom:8px; }
+.puerta p { color:var(--suave); font-size:.92rem; margin-bottom:22px; }
+.campos { display:flex; flex-direction:column; gap:10px; }
+input[type=password], input[type=text] {
+  width:100%; padding:15px 17px; border-radius:15px; font:inherit; text-align:center;
+  background:rgba(255,255,255,.06); color:var(--tinta); outline:none;
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 2px 8px rgba(0,0,0,.3);
+}
+input:focus { border-color:color-mix(in srgb,var(--oro) 65%,transparent);
+              box-shadow:0 0 0 3px color-mix(in srgb,var(--oro) 20%,transparent); }
+.pista { font-size:.8rem; color:var(--suave); margin-top:14px; line-height:1.5; }
+.pista b { color:var(--coral); font-weight:800; }
+.error { color:var(--coral); font-size:.86rem; font-weight:700; margin-top:14px; min-height:20px; }
+
+/* ── Botones ─────────────────────────────────────────────────────────────── */
+.btn {
+  position:relative; overflow:hidden; border:none; cursor:pointer; color:#08111C;
+  padding:14px 22px; border-radius:14px; font-weight:800; font-size:.95rem;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.32) 0%, rgba(255,255,255,0) 52%),
+    linear-gradient(180deg, color-mix(in srgb,var(--acento) 78%,transparent), color-mix(in srgb,var(--acento) 58%,transparent));
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 1px color-mix(in srgb,var(--acento) 42%,transparent),
+              0 10px 26px -10px color-mix(in srgb,var(--acento) 70%,transparent);
+  text-shadow:0 1px 2px rgba(255,255,255,.2);
+}
+.btn:disabled { opacity:.45; cursor:default; }
+.btn.claro {
+  color:var(--tinta); background:rgba(255,255,255,.07); text-shadow:none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 0 0 1px rgba(255,255,255,.12);
+}
+.btn:active { transform:translateY(1px); }
+
+/* ══ El tablero ═════════════════════════════════════════════════════════ */
+.tablero { position:relative; z-index:2; display:flex; min-height:100dvh; }
+
+/* Rail de la izquierda */
+.rail {
+  position:sticky; top:0; align-self:flex-start; height:100dvh;
+  display:flex; flex-direction:column; align-items:center; gap:7px;
+  padding:22px 14px; flex:0 0 78px;
+}
+.rail .marca { width:46px; height:46px; border-radius:50%; overflow:hidden; margin-bottom:18px; flex:0 0 auto; }
+.rail .marca img { width:100%; height:100%; object-fit:cover; }
+.pest {
+  width:48px; height:48px; border-radius:50%; cursor:pointer; border:none; flex:0 0 auto;
+  display:flex; align-items:center; justify-content:center; position:relative;
+  background:rgba(255,255,255,.045); color:var(--tinta);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 0 0 1px rgba(255,255,255,.08);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  transition:background .18s ease, color .18s ease, transform .12s ease;
+}
+.pest svg { width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.9;
+            stroke-linecap:round; stroke-linejoin:round; }
+.pest:hover { background:rgba(255,255,255,.1); }
+.pest.on { background:#FDFDFD; color:#141414; box-shadow:0 6px 20px -6px rgba(0,0,0,.8); }
+.pest .globo {
+  position:absolute; left:calc(100% + 12px); white-space:nowrap; font-size:.78rem; font-weight:800;
+  padding:7px 12px; border-radius:10px; background:rgba(12,18,26,.94); color:var(--tinta);
+  box-shadow:0 0 0 1px rgba(255,255,255,.1); opacity:0; pointer-events:none; transition:opacity .16s;
+}
+.pest:hover .globo { opacity:1; }
+
+/* Cuerpo */
+.cuerpo { flex:1; min-width:0; padding:24px 26px 40px 0; }
+@media (max-width:900px) { .cuerpo { padding:18px 16px 110px; } }
+
+.cabecera { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+.cabecera .titulo { font-size:clamp(1.4rem,3.4vw,2rem); text-transform:uppercase; letter-spacing:-.005em; }
+.cabecera .titulo .b1 { color:#fff; } .cabecera .titulo .b2 { color:var(--naranja); }
+.cabecera .sub { font-size:.78rem; color:var(--suave); font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+.cabecera .quien { margin-left:auto; display:flex; align-items:center; gap:10px; }
+.cabecera .quien .nom { text-align:right; }
+.cabecera .quien b { display:block; font-size:.86rem; }
+.cabecera .quien span { font-size:.74rem; color:var(--suave); }
+.marcas-alto { display:flex; align-items:center; gap:12px; }
+.marcas-alto img { height:38px; width:auto; object-fit:contain; }
+
+.barra-acciones { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+.chip {
+  display:inline-flex; align-items:center; gap:7px; padding:9px 15px; border-radius:99px;
+  font-size:.8rem; font-weight:700; cursor:pointer; border:none; color:var(--tinta);
+  background:rgba(255,255,255,.06); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 0 0 1px rgba(255,255,255,.09);
+}
+.chip:hover { background:rgba(255,255,255,.11); }
+.chip svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.chip.corte { cursor:default; color:var(--suave); }
+
+/* ── Rejilla y tarjetas ──────────────────────────────────────────────────── */
+.rejilla { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; }
+.tarjeta { padding:20px 22px; grid-column:span 12; }
+.c4 { grid-column:span 4; } .c6 { grid-column:span 6; } .c8 { grid-column:span 8; }
+.c3 { grid-column:span 3; }
+@media (max-width:1100px) { .c4,.c3 { grid-column:span 6; } .c8 { grid-column:span 12; } }
+@media (max-width:700px) { .c4,.c6,.c8,.c3 { grid-column:span 12; } }
+
+.tarjeta > h3 { font-size:1.02rem; margin-bottom:4px; }
+.tarjeta > h3 em { font-style:normal; color:var(--acento); }
+.nota { color:var(--suave); font-size:.8rem; margin-bottom:16px; line-height:1.5; }
+.rotulo { font-size:.68rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase;
+          color:var(--suave); margin:20px 0 10px; }
+.rotulo:first-child { margin-top:0; }
+
+/* Fichas de cifra */
+.fichas { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:16px; }
+.ficha { padding:16px 18px; }
+.ficha b { display:block; font-size:2.2rem; font-weight:900; line-height:1; letter-spacing:-.04em; color:var(--c,var(--oro)); }
+.ficha span { display:block; margin-top:8px; font-size:.76rem; color:var(--suave); font-weight:700; line-height:1.35; }
+
+/* Barras horizontales */
+.barra { margin-bottom:12px; }
+.barra .fila { display:flex; align-items:baseline; gap:10px; font-size:.86rem; margin-bottom:5px; }
+.barra .fila i { margin-left:auto; font-style:normal; font-weight:900; color:var(--acento); white-space:nowrap; font-size:.82rem; }
+.barra .via { height:9px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; }
+.barra .via u { display:block; height:100%; border-radius:99px; text-decoration:none;
+  background:linear-gradient(90deg, color-mix(in srgb,var(--acento) 70%,#fff), var(--acento));
+  box-shadow:0 0 14px -2px color-mix(in srgb,var(--acento) 70%,transparent);
+  transition:width .8s cubic-bezier(.2,.8,.3,1); }
+.barra.top1 .fila b::before { content:"▲ "; color:var(--acento); }
+
+/* Barras verticales */
+.columnas { display:flex; align-items:flex-end; gap:10px; height:150px; margin-top:6px; }
+.columnas .col { flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end; }
+.columnas .col u { width:100%; border-radius:10px 10px 6px 6px; text-decoration:none;
+  background:linear-gradient(180deg, color-mix(in srgb,var(--acento) 92%,#fff), color-mix(in srgb,var(--acento) 55%,transparent));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4); min-height:4px; transition:height .8s cubic-bezier(.2,.8,.3,1); }
+.columnas .col em { font-style:normal; font-size:.7rem; color:var(--suave); font-weight:800; text-align:center; line-height:1.2; }
+.columnas .col b { font-size:.78rem; font-weight:900; }
+
+/* Anillo */
+.anillo-caja { display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+.anillo { position:relative; width:150px; height:150px; flex:0 0 auto; }
+.anillo .aro {
+  position:absolute; inset:0; border-radius:50%;
+  background:conic-gradient(from -90deg, var(--acento) calc(var(--p) * 1%), rgba(255,255,255,.08) 0);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 15px), #000 calc(100% - 14px));
+  mask:radial-gradient(farthest-side, transparent calc(100% - 15px), #000 calc(100% - 14px));
+  filter:drop-shadow(0 0 12px color-mix(in srgb,var(--acento) 45%,transparent));
+}
+.anillo .centro { position:absolute; inset:0; display:flex; flex-direction:column;
+                  align-items:center; justify-content:center; }
+.anillo .centro b { font-size:2rem; font-weight:900; letter-spacing:-.04em; line-height:1; }
+.anillo .centro span { font-size:.68rem; color:var(--suave); font-weight:800; text-transform:uppercase; letter-spacing:.1em; margin-top:5px; }
+.leyenda { display:flex; flex-wrap:wrap; gap:14px; font-size:.76rem; color:var(--suave); font-weight:700; }
+.leyenda span { display:flex; align-items:center; gap:7px; }
+.leyenda u { width:11px; height:11px; border-radius:4px; display:inline-block; }
+
+/* Tira de cuatro tramos */
+.tira { display:flex; height:20px; border-radius:7px; overflow:hidden; font-size:.66rem; font-weight:900; color:#08111C; }
+.tira span { display:flex; align-items:center; justify-content:center; min-width:0; }
+.s-b,.a-si { background:var(--verde); } .s-r { background:var(--naranja); }
+.s-d { background:var(--coral); } .s-c { background:#C22B18; color:#fff; }
+.a-paso { background:rgba(255,255,255,.18); color:var(--tinta); } .a-no { background:var(--coral); }
+.serv,.cons { margin-bottom:14px; }
+.serv .fila,.cons .fila { display:flex; align-items:baseline; gap:10px; font-size:.86rem; margin-bottom:5px; }
+.serv .fila i { margin-left:auto; font-style:normal; font-weight:900; color:var(--coral); font-size:.8rem; }
+.cons p.frase { font-weight:700; font-size:.9rem; margin-bottom:8px; }
+.cons { border-top:1px solid var(--linea); padding-top:14px; }
+.cons:first-of-type { border-top:0; padding-top:0; }
+.etiqueta { display:inline-block; font-size:.62rem; font-weight:900; letter-spacing:.08em;
+            text-transform:uppercase; padding:4px 10px; border-radius:99px; margin-bottom:8px; }
+.et-unido { color:var(--verde); box-shadow:inset 0 0 0 1px var(--verde); }
+.et-partido { color:var(--naranja); box-shadow:inset 0 0 0 1px var(--naranja); }
+.et-rechazo { color:var(--coral); box-shadow:inset 0 0 0 1px var(--coral); }
+
+/* Titular */
+.titular { display:flex; align-items:center; gap:20px; flex-wrap:wrap; padding:20px 22px;
+           border-radius:18px; background:color-mix(in srgb,var(--acento) 10%,transparent);
+           box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acento) 40%,transparent); }
+.titular b { font-size:3rem; font-weight:900; line-height:1; letter-spacing:-.045em; color:var(--acento); }
+.titular p { flex:1 1 250px; font-size:.92rem; line-height:1.55; }
+.titular strong { font-weight:900; color:#fff; }
+
+/* Citas */
+.voz { border-left:3px solid var(--acento); padding:4px 0 4px 14px; margin-bottom:16px; }
+.voz p { font-size:.92rem; line-height:1.55; }
+.voz cite { display:block; font-style:normal; margin-top:6px; font-size:.74rem; color:var(--suave); font-weight:700; }
+
+/* Tabla */
+.marco { overflow-x:auto; border-radius:14px; box-shadow:inset 0 0 0 1px var(--linea); }
+table { border-collapse:collapse; width:100%; font-size:.8rem; white-space:nowrap; }
+th,td { padding:10px 13px; text-align:left; border-bottom:1px solid var(--linea); }
+th { background:rgba(255,255,255,.05); font-size:.66rem; letter-spacing:.07em; text-transform:uppercase;
+     font-weight:900; color:var(--suave); position:sticky; top:0; backdrop-filter:blur(10px); }
+tr:last-child td { border-bottom:0; }
+td.ancho { white-space:normal; min-width:230px; }
+.vacio { text-align:center; color:var(--suave); padding:30px 10px; font-size:.88rem; }
+
+.hoja { display:none; }
+.hoja.on { display:block; animation:entra .3s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes entra { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+
+/* ── Muelle del teléfono ─────────────────────────────────────────────────── */
+@media (max-width:900px) {
+  .tablero { flex-direction:column; }
+  .rail {
+    position:fixed; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom));
+    top:auto; height:auto; flex-direction:row; justify-content:space-between; align-self:auto;
+    padding:9px 10px; border-radius:26px; z-index:40; overflow-x:auto; gap:5px;
+    background:rgba(255,255,255,.07); backdrop-filter:blur(24px) saturate(1.3);
+    -webkit-backdrop-filter:blur(24px) saturate(1.3);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 12px 34px -8px rgba(0,0,0,.85);
   }
-  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-  body { background:var(--crema); color:var(--tinta); -webkit-font-smoothing:antialiased;
-         font:16px/1.6 "Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,sans-serif; }
-  h1,h2,h3 { font-weight:900; line-height:1.1; letter-spacing:-.022em; text-wrap:balance; }
+  .rail .marca { display:none; }
+  .pest { width:44px; height:44px; }
+  .pest .globo { display:none; }
+}
 
-  .cenefa { height:12px; width:100%;
-    background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='72' height='12' viewBox='0 0 72 12'>\
-<g fill='none' stroke-width='2.4' stroke-linecap='square'>\
-<path d='M2 10V4h6v4h4V2h6' stroke='%23F5900A'/>\
-<path d='M26 10V4h6v4h4V2h6' stroke='%2300A0AE'/>\
-<path d='M50 10V4h6v4h4V2h6' stroke='%23C4187C'/>\
-</g></svg>");
-    background-repeat:repeat-x; background-size:72px 12px; }
-
-  main { max-width:940px; margin:0 auto; padding:28px 20px 90px; }
-
-  /* ── Portada del informe ─────────────────────────────────────────── */
-  .encabezado { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:22px; }
-  .encabezado img { height:58px; width:auto; object-fit:contain; }
-  .encabezado .mq { height:46px; margin-left:auto; }
-  .titulo { margin-bottom:6px; font-size:clamp(1.6rem,5.2vw,2.4rem);
-            text-transform:uppercase; letter-spacing:-.005em; }
-  .titulo .b1 { color:var(--azul); } .titulo .b2 { color:var(--naranja); }
-  .bajada { color:var(--tinta-suave); font-size:.95rem; }
-  .sello { display:inline-block; margin-top:14px; font-size:.7rem; font-weight:800;
-           letter-spacing:.1em; text-transform:uppercase; padding:6px 14px; border-radius:99px;
-           background:var(--oro); color:#fff; }
-
-  /* ── Puerta ──────────────────────────────────────────────────────── */
-  .puerta { max-width:420px; margin:12vh auto; text-align:center; }
-  .puerta h2 { font-size:1.5rem; margin-bottom:8px; }
-  .puerta p { color:var(--tinta-suave); font-size:.92rem; margin-bottom:22px; }
-  .campos { display:flex; flex-direction:column; gap:10px; }
-  input[type=password], input[type=text] { width:100%; padding:16px 17px; border-radius:16px; font:inherit;
-    background:var(--papel); border:2px solid var(--borde); color:var(--tinta); outline:none; text-align:center; }
-  .pista { font-size:.8rem; color:var(--tinta-suave); margin-top:14px; line-height:1.5; }
-  .pista b { color:var(--coral); font-weight:800; }
-  .quien-entro { font-size:.78rem; color:var(--tinta-suave); font-weight:700; margin-top:10px; }
-  input:focus { border-color:var(--oro); }
-  .btn { padding:15px 24px; border-radius:99px; border:0; cursor:pointer;
-         font:inherit; font-weight:800; background:var(--tinta); color:#fff; }
-  .btn:active { transform:scale(.98); }
-  .btn.claro { background:var(--papel); color:var(--tinta); border:2px solid var(--borde); }
-  .btn:disabled { opacity:.5; cursor:default; }
-  .error { color:var(--coral); font-size:.86rem; font-weight:700; margin-top:14px; min-height:20px; }
-
-  /* ── Cifras de arriba ────────────────────────────────────────────── */
-  .cifras { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:26px 0 34px; }
-  .cifra { background:var(--papel); border:2px solid var(--borde); border-radius:18px; padding:18px;
-           box-shadow:0 2px 0 rgba(29,42,52,.05); }
-  .cifra b { display:block; font-size:2.1rem; font-weight:900; line-height:1; letter-spacing:-.03em; color:var(--acento,var(--azul)); }
-  .cifra span { display:block; margin-top:7px; font-size:.79rem; color:var(--tinta-suave); font-weight:700; }
-
-  /* ── Bloques ─────────────────────────────────────────────────────── */
-  section.bloque { background:var(--papel); border:2px solid var(--borde); border-radius:22px;
-                   padding:22px; margin-bottom:20px; box-shadow:0 3px 0 rgba(29,42,52,.05); }
-  section.bloque > h2 { font-size:1.18rem; margin-bottom:4px; }
-  section.bloque > h2 em { font-style:normal; color:var(--acento); }
-  .nota { color:var(--tinta-suave); font-size:.84rem; margin-bottom:18px; }
-
-  /* Barras */
-  .barra { margin-bottom:13px; }
-  .barra .fila { display:flex; align-items:baseline; gap:10px; font-size:.9rem; margin-bottom:5px; }
-  .barra .fila b { font-weight:700; }
-  .barra .fila i { margin-left:auto; font-style:normal; font-weight:900; color:var(--acento); white-space:nowrap; }
-  .barra .via { height:11px; border-radius:99px; background:#F2E9D4; overflow:hidden; }
-  .barra .via u { display:block; height:100%; border-radius:99px; background:var(--acento);
-                  text-decoration:none; transition:width .7s cubic-bezier(.2,.8,.3,1); }
-  .barra.top1 .fila b::before { content:"▲ "; color:var(--acento); }
-  /* En las tres columnas del perfil el espacio es angosto: letra más chica
-     y el rótulo encima de la cifra, para que nada se pise. */
-  .perfil .barra .fila { display:block; font-size:.82rem; line-height:1.35; }
-  .perfil .barra .fila i { display:block; margin:2px 0 0; font-size:.78rem; }
-
-  /* Consenso */
-  .cons { border-top:1px solid var(--borde); padding:15px 0; }
-  .cons:first-of-type { border-top:0; }
-  .cons p.frase { font-weight:700; font-size:.95rem; margin-bottom:9px; }
-  .cons .tira { display:flex; height:22px; border-radius:7px; overflow:hidden; font-size:.68rem;
-                font-weight:800; color:#fff; }
-  .cons .tira span { display:flex; align-items:center; justify-content:center; min-width:0; }
-  .cons .tira .a { background:var(--verde); } .cons .tira .p { background:#C9BFA8; }
-  .cons .tira .d { background:var(--coral); }
-  .etiqueta { display:inline-block; font-size:.66rem; font-weight:900; letter-spacing:.08em;
-              text-transform:uppercase; padding:4px 10px; border-radius:99px; margin-bottom:8px; }
-  .et-unido { background:color-mix(in srgb,var(--verde) 15%,#fff); color:var(--verde); border:1.5px solid var(--verde); }
-  .et-partido { background:color-mix(in srgb,var(--naranja) 15%,#fff); color:#9A5A00; border:1.5px solid var(--naranja); }
-  .et-rechazo { background:color-mix(in srgb,var(--coral) 13%,#fff); color:var(--coral); border:1.5px solid var(--coral); }
-
-
-  /* El titular: la cifra que se dice en voz alta al abrir la reunión */
-  .titular { display:flex; align-items:center; gap:20px; flex-wrap:wrap;
-    background:color-mix(in srgb,var(--oro) 10%,#fff); border:2px solid var(--oro);
-    border-radius:18px; padding:20px 22px; }
-  .titular b { font-size:3.2rem; font-weight:900; line-height:1; letter-spacing:-.04em; color:var(--oro); }
-  .titular p { flex:1 1 260px; font-size:.95rem; line-height:1.55; color:var(--tinta); }
-  .titular strong { font-weight:900; }
-
-  /* Servicios: una tira de cuatro tramos, del verde al rojo */
-  .serv { margin-bottom: 15px; }
-  .serv .fila { display:flex; align-items:baseline; gap:10px; font-size:.9rem; margin-bottom:5px; }
-  .serv .fila i { margin-left:auto; font-style:normal; font-weight:900; color:var(--coral); white-space:nowrap; }
-  .serv .tira { display:flex; height:22px; border-radius:7px; overflow:hidden;
-                font-size:.68rem; font-weight:800; color:#fff; }
-  .serv .tira span { display:flex; align-items:center; justify-content:center; min-width:0; }
-  .s-b { background:var(--verde); } .s-r { background:var(--naranja); }
-  .s-d { background:var(--coral); } .s-c { background:#A8121B; }
-  .leyenda { display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-size:.76rem;
-             color:var(--tinta-suave); font-weight:700; }
-  .leyenda span { display:flex; align-items:center; gap:6px; }
-  .leyenda u { width:13px; height:13px; border-radius:4px; display:inline-block; }
-
-  /* Voces */
-  .voz { border-left:4px solid var(--acento); padding:4px 0 4px 14px; margin-bottom:16px; }
-  .voz p { font-size:.95rem; line-height:1.55; }
-  .voz cite { display:block; font-style:normal; margin-top:6px; font-size:.78rem;
-              color:var(--tinta-suave); font-weight:700; }
-
-  /* Tabla */
-  .marco { overflow-x:auto; border:2px solid var(--borde); border-radius:16px; background:var(--papel); }
-  table { border-collapse:collapse; width:100%; font-size:.82rem; white-space:nowrap; }
-  th, td { padding:10px 13px; text-align:left; border-bottom:1px solid var(--borde); }
-  th { background:#F6EEDB; font-size:.7rem; letter-spacing:.06em; text-transform:uppercase;
-       font-weight:900; color:var(--tinta-suave); position:sticky; top:0; }
-  tr:last-child td { border-bottom:0; }
-  td.ancho { white-space:normal; min-width:250px; }
-
-  .acciones { display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px; }
-  .pie-doc { text-align:center; color:var(--tinta-suave); font-size:.76rem; margin-top:34px; line-height:1.7; }
-  .vacio { text-align:center; color:var(--tinta-suave); padding:34px 10px; font-size:.9rem; }
-
-  @media print {
-    body { background:#fff; } .acciones, .cenefa { display:none; }
-    section.bloque { break-inside:avoid; box-shadow:none; }
-    .marco { overflow:visible; } table { white-space:normal; }
-  }
+/* ── En papel: se voltea a blanco ────────────────────────────────────────── */
+@media print {
+  body { background:#fff; color:#1D2A34; }
+  .telon, .rail, .barra-acciones { display:none !important; }
+  .cuerpo { padding:0; }
+  .hoja { display:block !important; page-break-before:always; }
+  .hoja:first-of-type { page-break-before:auto; }
+  .vidrio, .tarjeta, .ficha { background:#fff !important; backdrop-filter:none !important;
+    box-shadow:0 0 0 1px #DDD6C4 !important; break-inside:avoid; }
+  .vidrio::before { display:none; }
+  .nota, .suave, .ficha span, .voz cite { color:#6C7A83 !important; }
+  th { background:#F4EEDF !important; color:#6C7A83 !important; }
+  .barra .via { background:#EFE7D4 !important; }
+  .marco { overflow:visible; } table { white-space:normal; }
+}
 </style></head>
 <body>
 
-<div class="cenefa"></div>
+<div class="telon" aria-hidden="true"><img src="/fondo/ventana.jpg" alt=""></div>
 
 <!-- ══ Puerta ══ -->
-<div class="puerta" id="puerta">
-  <h2>Informe de la consulta</h2>
+<div class="puerta vidrio" id="puerta">
+  <h2>Tablero de la consulta</h2>
   <p>Esta vista es de la directiva de CADTEBA.</p>
   <div class="campos">
     <input type="text" id="usuario" placeholder="Usuario" autocomplete="username" autocapitalize="none" spellcheck="false">
@@ -169,142 +304,207 @@
   <button class="btn" id="entrar" style="margin-top:6px">Entrar</button>
 </div>
 
-<!-- ══ Estreno: la primera vez hay que cambiar la clave ══ -->
-<div class="puerta" id="estreno" hidden>
+<!-- ══ Estreno ══ -->
+<div class="puerta vidrio" id="estreno" hidden>
   <h2>Ponle tu clave</h2>
-  <p id="saludo">Es tu primera entrada. La clave de estreno no sirve para ver el informe:
-     elige la tuya y solo tú la vas a saber.</p>
+  <p id="saludo">Es tu primera entrada. La clave de estreno no sirve para ver el tablero.</p>
   <div class="campos">
     <input type="password" id="nueva" placeholder="Tu clave nueva" autocomplete="new-password">
     <input type="password" id="nueva2" placeholder="Escríbela otra vez" autocomplete="new-password">
   </div>
-  <p class="pista">Mínimo 8 caracteres. Anótala donde no se te pierda: <b>no hay forma de recuperarla</b>
-     — si se te olvida, hay que reiniciarla a mano.</p>
+  <p class="pista">Mínimo 8 caracteres. Anótala donde no se te pierda: <b>no hay forma de recuperarla</b>.</p>
   <div class="error" id="error2"></div>
   <button class="btn" id="guardar" style="margin-top:6px">Guardar y entrar</button>
 </div>
 
-<!-- ══ Informe ══ -->
-<main id="informe" hidden>
+<!-- ══ Tablero ══ -->
+<div class="tablero" id="tablero" hidden>
 
-  <div class="encabezado">
-    <img src="/marcas/cadteba.png" alt="CADTEBA">
-    <img src="/marcas/turismo.png" alt="Turismo somos todos">
-    <img class="mq" src="/marcas/masquellano.png" alt="Barinas, más que llano">
-  </div>
+  <nav class="rail" id="rail">
+    <div class="marca"><img src="/marcas/cadteba.png" alt="CADTEBA"></div>
+  </nav>
 
-  <h1 class="titulo"><span class="b1">Barinas</span> <span class="b2">opina</span></h1>
-  <p class="bajada">Lo que dijo el sector turismo del estado Barinas sobre la carga tributaria,
-     de cara al nuevo modelo que se discute en el Consejo Nacional de Economía Productiva.</p>
-  <p class="sello" id="sello">—</p>
-  <p class="quien-entro" id="visor"></p>
+  <main class="cuerpo">
+    <header class="cabecera">
+      <div class="marcas-alto">
+        <img src="/marcas/turismo.png" alt="Turismo somos todos">
+      </div>
+      <div>
+        <h1 class="titulo"><span class="b1">Barinas</span> <span class="b2">opina</span></h1>
+        <p class="sub" id="sello">—</p>
+      </div>
+      <div class="quien">
+        <div class="nom"><b id="visor">—</b><span>CADTEBA · Barinas</span></div>
+      </div>
+    </header>
 
-  <div class="cifras" id="cifras"></div>
-
-  <section class="bloque" style="--acento:var(--oro)">
-    <h2>La temporada: cuántos días <em>de verdad</em> se trabaja</h2>
-    <p class="nota">El argumento central de Barinas. Se tributa doce meses sobre el ingreso bruto,
-       pero el turista llega en unos pocos momentos contados. Aquí está medido, no estimado.</p>
-    <div id="titular"></div>
-    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:24px 0 12px">Días al año con afluencia real</h3>
-    <div id="gDias"></div>
-    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Ocupación en la mejor temporada</h3>
-    <div id="gOcupacion"></div>
-    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Cuáles son esas temporadas</h3>
-    <div id="gMomentos"></div>
-  </section>
-
-  <section class="bloque" style="--acento:var(--coral)">
-    <h2>Los tributos que <em>más aprietan</em></h2>
-    <p class="nota">Cada negocio marcó hasta tres. El porcentaje es sobre el total de negocios que respondieron.</p>
-    <div id="gImpuestos"></div>
-  </section>
-
-  <section class="bloque" style="--acento:var(--azul)">
-    <h2>Si pudieran cambiar <em>uno solo</em></h2>
-    <p class="nota">La prioridad número uno de cada negocio. Es la pregunta que más pesa: obliga a escoger.</p>
-    <div id="gUno"></div>
-  </section>
-
-  <section class="bloque" style="--acento:var(--naranja)">
-    <h2>Qué hace falta para <em>fortalecer</em> el turismo</h2>
-    <p class="nota">Las medidas marcadas como necesarias. Las que dicen «está planteado en la mesa nacional» permiten comparar a Barinas con lo que ya pidieron Fedecámaras y Consecomercio.</p>
-    <div id="gCambios"></div>
-  </section>
-
-  <section class="bloque" style="--acento:var(--verde)">
-    <h2>Qué los haría <em>invertir o contratar</em></h2>
-    <p class="nota">Aquí está el argumento de empleo: lo que el sector dice que necesita para crecer.</p>
-    <div id="gInversion"></div>
-  </section>
-
-  <section class="bloque" style="--acento:var(--magenta)">
-    <h2>Dónde el gremio está <em>unido</em> y dónde partido</h2>
-    <p class="nota">Ordenado por nivel de acuerdo. Verde: de acuerdo · gris: paso · coral: en desacuerdo.
-       Lo que pasa del 75% es posición de gremio; lo que queda entre 40% y 60% es un tema que hay que conversar antes de llevarlo.</p>
-    <div id="gConsenso"></div>
-  </section>
-
-  <section class="bloque" style="--acento:var(--turquesa)">
-    <h2>Los servicios públicos, servicio por <em>servicio</em></h2>
-    <p class="nota">Las mismas seis casillas y las mismas cuatro notas del diagnóstico nacional, para poder volcarlas tal cual.
-       Ordenados por lo que está peor: manda la suma de «deficiente» más «crítico».</p>
-    <div id="gServicios"></div>
-    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Calidad general para poder trabajar</h3>
-    <div id="gCalidad"></div>
-    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Servicio en peor estado, municipio por municipio</h3>
-    <p class="nota">Esto es lo que un promedio nacional no puede decir. Es la ventaja de Barinas en esa mesa.</p>
-    <div class="marco"><table id="tServicios"></table></div>
-    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Lo que piden atender de primero</h3>
-    <div id="gPrioridades"></div>
-  </section>
-
-  <section class="bloque" style="--acento:var(--turquesa)">
-    <h2>En sus <em>propias palabras</em></h2>
-    <p class="nota">Por qué escogieron esa prioridad. Estas son las citas que se llevan a la mesa.</p>
-    <div id="gVoces"></div>
-  </section>
-
-  <section class="bloque" style="--acento:var(--oro)">
-    <h2>Quiénes respondieron</h2>
-    <div class="perfil" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:26px;margin-top:14px">
-      <div><h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:12px">Por rubro</h3><div id="gRubro"></div></div>
-      <div><h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:12px">Por municipio</h3><div id="gMunicipio"></div></div>
-      <div><h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:12px">Por tamaño</h3><div id="gTamano"></div></div>
+    <div class="barra-acciones">
+      <span class="chip corte" id="corte">—</span>
+      <button class="chip" id="csv"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Bajar en Excel</button>
+      <button class="chip" id="imprimir"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>Imprimir o PDF</button>
+      <button class="chip" id="refrescar"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Actualizar</button>
+      <button class="chip" id="salir"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Salir</button>
     </div>
-  </section>
 
-  <section class="bloque" style="--acento:var(--verde)">
-    <h2>Cómo calificaron <em>la consulta</em></h2>
-    <p class="nota">La carita del final, de 0 a 10. Sirve para saber si el instrumento gusta antes de repetirlo con otro tema.</p>
-    <div id="gValoracion"></div>
-  </section>
+    <!-- ── Resumen ── -->
+    <section class="hoja on" data-hoja="resumen">
+      <div class="fichas" id="fichas"></div>
+      <div class="rejilla">
+        <div class="tarjeta vidrio c8" style="--acento:var(--oro)">
+          <h3>La <em>asimetría</em> de Barinas</h3>
+          <p class="nota">La frase que se dice en voz alta al abrir la reunión. Calculada por el piso de cada rango, para que la cifra quede corta y no larga.</p>
+          <div id="titular"></div>
+        </div>
+        <div class="tarjeta vidrio c4" style="--acento:var(--verde)">
+          <h3>Nota de la <em>consulta</em></h3>
+          <p class="nota">La carita del final.</p>
+          <div id="gNota"></div>
+        </div>
+        <div class="tarjeta vidrio c6" style="--acento:var(--coral)">
+          <h3>Los tributos que <em>más aprietan</em></h3>
+          <p class="nota">Los cinco primeros. El detalle está en la pestaña de tributos.</p>
+          <div id="gTop"></div>
+        </div>
+        <div class="tarjeta vidrio c6" style="--acento:var(--turquesa)">
+          <h3>Servicios en <em>peor estado</em></h3>
+          <p class="nota">Porcentaje que los califica deficientes o críticos.</p>
+          <div id="gServTop"></div>
+        </div>
+      </div>
+    </section>
 
-  <section class="bloque" style="--acento:var(--magenta)">
-    <h2>Recados para la <em>Cámara</em></h2>
-    <p class="nota">Lo que dejó la gente en «¿quieres comunicarte con la Cámara?». Estos sí esperan respuesta.</p>
-    <div id="gMensajes"></div>
-  </section>
+    <!-- ── Temporada ── -->
+    <section class="hoja" data-hoja="temporada">
+      <div class="rejilla">
+        <div class="tarjeta vidrio c8" style="--acento:var(--oro)">
+          <h3>Días al año con <em>afluencia real</em></h3>
+          <p class="nota">Se tributa doce meses sobre el ingreso bruto, pero el turista llega en unos pocos momentos contados.</p>
+          <div id="gDias"></div>
+          <p class="rotulo">Ocupación en la mejor temporada</p>
+          <div id="gOcup"></div>
+        </div>
+        <div class="tarjeta vidrio c4" style="--acento:var(--azul)">
+          <h3>Cuáles son esas <em>temporadas</em></h3>
+          <p class="nota">Sirve también para saber cuándo vale la pena promocionar.</p>
+          <div id="gMomentos"></div>
+        </div>
+        <div class="tarjeta vidrio c12" style="--acento:var(--magenta)">
+          <h3>La temporada, <em>sector por sector</em></h3>
+          <p class="nota">Una posada y un restaurante no viven el año igual: el restaurante trabaja con el de la ciudad y la posada solo cuando llega el visitante. Promediarlos juntos diluye el argumento, así que aquí van separados.</p>
+          <div class="marco"><table id="tRubro"></table></div>
+        </div>
+      </div>
+    </section>
 
-  <section class="bloque" style="--acento:var(--tinta)">
-    <h2>Respuesta por respuesta</h2>
-    <p class="nota">La base completa, con los datos de contacto. Esta parte no se publica: es para el trabajo de la cámara.</p>
-    <div class="marco"><table id="tabla"></table></div>
-    <div class="acciones">
-      <button class="btn" id="csv">Bajar la base en Excel (CSV)</button>
-      <button class="btn claro" id="imprimir">Imprimir o guardar en PDF</button>
-      <button class="btn claro" id="refrescar">Actualizar</button>
-      <button class="btn claro" id="salir">Cerrar sesión</button>
-    </div>
-  </section>
+    <!-- ── Tributos ── -->
+    <section class="hoja" data-hoja="tributos">
+      <div class="rejilla">
+        <div class="tarjeta vidrio c6" style="--acento:var(--coral)">
+          <h3>Los que <em>más aprietan</em></h3>
+          <p class="nota">Cada quien marcó hasta tres. El porcentaje es sobre el total.</p>
+          <div id="gImpuestos"></div>
+          <div id="otrosImpuestos"></div>
+        </div>
+        <div class="tarjeta vidrio c6" style="--acento:var(--azul)">
+          <h3>Si pudieran cambiar <em>uno solo</em></h3>
+          <p class="nota">La prioridad número uno. Es la pregunta que obliga a escoger.</p>
+          <div id="gUno"></div>
+          <div id="otrosUno"></div>
+        </div>
+        <div class="tarjeta vidrio c6" style="--acento:var(--naranja)">
+          <h3>Qué hace falta para <em>fortalecer</em></h3>
+          <p class="nota">Hasta cinco medidas. Las de la mesa nacional permiten comparar a Barinas con lo que ya pidieron Fedecámaras y Consecomercio.</p>
+          <div id="gCambios"></div>
+          <div id="otrosCambios"></div>
+        </div>
+        <div class="tarjeta vidrio c6" style="--acento:var(--verde)">
+          <h3>Qué los haría <em>invertir</em></h3>
+          <p class="nota">Aquí está el argumento de empleo.</p>
+          <div id="gInversion"></div>
+          <div id="otrosInversion"></div>
+        </div>
+      </div>
+    </section>
 
-  <p class="pie-doc">
-    Cámara de Desarrollo Turístico del Estado Barinas · CADTEBA<br>
-    Consulta levantada con «BARINAS OPINA» · documento de trabajo interno
-  </p>
-</main>
+    <!-- ── Servicios ── -->
+    <section class="hoja" data-hoja="servicios">
+      <div class="rejilla">
+        <div class="tarjeta vidrio c8" style="--acento:var(--turquesa)">
+          <h3>Servicio por <em>servicio</em></h3>
+          <p class="nota">Las mismas seis casillas y las mismas cuatro notas del diagnóstico nacional, para poder volcarlas tal cual.</p>
+          <div id="gServicios"></div>
+        </div>
+        <div class="tarjeta vidrio c4" style="--acento:var(--coral)">
+          <h3>Calidad <em>general</em></h3>
+          <p class="nota">Para poder recibir y atender visitantes.</p>
+          <div id="gCalidad"></div>
+        </div>
+        <div class="tarjeta vidrio c12" style="--acento:var(--turquesa)">
+          <h3>Municipio por <em>municipio</em></h3>
+          <p class="nota">Esto es lo que un promedio nacional no puede decir. Es la ventaja de Barinas en esa mesa.</p>
+          <div class="marco"><table id="tServicios"></table></div>
+        </div>
+      </div>
+    </section>
 
-<div class="cenefa"></div>
+    <!-- ── Consenso ── -->
+    <section class="hoja" data-hoja="consenso">
+      <div class="rejilla">
+        <div class="tarjeta vidrio c12" style="--acento:var(--magenta)">
+          <h3>Dónde el sector está <em>unido</em> y dónde partido</h3>
+          <p class="nota">Verde: de acuerdo · gris: paso · coral: en desacuerdo. Sobre 75% es posición de gremio; entre 40% y 60% es un tema que hay que conversar antes de llevarlo.</p>
+          <div id="gConsenso"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Voces ── -->
+    <section class="hoja" data-hoja="voces">
+      <div class="rejilla">
+        <div class="tarjeta vidrio c6" style="--acento:var(--azul)">
+          <h3>En sus <em>propias palabras</em></h3>
+          <p class="nota">Por qué escogieron esa prioridad. Son las citas que se llevan a la mesa.</p>
+          <div id="gVoces"></div>
+        </div>
+        <div class="tarjeta vidrio c6" style="--acento:var(--turquesa)">
+          <h3>Lo que piden atender <em>de primero</em></h3>
+          <p class="nota">La prioridad de servicios, escrita por ellos.</p>
+          <div id="gPrioridades"></div>
+        </div>
+        <div class="tarjeta vidrio c12" style="--acento:var(--magenta)">
+          <h3>Recados para la <em>Cámara</em></h3>
+          <p class="nota">Estos sí esperan respuesta.</p>
+          <div id="gMensajes"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Quiénes ── -->
+    <section class="hoja" data-hoja="quienes">
+      <div class="rejilla">
+        <div class="tarjeta vidrio c4" style="--acento:var(--oro)"><h3>Por <em>sector</em></h3><div id="gRubro"></div></div>
+        <div class="tarjeta vidrio c4" style="--acento:var(--verde)"><h3>Por <em>municipio</em></h3><div id="gMunicipio"></div></div>
+        <div class="tarjeta vidrio c4" style="--acento:var(--azul)"><h3>Por <em>tamaño</em></h3><div id="gTamano"></div></div>
+      </div>
+    </section>
+
+    <!-- ── Base ── -->
+    <section class="hoja" data-hoja="base">
+      <div class="rejilla">
+        <div class="tarjeta vidrio c12" style="--acento:var(--oro)">
+          <h3>Respuesta por <em>respuesta</em></h3>
+          <p class="nota">La base completa, con los datos de contacto de quien los dejó. Esta parte no se publica: es para el trabajo de la Cámara.</p>
+          <div class="marco"><table id="tabla"></table></div>
+        </div>
+      </div>
+    </section>
+
+    <p class="nota" style="text-align:center; margin-top:30px">
+      Cámara de Desarrollo Turístico del Estado Barinas · CADTEBA<br>
+      Consulta levantada con «BARINAS OPINA» · documento de trabajo interno
+    </p>
+  </main>
+</div>
 
 <script>
 (function () {
@@ -315,20 +515,43 @@
 
   let DATOS = null, PASE = "", QUIEN = "";
 
-  // ── Puerta ───────────────────────────────────────────────────────────
-  // El pase vive solo en esta pestaña: al cerrarla hay que volver a entrar.
+  // ── Las pestañas del rail ────────────────────────────────────────────────
+  const HOJAS = [
+    ["resumen",   "Resumen",   "M3 12h4l3 8 4-16 3 8h4"],
+    ["temporada", "Temporada", "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"],
+    ["tributos",  "Tributos",  "M3 21h18M6 21V9l6-5 6 5v12M10 21v-6h4v6"],
+    ["servicios", "Servicios", "M13 2 4 14h7l-1 8 9-12h-7l1-8z"],
+    ["consenso",  "Consenso",  "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"],
+    ["voces",     "Voces",     "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"],
+    ["quienes",   "Quiénes",   "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"],
+    ["base",      "La base",   "M3 5h18M3 12h18M3 19h18"],
+  ];
+  const rail = $("rail");
+  HOJAS.forEach(([id, nombre, d], k) => {
+    const b = document.createElement("button");
+    b.className = "pest" + (k === 0 ? " on" : "");
+    b.dataset.va = id;
+    b.innerHTML = `<svg viewBox="0 0 24 24"><path d="${d}"/></svg><span class="globo">${nombre}</span>`;
+    b.onclick = () => {
+      rail.querySelectorAll(".pest").forEach(x => x.classList.toggle("on", x === b));
+      document.querySelectorAll(".hoja").forEach(h => h.classList.toggle("on", h.dataset.hoja === id));
+      window.scrollTo({ top: 0, behavior: "instant" });
+    };
+    rail.appendChild(b);
+  });
+
+  // ── Puerta ───────────────────────────────────────────────────────────────
   const guardado = sessionStorage.getItem("pase-informe");
   if (guardado) { PASE = guardado; QUIEN = sessionStorage.getItem("quien-informe") || ""; cargar(true); }
 
   $("entrar").onclick = entrar;
-  $("guardar").onclick = guardar;
+  $("guardar").onclick = guardarClave;
   for (const id of ["usuario", "clave"]) $(id).onkeydown = e => { if (e.key === "Enter") entrar(); };
-  for (const id of ["nueva", "nueva2"]) $(id).onkeydown = e => { if (e.key === "Enter") guardar(); };
+  for (const id of ["nueva", "nueva2"]) $(id).onkeydown = e => { if (e.key === "Enter") guardarClave(); };
 
   async function pedir(cuerpo) {
     const r = await fetch("/api/acceso", {
-      method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify(cuerpo),
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(cuerpo),
     });
     const d = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(d.error || "No se pudo entrar. Intenta de nuevo.");
@@ -336,18 +559,15 @@
   }
 
   async function entrar() {
-    const usuario = $("usuario").value.trim();
-    const clave = $("clave").value;
+    const usuario = $("usuario").value.trim(), clave = $("clave").value;
     if (!usuario || !clave) return;
     $("error").textContent = "";
     $("entrar").disabled = true; $("entrar").textContent = "Entrando…";
     try {
       const d = await pedir({ usuario, clave });
       if (d.estrenando) {
-        // Entró con la de estreno: no se le da pase hasta que ponga la suya.
-        $("puerta").hidden = true;
-        $("estreno").hidden = false;
-        $("saludo").textContent = `Hola, ${d.nombre}. Es tu primera entrada. La clave de estreno no sirve para ver el informe: elige la tuya y solo tú la vas a saber.`;
+        $("puerta").hidden = true; $("estreno").hidden = false;
+        $("saludo").textContent = `Hola, ${d.nombre}. Es tu primera entrada. La clave de estreno no sirve para ver el tablero: elige la tuya.`;
         $("nueva").focus();
         return;
       }
@@ -355,14 +575,11 @@
       sessionStorage.setItem("pase-informe", PASE);
       sessionStorage.setItem("quien-informe", QUIEN);
       await cargar(false);
-    } catch (e) {
-      $("error").textContent = e.message;
-    } finally {
-      $("entrar").disabled = false; $("entrar").textContent = "Entrar";
-    }
+    } catch (e) { $("error").textContent = e.message; }
+    finally { $("entrar").disabled = false; $("entrar").textContent = "Entrar"; }
   }
 
-  async function guardar() {
+  async function guardarClave() {
     const nueva = $("nueva").value, nueva2 = $("nueva2").value;
     $("error2").textContent = "";
     if (nueva !== nueva2) return void ($("error2").textContent = "Las dos no coinciden.");
@@ -375,11 +592,8 @@
       sessionStorage.setItem("quien-informe", QUIEN);
       $("estreno").hidden = true;
       await cargar(false);
-    } catch (e) {
-      $("error2").textContent = e.message;
-    } finally {
-      $("guardar").disabled = false; $("guardar").textContent = "Guardar y entrar";
-    }
+    } catch (e) { $("error2").textContent = e.message; }
+    finally { $("guardar").disabled = false; $("guardar").textContent = "Guardar y entrar"; }
   }
 
   async function cargar(callada) {
@@ -388,22 +602,17 @@
       if (r.status === 401) throw new Error("Tu sesión venció. Entra otra vez.");
       if (!r.ok) throw new Error("No se pudo leer la consulta. Intenta de nuevo.");
       DATOS = await r.json();
-      $("puerta").hidden = true;
-      $("estreno").hidden = true;
-      $("informe").hidden = false;
+      $("puerta").hidden = true; $("estreno").hidden = true; $("tablero").hidden = false;
       pintar();
     } catch (e) {
-      sessionStorage.removeItem("pase-informe");
-      PASE = "";
+      sessionStorage.removeItem("pase-informe"); PASE = "";
       if (!callada) $("error").textContent = e.message;
-      $("puerta").hidden = false;
-      $("informe").hidden = true;
+      $("puerta").hidden = false; $("tablero").hidden = true;
     }
   }
 
-  // ── Conteos ──────────────────────────────────────────────────────────
-  // Cuenta cuántos negocios marcaron cada opción. Ojo: cuenta negocios, no
-  // marcas — si alguien repitiera un valor, sigue valiendo por uno.
+  // ── Dibujos ──────────────────────────────────────────────────────────────
+  // Cuenta negocios, no marcas: si alguien repitiera un valor, vale por uno.
   function contar(filas, campo) {
     const m = new Map();
     for (const f of filas) {
@@ -414,83 +623,185 @@
     return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   }
 
-  function barras(caja, pares, total) {
+  function barras(caja, pares, total, tope) {
+    if (!caja) return;
     if (!pares.length) { caja.innerHTML = '<p class="vacio">Todavía nadie ha respondido esto.</p>'; return; }
-    const tope = pares[0][1];
-    caja.innerHTML = pares.map(([t, n], k) => `
+    const lista = tope ? pares.slice(0, tope) : pares;
+    const mayor = lista[0][1];
+    caja.innerHTML = lista.map(([t, n], k) => `
       <div class="barra ${k === 0 ? "top1" : ""}">
         <div class="fila"><b>${esc(t)}</b><i>${n} · ${pct(n, total)}%</i></div>
-        <div class="via"><u style="width:${Math.round(n * 100 / tope)}%"></u></div>
+        <div class="via"><u style="width:${Math.round(n * 100 / mayor)}%"></u></div>
       </div>`).join("");
   }
 
-  // ── Pintar ───────────────────────────────────────────────────────────
+  function columnas(caja, pares, total) {
+    if (!pares.length) { caja.innerHTML = '<p class="vacio">Sin respuestas.</p>'; return; }
+    const mayor = Math.max(...pares.map(p => p[1]));
+    caja.innerHTML = `<div class="columnas">${pares.map(([t, n]) => `
+      <div class="col">
+        <b>${pct(n, total)}%</b>
+        <u style="height:${Math.max(4, Math.round(n * 100 / mayor))}%"></u>
+        <em>${esc(t)}</em>
+      </div>`).join("")}</div>`;
+  }
+
+  function anillo(caja, valor, centro, pie, leyenda) {
+    caja.innerHTML = `
+      <div class="anillo-caja">
+        <div class="anillo"><div class="aro" style="--p:${valor}"></div>
+          <div class="centro"><b>${centro}</b><span>${pie}</span></div></div>
+        <div style="flex:1 1 160px">${leyenda}</div>
+      </div>`;
+  }
+
+  function otros(caja, filas, campo) {
+    if (!caja) return;
+    const dichos = filas.map(f => (f[campo] || "").trim()).filter(t => t.length > 1);
+    caja.innerHTML = dichos.length
+      ? `<p class="rotulo">Los que escribieron «otro»</p>` +
+        dichos.map(t => `<div class="voz"><p>«${esc(t)}»</p></div>`).join("")
+      : "";
+  }
+
+  // ── Pintar ───────────────────────────────────────────────────────────────
   function pintar() {
     const filas = DATOS.respuestas || [];
     const total = filas.length;
-
-    // Fecha de corte y sello
     const fmt = new Intl.DateTimeFormat("es-VE", { day:"numeric", month:"long", year:"numeric" });
-    $("sello").textContent = total
-      ? `${total} ${total === 1 ? "respuesta" : "respuestas"} · corte al ${fmt.format(new Date())}`
-      : "Sin respuestas todavía";
-    $("visor").textContent = QUIEN ? `Abierto por ${QUIEN}` : "";
+
+    $("visor").textContent = QUIEN || "CADTEBA";
+    $("sello").textContent = total ? `${total} ${total === 1 ? "respuesta" : "respuestas"}` : "Sin respuestas todavía";
+    $("corte").textContent = "Corte al " + fmt.format(new Date());
 
     if (!total) {
-      for (const id of ["gImpuestos","gUno","gCambios","gInversion","gConsenso","gVoces","gRubro","gMunicipio","gTamano"])
-        $(id).innerHTML = '<p class="vacio">Aún no hay respuestas. En cuanto entre la primera, este informe se llena solo.</p>';
-      $("cifras").innerHTML = "";
-      $("tabla").innerHTML = "";
+      document.querySelectorAll(".tarjeta > div, .fichas").forEach(c => {
+        c.innerHTML = '<p class="vacio">Aún no hay respuestas. En cuanto entre la primera, este tablero se llena solo.</p>';
+      });
       return;
     }
 
-    // Cifras de arriba
+    // ── Fichas ──
     const municipios = new Set(filas.map(f => f.municipio).filter(Boolean));
     const afiliados = filas.filter(f => /ya estoy afiliado/i.test(f.afiliado || "")).length;
     const quieren = filas.filter(f => /quiero saber/i.test(f.afiliado || "")).length;
-    // Empleo representado: se toma el piso de cada rango, para no inflar la cifra.
     const piso = { "Solo yo o con un ayudante":1, "De 3 a 10 personas":3, "De 11 a 30 personas":11, "Más de 30 personas":31 };
     const empleo = filas.reduce((s, f) => s + (piso[f.tamano] || 0), 0);
-
-    $("cifras").innerHTML = [
-      [total, "negocios respondieron", "var(--azul)"],
+    $("fichas").innerHTML = [
+      [total, "respuestas del sector", "var(--oro)"],
       [municipios.size, "municipios representados", "var(--verde)"],
       [empleo + "+", "empleos representados (mínimo)", "var(--naranja)"],
-      [afiliados, "ya afiliados a CADTEBA", "var(--oro)"],
+      [afiliados, "ya afiliados a CADTEBA", "var(--turquesa)"],
       [quieren, "quieren afiliarse", "var(--magenta)"],
-    ].map(([n, t, c]) => `<div class="cifra" style="--acento:${c}"><b>${n}</b><span>${t}</span></div>`).join("");
+    ].map(([n, t, c]) => `<div class="ficha vidrio" style="--c:${c}"><b>${n}</b><span>${t}</span></div>`).join("");
 
-    // ── Temporada ─────────────────────────────────────────────────────
-    // Para el titular se toma el piso de cada rango: la frase queda del lado
-    // conservador y nadie puede acusar al informe de exagerar.
-    const PISO_DIAS = { "Menos de 30 días al año":0, "Entre 30 y 60 días":30,
-                        "Entre 60 y 120 días":60, "Entre 120 y 200 días":120, "Más de 200 días":200 };
-    const cortos = filas.filter(f => f.dias === "Menos de 30 días al año" || f.dias === "Entre 30 y 60 días").length;
-    const conDias = filas.filter(f => f.dias in PISO_DIAS);
-    const bajaOcup = filas.filter(f => f.ocupacion === "Menos del 25%" || f.ocupacion === "Entre 25% y 30%").length;
+    // ── Temporada ──
+    const RANGOS = ["Menos de 30 días al año","Entre 30 y 60 días","Entre 60 y 120 días","Entre 120 y 200 días","Más de 200 días"];
+    const CORTOS = ["Menos de 30","30 a 60","60 a 120","120 a 200","Más de 200"];
+    const conDias = filas.filter(f => RANGOS.includes(f.dias));
+    const cortos = conDias.filter(f => RANGOS.indexOf(f.dias) <= 1).length;
+    const conOcup = filas.filter(f => f.ocupacion);
+    const bajaOcup = conOcup.filter(f => f.ocupacion === "Menos del 25%" || f.ocupacion === "Entre 25% y 30%").length;
 
     $("titular").innerHTML = conDias.length ? `
       <div class="titular">
         <b>${pct(cortos, conDias.length)}%</b>
-        <p>de los negocios que respondieron trabaja con afluencia real
-           <strong>sesenta días al año o menos</strong>${
-             bajaOcup ? `, y ${pct(bajaOcup, filas.filter(f => f.ocupacion).length)}% no pasa del 30% de ocupación ni en su mejor temporada` : ""}.
-           Sobre esa operación se paga IVA, patente municipal y el 1% al INATUR <strong>los doce meses</strong>.</p>
+        <p>de quienes respondieron trabaja con afluencia real <strong>sesenta días al año o menos</strong>${
+          conOcup.length ? `, y ${pct(bajaOcup, conOcup.length)}% no pasa del 30% de ocupación ni en su mejor temporada` : ""}.
+          Sobre esa operación se paga IVA, patente municipal y el 1% al INATUR <strong>los doce meses</strong>.</p>
       </div>` : '<p class="vacio">Todavía no hay respuestas sobre la temporada.</p>';
 
-    barras($("gDias"),      contar(filas, "dias"),      total);
-    barras($("gOcupacion"), contar(filas, "ocupacion"), total);
-    barras($("gMomentos"),  contar(filas, "momentos"),  total);
+    columnas($("gDias"), CORTOS.map((c, i) => [c, filas.filter(f => f.dias === RANGOS[i]).length]), total);
+    barras($("gOcup"), contar(filas, "ocupacion"), total);
+    barras($("gMomentos"), contar(filas, "momentos"), total);
 
+    // La temporada, sector por sector — el cruce que pidió Humberto.
+    const sectores = [...new Set(filas.flatMap(f => f.rubro || []))];
+    const porSector = sectores.map(s => {
+      const g = filas.filter(f => (f.rubro || []).includes(s));
+      const gd = g.filter(f => RANGOS.includes(f.dias));
+      const go = g.filter(f => f.ocupacion);
+      return {
+        s, n: g.length,
+        corto: gd.length ? pct(gd.filter(f => RANGOS.indexOf(f.dias) <= 1).length, gd.length) : null,
+        baja: go.length ? pct(go.filter(f => /Menos del 25|Entre 25/.test(f.ocupacion)).length, go.length) : null,
+        moda: (contar(g, "dias")[0] || ["—"])[0],
+      };
+    }).sort((a, b) => b.n - a.n);
+
+    $("tRubro").innerHTML = porSector.length
+      ? "<thead><tr><th>Sector</th><th>Respuestas</th><th>Rango más común</th><th>60 días o menos</th><th>Ocupación bajo 30%</th></tr></thead><tbody>" +
+        porSector.map(r => `<tr>
+          <td><b>${esc(r.s)}</b>${r.n < 3 ? ' <small style="color:var(--suave)">(pocas respuestas)</small>' : ""}</td>
+          <td>${r.n}</td>
+          <td>${esc(r.moda)}</td>
+          <td>${r.corto === null ? "—" : `<b style="color:var(--coral)">${r.corto}%</b>`}</td>
+          <td>${r.baja === null ? "—" : `<b style="color:var(--naranja)">${r.baja}%</b>`}</td>
+        </tr>`).join("") + "</tbody>"
+      : "";
+
+    // ── Tributos ──
     barras($("gImpuestos"), contar(filas, "impuestos"), total);
-    barras($("gUno"),       contar(filas, "uno"),       total);
-    barras($("gCambios"),   contar(filas, "cambios"),   total);
+    barras($("gUno"), contar(filas, "uno"), total);
+    barras($("gCambios"), contar(filas, "cambios"), total);
     barras($("gInversion"), contar(filas, "inversion"), total);
-    barras($("gRubro"),     contar(filas, "rubro"),     total);
-    barras($("gMunicipio"), contar(filas, "municipio"), total);
-    barras($("gTamano"),    contar(filas, "tamano"),    total);
+    otros($("otrosImpuestos"), filas, "otro_impuestos");
+    otros($("otrosUno"), filas, "otro_uno");
+    otros($("otrosCambios"), filas, "otro_cambios");
+    otros($("otrosInversion"), filas, "otro_inversion");
+    barras($("gTop"), contar(filas, "impuestos"), total, 5);
 
-    // Consenso
+    // ── Servicios ──
+    const NOTAS = ["Bueno", "Regular", "Deficiente", "Crítico"];
+    const CLASE = { "Bueno":"b", "Regular":"r", "Deficiente":"d", "Crítico":"c" };
+    const nombres = [...new Set(filas.flatMap(f => Object.keys(f.servicios || {})))];
+    const servs = nombres.map(nom => {
+      const c = { Bueno:0, Regular:0, Deficiente:0, "Crítico":0 }; let t = 0;
+      for (const f of filas) { const v = (f.servicios || {})[nom]; if (v in c) { c[v]++; t++; } }
+      return { nom, c, t, mal: pct(c.Deficiente + c["Crítico"], t) };
+    }).filter(s => s.t).sort((a, b) => b.mal - a.mal);
+
+    $("gServicios").innerHTML = servs.length ? servs.map(s => `
+      <div class="serv">
+        <div class="fila"><b>${esc(s.nom)}</b><i>${s.mal}% deficiente o crítico</i></div>
+        <div class="tira">${NOTAS.map(n =>
+          `<span class="s-${CLASE[n]}" style="width:${(s.c[n] * 100 / s.t).toFixed(1)}%"
+             title="${n}: ${s.c[n]}">${pct(s.c[n], s.t) >= 12 ? pct(s.c[n], s.t) + "%" : ""}</span>`).join("")}</div>
+      </div>`).join("") +
+      `<div class="leyenda" style="margin-top:14px">${NOTAS.map(n => `<span><u class="s-${CLASE[n]}"></u>${n}</span>`).join("")}</div>`
+      : '<p class="vacio">Todavía nadie ha calificado los servicios.</p>';
+
+    barras($("gServTop"), servs.slice(0, 4).map(s => [s.nom, s.c.Deficiente + s.c["Crítico"]]), total);
+    barras($("gCalidad"), contar(filas, "calidad_servicios"), total);
+
+    const porMun = new Map();
+    for (const f of filas) {
+      if (!f.municipio) continue;
+      const g = porMun.get(f.municipio) || { n:0, s:{} };
+      g.n++;
+      for (const [nom, v] of Object.entries(f.servicios || {})) {
+        g.s[nom] = g.s[nom] || { mal:0, t:0 };
+        g.s[nom].t++;
+        if (v === "Deficiente" || v === "Crítico") g.s[nom].mal++;
+      }
+      porMun.set(f.municipio, g);
+    }
+    const filasMun = [...porMun.entries()].map(([mun, g]) => ({
+      mun, n: g.n,
+      peores: Object.entries(g.s).map(([nom, d]) => ({ nom, p: pct(d.mal, d.t) }))
+                .sort((a, b) => b.p - a.p).filter(x => x.p > 0).slice(0, 3),
+    })).sort((a, b) => b.n - a.n);
+
+    $("tServicios").innerHTML = filasMun.length
+      ? "<thead><tr><th>Municipio</th><th>Respuestas</th><th>Lo que está peor</th></tr></thead><tbody>" +
+        filasMun.map(m => `<tr>
+          <td><b>${esc(m.mun)}</b>${m.n === 1 ? ' <small style="color:var(--suave)">(una sola respuesta)</small>' : ""}</td>
+          <td>${m.n}</td>
+          <td class="ancho">${m.peores.length ? m.peores.map(x => `${esc(x.nom)} <b>${x.p}%</b>`).join(" · ") : "sin fallas reportadas"}</td>
+        </tr>`).join("") + "</tbody>"
+      : "";
+
+    // ── Consenso ──
     const frases = new Map();
     for (const f of filas) {
       for (const [frase, v] of Object.entries(f.acuerdos || {})) {
@@ -504,115 +815,62 @@
       .sort((x, y) => y.ac - x.ac);
 
     $("gConsenso").innerHTML = cons.length ? cons.map(c => {
-      const et = c.ac >= 75 ? ["et-unido", "El gremio está unido"]
-               : c.ac <= 35 ? ["et-rechazo", "El gremio lo rechaza"]
-               : c.ac >= 40 && c.ac <= 60 ? ["et-partido", "El gremio está partido"]
-               : null;
+      const et = c.ac >= 75 ? ["et-unido", "El sector está unido"]
+               : c.ac <= 35 ? ["et-rechazo", "El sector lo rechaza"]
+               : c.ac >= 40 && c.ac <= 60 ? ["et-partido", "El sector está partido"] : null;
       const w = n => (c.t ? (n * 100 / c.t) : 0).toFixed(1) + "%";
       return `<div class="cons">
         ${et ? `<span class="etiqueta ${et[0]}">${et[1]}</span>` : ""}
         <p class="frase">${esc(c.frase)}</p>
         <div class="tira">
-          <span class="a" style="width:${w(c.a)}">${c.ac >= 12 ? c.ac + "%" : ""}</span>
-          <span class="p" style="width:${w(c.p)}"></span>
-          <span class="d" style="width:${w(c.d)}">${pct(c.d, c.t) >= 12 ? pct(c.d, c.t) + "%" : ""}</span>
+          <span class="a-si" style="width:${w(c.a)}">${c.ac >= 12 ? c.ac + "%" : ""}</span>
+          <span class="a-paso" style="width:${w(c.p)}"></span>
+          <span class="a-no" style="width:${w(c.d)}">${pct(c.d, c.t) >= 12 ? pct(c.d, c.t) + "%" : ""}</span>
         </div>
       </div>`;
-    }).join("") : '<p class="vacio">Nadie ha llegado a esta parte todavía.</p>';
+    }).join("") + `<div class="leyenda" style="margin-top:16px">
+        <span><u class="a-si"></u>De acuerdo</span><span><u class="a-paso"></u>Paso</span><span><u class="a-no"></u>En desacuerdo</span>
+      </div>` : '<p class="vacio">Nadie ha llegado a esta parte todavía.</p>';
 
-    // ── Servicios públicos ────────────────────────────────────────────
-    // Cada servicio se resume por su parte «mala» (deficiente + crítico),
-    // que es la cifra que se lleva a la mesa.
-    const NOTAS = ["Bueno", "Regular", "Deficiente", "Crítico"];
-    const CLASE = { "Bueno":"b", "Regular":"r", "Deficiente":"d", "Crítico":"c" };
-    const nombres = [...new Set(filas.flatMap(f => Object.keys(f.servicios || {})))];
-
-    const servs = nombres.map(nom => {
-      const c = { Bueno:0, Regular:0, Deficiente:0, "Crítico":0 };
-      let t = 0;
-      for (const f of filas) { const v = (f.servicios || {})[nom]; if (v in c) { c[v]++; t++; } }
-      return { nom, c, t, mal: pct(c.Deficiente + c["Crítico"], t) };
-    }).filter(s => s.t).sort((a, b) => b.mal - a.mal);
-
-    $("gServicios").innerHTML = servs.length ? servs.map(s => `
-      <div class="serv">
-        <div class="fila"><b>${esc(s.nom)}</b><i>${s.mal}% deficiente o crítico</i></div>
-        <div class="tira">${NOTAS.map(n =>
-          `<span class="s-${CLASE[n]}" style="width:${(s.c[n] * 100 / s.t).toFixed(1)}%"
-             title="${n}: ${s.c[n]}">${pct(s.c[n], s.t) >= 11 ? pct(s.c[n], s.t) + "%" : ""}</span>`).join("")}</div>
-      </div>`).join("") + `
-      <div class="leyenda">
-        ${NOTAS.map(n => `<span><u class="s-${CLASE[n]}"></u>${n}</span>`).join("")}
-      </div>` : '<p class="vacio">Todavía nadie ha calificado los servicios.</p>';
-
-    barras($("gCalidad"), contar(filas, "calidad_servicios"), total);
-
-    // Peor servicio por municipio: se muestra el que más «deficiente o crítico»
-    // acumula en cada uno. Con una sola respuesta no se saca conclusión, y se avisa.
-    const porMun = new Map();
-    for (const f of filas) {
-      if (!f.municipio) continue;
-      const g = porMun.get(f.municipio) || { n:0, s:{} };
-      g.n++;
-      for (const [nom, v] of Object.entries(f.servicios || {})) {
-        g.s[nom] = g.s[nom] || { mal:0, t:0 };
-        g.s[nom].t++;
-        if (v === "Deficiente" || v === "Crítico") g.s[nom].mal++;
-      }
-      porMun.set(f.municipio, g);
+    // ── Nota de la consulta ──
+    const notas = filas.map(f => f.valoracion).filter(v => v !== "" && v !== undefined && v !== null).map(Number);
+    if (notas.length) {
+      const prom = notas.reduce((a, b) => a + b, 0) / notas.length;
+      anillo($("gNota"), Math.round(prom * 10), prom.toFixed(1), "de 10",
+        `<p style="font-size:.88rem; line-height:1.55">Promedio de <strong>${notas.length}</strong>
+         ${notas.length === 1 ? "persona" : "personas"}.<br>
+         <span style="color:var(--verde); font-weight:900">${pct(notas.filter(n => n >= 8).length, notas.length)}%</span>
+         le puso 8 o más.</p>`);
+    } else {
+      $("gNota").innerHTML = '<p class="vacio">Todavía nadie la ha calificado.</p>';
     }
-    const filasMun = [...porMun.entries()].map(([mun, g]) => {
-      const peores = Object.entries(g.s).map(([nom, d]) => ({ nom, p: pct(d.mal, d.t) }))
-                           .sort((a, b) => b.p - a.p);
-      return { mun, n: g.n, peores: peores.filter(x => x.p > 0).slice(0, 3) };
-    }).sort((a, b) => b.n - a.n);
 
-    $("tServicios").innerHTML = filasMun.length
-      ? "<thead><tr><th>Municipio</th><th>Respuestas</th><th>Lo que está peor</th></tr></thead><tbody>" +
-        filasMun.map(m => `<tr>
-          <td><b>${esc(m.mun)}</b>${m.n === 1 ? ' <small style="color:var(--tinta-suave)">(una sola respuesta)</small>' : ""}</td>
-          <td>${m.n}</td>
-          <td class="ancho">${m.peores.length
-            ? m.peores.map(x => `${esc(x.nom)} <b>${x.p}%</b>`).join(" · ")
-            : "sin fallas reportadas"}</td>
-        </tr>`).join("") + "</tbody>"
-      : "";
-
-    const prio = filas.filter(f => (f.prioridad_servicio || "").trim().length > 3);
-    $("gPrioridades").innerHTML = prio.length ? prio.map(f => `
-      <div class="voz">
-        <p>«${esc(f.prioridad_servicio)}»</p>
-        <cite>${esc(f.negocio || "Sin nombre")}${f.municipio ? " · " + esc(f.municipio) : ""}</cite>
-      </div>`).join("") : '<p class="vacio">Nadie ha escrito una prioridad todavía.</p>';
-
-    // Voces
+    // ── Voces ──
     const voces = filas.filter(f => (f.porque_uno || "").trim().length > 3)
                        .sort((a, b) => (b.porque_uno || "").length - (a.porque_uno || "").length);
     $("gVoces").innerHTML = voces.length ? voces.map(f => `
-      <div class="voz">
-        <p>«${esc(f.porque_uno)}»</p>
+      <div class="voz"><p>«${esc(f.porque_uno)}»</p>
         <cite>${esc(f.negocio || "Sin nombre")}${f.municipio ? " · " + esc(f.municipio) : ""}${f.uno ? " · sobre: " + esc(f.uno) : ""}</cite>
       </div>`).join("") : '<p class="vacio">Todavía nadie ha escrito su porqué.</p>';
 
-    // Valoración de la consulta
-    const notas = filas.map(f => f.valoracion).filter(v => v !== "" && v !== undefined && v !== null).map(Number);
-    $("gValoracion").innerHTML = notas.length
-      ? `<div class="titular" style="--oro:var(--verde)">
-           <b>${(notas.reduce((a, b) => a + b, 0) / notas.length).toFixed(1)}</b>
-           <p>de 10, promedio de <strong>${notas.length}</strong> ${notas.length === 1 ? "persona" : "personas"} que la calificaron.
-              ${pct(notas.filter(n => n >= 8).length, notas.length)}% le puso 8 o más.</p>
-         </div>`
-      : '<p class="vacio">Todavía nadie ha calificado la consulta.</p>';
+    const prio = filas.filter(f => (f.prioridad_servicio || "").trim().length > 3);
+    $("gPrioridades").innerHTML = prio.length ? prio.map(f => `
+      <div class="voz"><p>«${esc(f.prioridad_servicio)}»</p>
+        <cite>${esc(f.negocio || "Sin nombre")}${f.municipio ? " · " + esc(f.municipio) : ""}</cite>
+      </div>`).join("") : '<p class="vacio">Nadie ha escrito una prioridad todavía.</p>';
 
-    // Recados
     const recados = DATOS.mensajes || [];
     $("gMensajes").innerHTML = recados.length ? recados.map(m => `
-      <div class="voz">
-        <p>«${esc(m.mensaje)}»</p>
+      <div class="voz"><p>«${esc(m.mensaje)}»</p>
         <cite>${esc(m.nombre)} · ${esc(m.telefono)} · ${new Date(m.cuando).toLocaleDateString("es-VE")}</cite>
       </div>`).join("") : '<p class="vacio">No hay recados todavía.</p>';
 
-    // Tabla
+    // ── Quiénes ──
+    barras($("gRubro"), contar(filas, "rubro"), total);
+    barras($("gMunicipio"), contar(filas, "municipio"), total);
+    barras($("gTamano"), contar(filas, "tamano"), total);
+
+    // ── La base ──
     const cols = [
       ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["municipio", "Municipio"],
       ["tamano", "Tamaño"], ["dias", "Días al año"], ["ocupacion", "Ocupación"],
@@ -620,13 +878,12 @@
       ["uno", "Prioridad 1"], ["otro_uno", "Cuál"], ["porque_uno", "Por qué"],
       ["cambios", "Qué hace falta"], ["otro_cambios", "Otra medida"],
       ["inversion", "Para invertir"], ["otro_inversion", "Otra"],
-      ["valoracion", "Nota"],
-      ["nombre", "Contacto"], ["telefono", "WhatsApp"], ["correo", "Correo"],
-      ["instagram", "Instagram"], ["web", "Web"], ["afiliado", "Afiliación"],
+      ["valoracion", "Nota"], ["nombre", "Contacto"], ["telefono", "WhatsApp"],
+      ["correo", "Correo"], ["instagram", "Instagram"], ["web", "Web"], ["afiliado", "Afiliación"],
     ];
     const celda = (f, c) => c === "cuando"
       ? new Date(f.cuando).toLocaleDateString("es-VE")
-      : Array.isArray(f[c]) ? f[c].join(" · ") : (f[c] || "");
+      : Array.isArray(f[c]) ? f[c].join(" · ") : (f[c] ?? "");
     $("tabla").innerHTML =
       "<thead><tr>" + cols.map(([, t]) => `<th>${t}</th>`).join("") + "</tr></thead><tbody>" +
       [...filas].reverse().map(f => "<tr>" + cols.map(([c]) =>
@@ -634,7 +891,7 @@
       "</tbody>";
   }
 
-  // ── Acciones ─────────────────────────────────────────────────────────
+  // ── Acciones ─────────────────────────────────────────────────────────────
   $("csv").onclick = () => { location.href = "/api/opina?csv=1&pase=" + encodeURIComponent(PASE); };
   $("imprimir").onclick = () => window.print();
   $("refrescar").onclick = () => cargar(false);
