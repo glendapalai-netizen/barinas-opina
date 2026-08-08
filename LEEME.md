@@ -47,6 +47,7 @@ de Netlify y Netlify Blobs como almacén. Se despliega subiendo la carpeta.
 ```
 index.html                    la consulta (una sola página, doce pantallas)
 preview.html                  plantilla de la imagen que sale en WhatsApp
+fondo/ventana.mp4 · .jpg      el atardecer de la portada, y su foto de respaldo
 preview.jpg                   la imagen ya generada (1200×630)
 icono.png                     ícono del sitio
 marcas/                       CADTEBA · Turismo somos todos · Más que llano
@@ -198,6 +199,34 @@ hay es la mesa donde se está armando. Decirlo de otra forma sería faltar a la
 verdad.
 
 ---
+
+## La portada
+
+Video a pantalla completa —una ventana al atardecer sobre la sabana— con el
+título, los sellos y el texto sobre cristal. Vive **solo en la portada**: al
+tocar «Comenzar» el video se detiene y vuelve el crema. Un video corriendo
+detrás de las preguntas cansa la vista, gasta batería y distrae de lo único
+que importa, que es que la persona conteste.
+
+La foto va como `<img>` y **se pinta siempre**; el video se funde encima solo
+cuando de verdad logra reproducirse. Si el teléfono no puede con él, si el dato
+se cae o si el ahorro de datos está puesto, queda la foto y nadie se entera de
+que faltó algo. El video no se descarga hasta que hace falta.
+
+## El vidrio
+
+Dos vidrios distintos, porque el fondo manda:
+
+`.vidrio` — sobre el video: translúcido de verdad, con desenfoque del fondo y
+un filo de luz arriba y abajo, como el canto de un cristal.
+
+`.vidrio-mate` y las tarjetas — sobre el crema no hay nada que refractar detrás,
+así que el volumen se hace con luz y sombra y no con transparencia. Un cristal
+translúcido sobre un plano liso se ve sucio, no elegante.
+
+Las letras de BARINAS OPINA no llevan una imagen: el bisel es un degradado
+recortado sobre el texto (claro arriba, apagado al centro, encendido abajo) y
+el grosor son cuatro sombras superpuestas — canto, corte, cuerpo y apoyo.
 
 ## Decisiones que conviene no deshacer
 

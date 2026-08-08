@@ -72,6 +72,7 @@
   .avance i { display: block; height: 100%; width: 0; background: var(--acento); transition: width .35s ease, background .35s ease; }
 
   main { width: 100%; max-width: 560px; margin: 0 auto; padding: 24px 20px 132px; }
+  body.con-telon main { padding-top: 8px; padding-bottom: 150px; }
 
   .paso { display: none; animation: entra .32s cubic-bezier(.2,.7,.3,1) both; }
   .paso.on { display: block; }
@@ -92,9 +93,12 @@
   .op {
     display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
     padding: 15px 17px; border-radius: 16px; cursor: pointer;
-    background: var(--papel); border: 2px solid var(--borde);
     color: var(--tinta); font-size: .96rem; font-family: inherit; line-height: 1.4;
-    box-shadow: 0 2px 0 rgba(29,42,52,.05);
+    background: linear-gradient(168deg, #fff 0%, #FDFAF2 60%, #F8F2E4 100%);
+    border: 1.5px solid rgba(230,218,192,.85);
+    box-shadow:
+      inset 0 1.5px 0 #fff, inset 0 -1.5px 0 rgba(184,134,47,.09),
+      0 1px 2px rgba(29,42,52,.05), 0 6px 16px -8px rgba(29,42,52,.22);
     transition: border-color .14s ease, background .14s ease, transform .1s ease;
   }
   .op:active { transform: scale(.99); }
@@ -144,8 +148,12 @@
   /* Tablero de servicios: un renglón por servicio, cuatro notas del verde al
      coral. Se califican todos a la vista, para que uno compare mientras marca. */
   .servicio {
-    background: var(--papel); border: 2px solid var(--borde); border-radius: 16px;
-    padding: 13px 15px; margin-bottom: 10px; box-shadow: 0 2px 0 rgba(29,42,52,.05);
+    border-radius: 16px; padding: 13px 15px; margin-bottom: 10px;
+    background: linear-gradient(168deg, #fff 0%, #FDFAF2 60%, #F8F2E4 100%);
+    border: 1.5px solid rgba(230,218,192,.85);
+    box-shadow:
+      inset 0 1.5px 0 #fff, inset 0 -1.5px 0 rgba(184,134,47,.09),
+      0 1px 2px rgba(29,42,52,.05), 0 6px 16px -8px rgba(29,42,52,.22);
   }
   .servicio .nombre { font-weight: 800; font-size: .95rem; margin-bottom: 10px; }
   .servicio .notas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
@@ -177,6 +185,77 @@
   .tres button:active { transform: scale(.96); }
   .llevamos { color: var(--tinta-suave); font-size: .8rem; text-align: center; margin-bottom: 14px; font-weight: 700; }
 
+
+  /* ═══ VIDRIO ═══════════════════════════════════════════════════════════
+     Dos vidrios distintos, porque el fondo manda:
+     · .vidrio      — sobre el video: translúcido de verdad, con desenfoque
+                      del fondo y el filo de luz arriba y abajo.
+     · .vidrio-mate — sobre el crema: no hay nada que refractar detrás, así
+                      que el volumen se hace con luz y sombra, no con
+                      transparencia. Si se hiciera translúcido, se vería sucio.
+     ══════════════════════════════════════════════════════════════════════ */
+  .vidrio {
+    position: relative; overflow: hidden;
+    background: rgba(255,255,255,.06);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.22), 0 18px 44px rgba(0,0,0,.34);
+  }
+  /* El filo: un anillo de luz que se enciende arriba y abajo, como el canto
+     de un cristal cuando le pega la luz de lado. */
+  .vidrio::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit;
+    padding: 1.4px; pointer-events: none;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,.55) 0%, rgba(255,255,255,.18) 22%,
+      rgba(255,255,255,0) 42%, rgba(255,255,255,0) 58%,
+      rgba(255,255,255,.18) 78%, rgba(255,255,255,.55) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+  }
+
+  .vidrio-mate {
+    position: relative;
+    background: linear-gradient(168deg, #fff 0%, #FDFAF2 58%, #F7F1E2 100%);
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,1),      /* el brillo del canto de arriba */
+      inset 0 -1.5px 0 rgba(184,134,47,.10),   /* la sombra propia del canto de abajo */
+      0 1px 2px rgba(29,42,52,.05),
+      0 6px 18px -6px rgba(29,42,52,.16);      /* la pieza levantada del papel */
+  }
+
+  /* ═══ El telón de video ════════════════════════════════════════════════ */
+  .telon {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    opacity: 0; visibility: hidden; transition: opacity .55s ease, visibility .55s;
+    background: #0d1520;
+  }
+  body.con-telon .telon { opacity: 1; visibility: visible; }
+  .telon .foto {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+  .telon video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+    opacity: 0; transition: opacity .8s ease;   /* funde sobre la foto */
+  }
+  .telon video.corriendo { opacity: 1; }
+  /* Un velo que aclara abajo: sin él la letra blanca se pierde en el naranja
+     del atardecer, que es justo la parte más luminosa del cuadro. */
+  .telon .velo {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(8,14,22,.34) 0%, rgba(8,14,22,.12) 34%,
+                              rgba(8,14,22,.52) 78%, rgba(8,14,22,.74) 100%);
+  }
+  /* Mientras el telón está puesto, la app se aparta y deja ver */
+  body.con-telon { background: #0d1520; }
+  body.con-telon .tope, body.con-telon .cenefa { opacity: 0; pointer-events: none; }
+  body.con-telon main { position: relative; z-index: 10; }
+  body.con-telon .pie { background: linear-gradient(to top, rgba(8,14,22,.92) 55%, transparent); }
+  @media (prefers-reduced-motion: reduce) { .telon video { display: none; } }
+
   /* Barra de abajo */
   .pie {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
@@ -184,42 +263,112 @@
     background: linear-gradient(to top, var(--crema) 66%, transparent);
     display: flex; gap: 10px; max-width: 560px; margin: 0 auto;
   }
+  /* El botón es una pieza de cristal de color: el degradado le da la curva,
+     el filo blanco de arriba el brillo, y la sombra debajo el grosor. */
   .btn {
-    flex: 1; padding: 17px; border-radius: 16px; font-family: inherit; font-size: 1.02rem; font-weight: 800;
-    cursor: pointer; border: none; background: var(--acento); color: #fff;
-    box-shadow: 0 4px 0 color-mix(in srgb, var(--acento) 65%, #000);
-    transition: background .3s ease;
+    position: relative; overflow: hidden;
+    flex: 1; padding: 17px; border-radius: 18px; font-family: inherit;
+    font-size: 1.02rem; font-weight: 800; cursor: pointer; border: none; color: #fff;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,0) 46%),
+      linear-gradient(180deg, color-mix(in srgb, var(--acento) 88%, #fff) 0%,
+                              var(--acento) 52%,
+                              color-mix(in srgb, var(--acento) 82%, #000) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.55),
+      inset 0 -1px 0 rgba(0,0,0,.18),
+      0 4px 0 color-mix(in srgb, var(--acento) 62%, #000),
+      0 10px 22px -6px color-mix(in srgb, var(--acento) 55%, transparent);
+    text-shadow: 0 1px 2px rgba(0,0,0,.22);
+    transition: filter .3s ease, box-shadow .2s ease;
   }
-  .btn:disabled { background: #D9CFB8; box-shadow: 0 4px 0 #C6BAA0; color: #fff; }
+  /* El reflejo que cruza la cara del cristal */
+  .btn::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 46%;
+    border-radius: inherit inherit 0 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0));
+  }
+  .btn:disabled {
+    background: linear-gradient(180deg, #E4DAC4 0%, #D5CAB2 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 4px 0 #C3B79D;
+    color: rgba(255,255,255,.9); text-shadow: none;
+  }
   .btn.atras {
-    flex: 0 0 58px; background: var(--papel); border: 2px solid var(--borde);
-    color: var(--tinta-suave); font-size: 1.3rem; box-shadow: 0 4px 0 var(--borde);
+    flex: 0 0 58px; color: var(--tinta-suave); font-size: 1.3rem;
+    background: linear-gradient(180deg, #fff 0%, #F6F0E2 100%);
+    box-shadow:
+      inset 0 1px 0 #fff, inset 0 0 0 1px rgba(255,255,255,.9),
+      0 4px 0 var(--borde), 0 8px 16px -6px rgba(29,42,52,.2);
+    text-shadow: none;
   }
-  .btn:active { transform: translateY(2px); box-shadow: none; }
+  .btn:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,255,255,.4); }
 
-  /* Portada */
-  .portada { text-align: center; }
-  .portada .sellos { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 26px; }
-  .portada .sellos img.cad { height: 84px; width: auto; }
-  .portada .sellos img.tur { height: 74px; width: auto; }
-  .portada h1 { font-size: clamp(2.2rem, 10vw, 3.2rem); margin-bottom: 6px;
-                 text-transform: uppercase; letter-spacing: -.005em; }
-  .portada h1 .b1 { color: var(--azul); }
-  .portada h1 .b2 { color: var(--naranja); }
-  .portada .lema {
-    font-size: .72rem; font-weight: 800; letter-spacing: .24em; text-transform: uppercase;
-    color: var(--verde); margin-bottom: 22px;
+  /* Sobre el video el botón de atrás también se vuelve cristal transparente */
+  body.con-telon .btn.atras {
+    background: rgba(255,255,255,.1); color: #fff;
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 18px rgba(0,0,0,.3);
   }
-  .portada p { color: var(--tinta-suave); font-size: 1rem; max-width: 40ch; margin: 0 auto 12px; }
-  .portada p strong { color: var(--tinta); font-weight: 800; }
+
+  /* ═══ Portada sobre el video ═══════════════════════════════════════════
+     Todo va en blanco porque el fondo es el atardecer. El texto lleva sombra
+     propia: el cielo cambia de azul a naranja dentro del mismo cuadro y sin
+     ella habría un instante en que la letra se pierde. */
+  .portada { text-align: center; color: #fff; padding: 4vh 0 26px; }
+  .portada .sellos {
+    display: flex; justify-content: center; align-items: center; gap: 18px;
+    margin: 0 auto 24px; padding: 14px 22px; border-radius: 26px; width: fit-content;
+  }
+  .portada .sellos img.cad { height: 66px; width: auto; }
+  .portada .sellos img.tur { height: 58px; width: auto; }
+
+  /* Las letras de cristal: el degradado hace el bisel (claro arriba, apagado
+     al centro, encendido abajo) y las sombras dan el grosor y el apoyo. */
+  .portada h1 {
+    font-size: clamp(2.5rem, 12.5vw, 3.6rem); margin-bottom: 8px;
+    text-transform: uppercase; letter-spacing: .002em; line-height: 1;
+  }
+  .portada h1 span {
+    background-image: linear-gradient(176deg,
+      #ffffff 0%, #ffffff 32%, rgba(255,255,255,.72) 52%,
+      rgba(255,255,255,.94) 74%, #ffffff 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 1px 0 rgba(255,255,255,.65))    /* el canto encendido */
+      drop-shadow(0 -1px 0 rgba(0,0,0,.18))          /* el corte de arriba */
+      drop-shadow(0 3px 5px rgba(0,0,0,.42))         /* el cuerpo */
+      drop-shadow(0 14px 26px rgba(0,0,0,.45));      /* el apoyo, lejos */
+  }
+  .portada h1 .b2 {
+    background-image: linear-gradient(176deg,
+      #FFE7C2 0%, #FFD79B 34%, rgba(245,144,10,.86) 54%,
+      #FFCF8C 76%, #FFF0D8 100%);
+    -webkit-background-clip: text; background-clip: text;
+  }
+
+  .portada .lema {
+    font-size: .7rem; font-weight: 900; letter-spacing: .3em; text-transform: uppercase;
+    color: rgba(255,255,255,.9); margin-bottom: 24px;
+    text-shadow: 0 2px 10px rgba(0,0,0,.55);
+  }
+
+  /* El texto va sobre su propio cristal: sin él, un párrafo largo encima de
+     un video en movimiento no hay quien lo lea. */
+  .portada .dicho { border-radius: 24px; padding: 22px 20px; margin: 0 0 18px; }
+  .portada .dicho p { color: rgba(255,255,255,.94); font-size: 1rem; margin: 0 auto; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+  .portada .dicho p + p { margin-top: 12px; }
+  .portada .dicho p strong { color: #fff; font-weight: 900; }
+
   .minutos {
-    display: inline-flex; align-items: center; gap: 8px; margin: 20px 0 4px;
-    padding: 10px 18px; border-radius: 99px; font-size: .84rem; font-weight: 800;
-    color: #fff; background: var(--turquesa);
+    display: inline-flex; align-items: center; gap: 8px; margin: 2px 0 4px;
+    padding: 12px 20px; border-radius: 99px; font-size: .84rem; font-weight: 800;
+    color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.45);
   }
   .aviso {
-    color: var(--tinta-suave); font-size: .78rem; line-height: 1.62; margin-top: 24px;
-    border-top: 2px dotted var(--borde); padding-top: 18px;
+    color: rgba(255,255,255,.74); font-size: .76rem; line-height: 1.62; margin-top: 22px;
+    padding-top: 16px; border-top: 1px solid rgba(255,255,255,.18);
+    text-shadow: 0 1px 6px rgba(0,0,0,.55);
   }
 
   /* Cierre */
@@ -239,9 +388,17 @@
 </style></head>
 <body>
 
+<!-- El llano por la ventana: solo respira en la portada. Va como primer hijo
+     del cuerpo y no dentro de la barra de arriba, que se apaga con el telón. -->
+<div class="telon" id="telon" aria-hidden="true">
+  <img class="foto" src="/fondo/ventana.jpg" alt="">
+  <video id="fondoVideo" muted playsinline loop preload="none"></video>
+  <span class="velo"></span>
+</div>
+
 <div class="tope">
   <div class="avance"><i id="avance"></i></div>
-  <div class="cenefa"></div>
+<div class="cenefa"></div>
 </div>
 
 <main>
@@ -249,26 +406,27 @@
 <!-- ══ Portada ══ -->
 <section class="paso on" data-id="portada" data-color="naranja">
   <div class="portada">
-    <div class="sellos">
+    <div class="sellos vidrio">
       <img class="cad" src="/marcas/cadteba.png" alt="CADTEBA · Cámara de Desarrollo Turístico del Estado Barinas">
       <img class="tur" src="/marcas/turismo.png" alt="Turismo somos todos · Explora Barinas">
     </div>
     <h1><span class="b1">Barinas</span> <span class="b2">opina</span></h1>
     <p class="lema">Turismo somos todos</p>
-    <p>Se está discutiendo en el país un <strong>nuevo modelo tributario</strong>. El comercio y la industria ya llevaron sus propuestas. El turismo del interior todavía no lleva números.</p>
-    <p>CADTEBA está armando los de Barinas. Para que queden completos, falta tu negocio.</p>
-    <span class="minutos">
+    <div class="dicho vidrio">
+      <p>Se está discutiendo en el país un <strong>nuevo modelo tributario</strong>. El comercio y la industria ya llevaron sus propuestas. El turismo del interior todavía no lleva números.</p>
+      <p>CADTEBA está armando los de Barinas. Para que queden completos, falta tu negocio.</p>
+    </div>
+    <span class="minutos vidrio">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="16" height="16"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
       3 minutos · casi todo es tocar
     </span>
     <p class="aviso">
-      Tus respuestas se suman a las de los demás y forman el informe con el que CADTEBA sustenta la posición de Barinas.
-      Tus datos de contacto los guarda CADTEBA para escribirte sobre esta consulta y sobre el gremio — nada más, y nunca se venden.
+      Tus respuestas forman el informe con el que CADTEBA sustenta la posición de Barinas.
+      Tus datos los guarda la Cámara para escribirte sobre esto — nada más, y nunca se venden.
     </p>
   </div>
 </section>
 
-<!-- ══ Ficha ══ -->
 <section class="paso" data-id="negocio" data-color="turquesa">
   <span class="cuenta">Tu negocio · 1 de 5</span>
   <h2>¿Cómo se llama tu negocio?</h2>
@@ -685,11 +843,34 @@
     // Cada pantalla toma su color, como cada letra del logo
     document.documentElement.style.setProperty("--acento", `var(--${pasos[i].dataset.color})`);
   }
+  // El video solo vive en la portada. Se carga cuando ya se vio la foto fija,
+  // para que en una conexión lenta la pantalla no se quede en blanco esperando.
+  function telon(puesto) {
+    document.body.classList.toggle("con-telon", puesto);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = puesto ? "#0d1520" : "#FBF3DE";
+
+    const v = $("fondoVideo");
+    if (!v) return;                 // el teléfono no pudo con el video: queda la foto
+    if (!puesto) { v.pause(); return; }
+
+    if (!v.src) {
+      v.src = "/fondo/ventana.mp4";
+      // Solo aparece cuando de verdad hay imagen. Si falla, se apaga en
+      // silencio y la foto se queda: nadie se entera de que faltó algo.
+      v.addEventListener("playing", () => v.classList.add("corriendo"), { once: true });
+      v.addEventListener("error", () => v.classList.remove("corriendo"), { once: true });
+      v.load();
+    }
+    v.play().catch(() => {});
+  }
+
   function ir(n) {
     pasos[i].classList.remove("on");
     i = n;
     pasos[i].classList.add("on");
     window.scrollTo({ top: 0, behavior: "instant" });
+    telon(donde() === "portada");
     if (donde() === "uno") armarUno();
     if (donde() === "servicios" && !$("serviciosBox").innerHTML) pintarServicios();
     if (donde() === "acuerdos" && !$("afirmaBox").innerHTML) pintarAfirmacion();
@@ -735,6 +916,7 @@
     else location.href = "https://wa.me/?text=" + encodeURIComponent(msg);
   };
 
+  telon(true);
   revisar();
 })();
 </script>
