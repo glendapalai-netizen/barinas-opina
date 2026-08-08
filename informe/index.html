@@ -520,6 +520,12 @@ td.ancho { white-space:normal; min-width:200px; }
           <p class="nota">Cuánta gente trabaja en cada negocio.</p>
           <div id="gTamano"></div>
         </div>
+        <div class="tarjeta vidrio c12" style="--acento:var(--magenta)">
+          <h3>Turismo <em>somos todos</em>, con números</h3>
+          <p class="nota">A quien no atiende visitantes se le pregunta qué tiene que ver su trabajo con el turismo. Aquí está la respuesta — es el argumento de que la cadena es más ancha que el gremio.</p>
+          <div id="titularVinculo"></div>
+          <div id="gVinculo"></div>
+        </div>
         <div class="tarjeta vidrio c12" style="--acento:var(--turquesa)">
           <h3>Por <em>dirección</em> de la Cámara</h3>
           <p class="nota">Las siete direcciones técnicas de CADTEBA. No se pregunta: se deduce del sector que cada quien marcó, según la tabla de los estatutos. Es la vista interna, para saber a qué dirección le toca cada respuesta.</p>
@@ -1038,13 +1044,18 @@ td.ancho { white-space:normal; min-width:200px; }
     $("titular").innerHTML = conDias.length ? `
       <div class="titular">
         <b>${pct(cortos, conDias.length)}%</b>
-        <p>de quienes respondieron trabaja con afluencia real <strong>sesenta días al año o menos</strong>${
+        <p>de los <strong>${conDias.length} que atienden al visitante</strong> trabaja con afluencia real
+          <strong>sesenta días al año o menos</strong>${
           conOcup.length ? `, y ${pct(bajaOcup, conOcup.length)}% no pasa del 30% de ocupación ni en su mejor temporada` : ""}.
           Sobre esa operación se paga IVA, patente municipal y el 1% al INATUR <strong>los doce meses</strong>.</p>
       </div>` : '<p class="vacio">Todavía no hay respuestas sobre la temporada.</p>';
 
-    columnas($("gDias"), CORTOS.map((c, i) => [c, filas.filter(f => f.dias === RANGOS[i]).length]), total);
-    barras($("gOcup"), contar(filas, "ocupacion"), total);
+    // Ojo con el denominador: estas cifras son sobre quienes atienden al
+    // visitante, no sobre todos los que respondieron. Al entrar ferreteros y
+    // farmacias a la consulta, contarlas sobre el total las desinflaría — y un
+    // informe que exagera se desarma con una sola pregunta en la reunión.
+    columnas($("gDias"), CORTOS.map((c, i) => [c, filas.filter(f => f.dias === RANGOS[i]).length]), conDias.length);
+    barras($("gOcup"), contar(filas, "ocupacion"), conOcup.length);
     barras($("gMomentos"), contar(filas, "momentos"), total);
 
     // La temporada, sector por sector — el cruce que pidió Humberto.
@@ -1250,9 +1261,25 @@ td.ancho { white-space:normal; min-width:200px; }
     barras($("gTamano"), contar(filas, "tamano"), total);
     barras($("gDireccion"), contarDirecciones(filas), total);
 
+    // El vínculo con el turismo. Se cuenta sobre los que respondieron esa
+    // pregunta, que son los que NO atienden al visitante de frente: a los que
+    // sí, no se les preguntó porque la respuesta ya se sabía.
+    const ATIENDE = "Atiendo directamente a visitantes que vienen de fuera";
+    const conVinculo = filas.filter(f => f.vinculo);
+    const fuera = conVinculo.filter(f => f.vinculo !== ATIENDE);
+    const tocados = fuera.filter(f => f.vinculo !== "Nada, mi trabajo va igual todo el año");
+    $("titularVinculo").innerHTML = fuera.length ? `
+      <div class="titular">
+        <b>${pct(tocados.length, fuera.length)}%</b>
+        <p>de los <strong>${fuera.length} que no atienden visitantes</strong> dice que el turismo igual le
+          llega: le vende a la cadena, o sus ventas suben en temporada. El turismo de Barinas mueve
+          <strong>más caja de la que aparece en el gremio</strong>.</p>
+      </div>` : "";
+    barras($("gVinculo"), contar(conVinculo, "vinculo"), conVinculo.length);
+
     // ── La base ──
     const cols = [
-      ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["otro_rubro", "Otro sector"], ["direccion", "Dirección"], ["municipio", "Municipio"],
+      ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["otro_rubro", "Otro sector"], ["vinculo", "Vínculo"], ["direccion", "Dirección"], ["municipio", "Municipio"],
       ["tamano", "Tamaño"], ["dias", "Días al año"], ["ocupacion", "Ocupación"],
       ["impuestos", "Los que aprietan"], ["otro_impuestos", "Otro tributo"],
       ["uno", "Prioridad 1"], ["otro_uno", "Cuál"], ["porque_uno", "Por qué"],

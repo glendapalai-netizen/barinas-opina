@@ -38,6 +38,7 @@ export async function guardarRespuesta(id, fila, direcciones) {
     "Fecha": new Date(fila.cuando).toISOString(),
     "Sector": fila.rubro || [],
     "Otro sector": fila.otro_rubro || "",
+    "Vínculo con el turismo": fila.vinculo || "",
     "Dirección CADTEBA": direcciones || [],
     "Municipio": fila.municipio || "",
     "Tamaño": fila.tamano || "",

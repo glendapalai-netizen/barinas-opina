@@ -71,6 +71,7 @@ El recorrido:
 |---|---|
 | `portada` | por qué se está preguntando |
 | `rubro` | a qué sector pertenece — **sin pedir nombres** |
+| `vinculo` | qué tiene que ver su trabajo con el turismo — **solo a quien no atiende visitantes** |
 | `municipio` `tamano` | dónde opera y con cuánta gente |
 | `temporada` | momentos del año, días con afluencia real, ocupación |
 | `impuestos` | cuáles aprietan más (hasta tres) |
@@ -106,6 +107,33 @@ funciona mejor.
 Uno solo, además de por lo anterior, porque con varios había que decidir cuál
 manda al deducir la dirección — y esa duda la resolvía el programa por su
 cuenta. Así la resuelve quien responde, que es quien sabe.
+
+**No todos ven las mismas pantallas, y esto es deliberado.** Un ferretero no
+tiene ocupación; preguntarle cuántos días al año le llegan turistas lo hace
+sentir que la encuesta no es para él, y de paso mete un dato falso. Así que
+`CARA_AL_VISITANTE` define los ocho sectores que atienden al visitante de
+frente: a esos se les da por respondida la pregunta puente y pasan derecho a
+temporada. A los demás se les hace la puente — y **su primera opción los manda
+igual a temporada**, porque ningún sector predice esto: el médico que recibe
+pacientes de Táchira sí tiene ocupación de consultorio, y el del ambulatorio de
+Sabaneta no. El sector decide por dónde entras; tú decides adónde vas.
+
+Esa pregunta no es un trámite para saltar pantallas: **es el dato que sostiene
+«turismo somos todos»**. Sale de ahí la lámina que dice qué porcentaje de los
+que no atienden visitantes vive igual del turismo, por venderle a la cadena o
+por vender más en temporada.
+
+**Los denominadores se dicen en voz alta.** El titular no dice «de quienes
+respondieron» sino «de los N que atienden al visitante», y las columnas de días
+y ocupación se calculan sobre ese universo y no sobre el total. Al entrar
+ferreteros y farmacias a la consulta, contarlas sobre el total las desinflaría —
+y un informe que exagera se desarma con una sola pregunta en la reunión.
+
+**Los tributos no son la misma lista para todos.** INATUR y las tasas del RTN
+solo se le enseñan a quien atiende al visitante: un ferretero no los paga.
+Y los menos comunes —LOCTI, FONA, deporte, aranceles, bomberos, solvencias—
+quedan detrás de un renglón que se abre. Veintidós casillas de un tirón son un
+muro en el que la gente se rinde; a la vista quedan los que aprietan a todos.
 
 **La dirección de CADTEBA no se pregunta: se deduce.** `SECTOR_DIRECCION` dice
 a cuál de las siete direcciones técnicas pertenece cada sector, y esa tabla

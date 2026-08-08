@@ -309,6 +309,17 @@
     width: 20px; height: 20px; color: var(--acento); pointer-events: none;
   }
 
+  /* El renglón que abre los tributos menos comunes */
+  .mas-tributos { margin-top: 4px; }
+  .mas-tributos summary {
+    cursor: pointer; list-style: none; padding: 14px 4px 10px;
+    color: var(--tinta-suave); font-size: .9rem; font-weight: 700;
+  }
+  .mas-tributos summary::-webkit-details-marker { display: none; }
+  .mas-tributos summary::before { content: "+ "; color: var(--acento); font-weight: 900; }
+  .mas-tributos[open] summary::before { content: "– "; }
+  .mas-tributos .ops { padding-bottom: 4px; }
+
   .otro-caja { margin-top: 12px; animation: entra .25s ease both; }
 
   /* ── La carita ──────────────────────────────────────────────────────── */
@@ -527,8 +538,8 @@
   </div>
 </section>
 
-<section class="paso" data-id="rubro" data-color="verde">
-  <span class="cuenta">Tu actividad · 1 de 4</span>
+<section class="paso" data-id="rubro" data-grupo="Tu actividad" data-color="verde">
+  <span class="cuenta"></span>
   <h2>¿A qué <em>sector</em> perteneces?</h2>
   <p class="ayuda">Escoge el que más se parezca a lo tuyo. Turismo somos todos:
     aquí está el mecánico, la ferretería y la farmacia, no solo la posada.</p>
@@ -547,14 +558,22 @@
   </div>
 </section>
 
-<section class="paso" data-id="municipio" data-color="azul">
-  <span class="cuenta">Tu actividad · 2 de 4</span>
+<section class="paso" data-id="vinculo" data-grupo="Tu actividad" data-color="turquesa">
+  <span class="cuenta"></span>
+  <h2>¿Cuánto tiene que ver tu trabajo con el <em>turismo</em>?</h2>
+  <p class="ayuda">No hace falta que atiendas turistas para que el turismo te toque.
+    Contesta lo que de verdad te pasa.</p>
+  <div class="ops" data-campo="vinculo"></div>
+</section>
+
+<section class="paso" data-id="municipio" data-grupo="Tu actividad" data-color="azul">
+  <span class="cuenta"></span>
   <h2>¿En qué municipio estás?</h2>
   <div class="ops" data-campo="municipio"></div>
 </section>
 
-<section class="paso" data-id="tamano" data-color="magenta">
-  <span class="cuenta">Tu actividad · 3 de 4</span>
+<section class="paso" data-id="tamano" data-grupo="Tu actividad" data-color="magenta">
+  <span class="cuenta"></span>
   <h2>¿Cuántas personas trabajan contigo?</h2>
   <p class="ayuda">Contándote a ti.</p>
   <div class="ops" data-campo="tamano"></div>
@@ -564,8 +583,8 @@
   </details>
 </section>
 
-<section class="paso" data-id="temporada" data-color="oro">
-  <span class="cuenta">Tu actividad · 4 de 4</span>
+<section class="paso" data-id="temporada" data-grupo="Tu actividad" data-color="oro">
+  <span class="cuenta"></span>
   <h2>¿Cuándo <em>de verdad</em> te llegan turistas?</h2>
   <p class="ayuda">Aquí no vale el año completo. Vale cuándo hay gente de verdad.</p>
 
@@ -585,8 +604,8 @@
 </section>
 
 <!-- ══ Las cuatro de fondo ══ -->
-<section class="paso" data-id="impuestos" data-color="coral">
-  <span class="cuenta">Pregunta 1 de 4</span>
+<section class="paso" data-id="impuestos" data-grupo="Pregunta" data-color="coral">
+  <span class="cuenta"></span>
   <h2>¿Cuáles impuestos te <em>aprietan más</em> hoy?</h2>
   <p class="ayuda">Marca hasta tres. Los que de verdad te duelen.</p>
   <div class="ops" data-campo="impuestos" data-multi="3"></div>
@@ -613,8 +632,8 @@
   </details>
 </section>
 
-<section class="paso" data-id="cambios" data-color="naranja">
-  <span class="cuenta">Pregunta 2 de 4</span>
+<section class="paso" data-id="cambios" data-grupo="Pregunta" data-color="naranja">
+  <span class="cuenta"></span>
   <h2>¿Qué haría falta para fortalecer el turismo aquí?</h2>
   <p class="ayuda">Marca hasta cinco. Las que de verdad moverían la aguja.</p>
   <div class="ops" data-campo="cambios" data-multi="5"></div>
@@ -624,8 +643,8 @@
   </div>
 </section>
 
-<section class="paso" data-id="uno" data-color="azul">
-  <span class="cuenta">Pregunta 3 de 4</span>
+<section class="paso" data-id="uno" data-grupo="Pregunta" data-color="azul">
+  <span class="cuenta"></span>
   <h2>Si pudieras cambiar <em>uno solo</em>, ¿cuál?</h2>
   <p class="ayuda">Elige uno y cuéntanos en una línea por qué.</p>
   <div class="ops" data-campo="uno"></div>
@@ -636,8 +655,8 @@
   <div style="margin-top:14px"><textarea id="porque_uno" placeholder="¿Por qué ése? (opcional, pero es lo que más pesa en el informe)"></textarea></div>
 </section>
 
-<section class="paso" data-id="inversion" data-color="verde">
-  <span class="cuenta">Pregunta 4 de 4</span>
+<section class="paso" data-id="inversion" data-grupo="Pregunta" data-color="verde">
+  <span class="cuenta"></span>
   <h2>¿Qué te haría invertir o contratar más gente?</h2>
   <p class="ayuda">Marca todas las que apliquen.</p>
   <div class="ops" data-campo="inversion" data-multi="1"></div>
@@ -648,8 +667,8 @@
 </section>
 
 <!-- ══ Servicios públicos ══ -->
-<section class="paso" data-id="servicios" data-color="turquesa">
-  <span class="cuenta">Servicios · 1 de 2</span>
+<section class="paso" data-id="servicios" data-grupo="Servicios" data-color="turquesa">
+  <span class="cuenta"></span>
   <h2>¿Cómo están los servicios <em>donde tú operas</em>?</h2>
   <p class="ayuda">Uno por uno, como lo vives tú — no como debería ser.</p>
   <div id="serviciosBox"></div>
@@ -659,8 +678,8 @@
   </details>
 </section>
 
-<section class="paso" data-id="servicios-general" data-color="coral">
-  <span class="cuenta">Servicios · 2 de 2</span>
+<section class="paso" data-id="servicios-general" data-grupo="Servicios" data-color="coral">
+  <span class="cuenta"></span>
   <h2>En general, ¿los servicios <em>dan para trabajar</em>?</h2>
   <p class="ayuda">Pensando en poder recibir y atender visitantes.</p>
   <div class="ops" data-campo="calidad_servicios"></div>
@@ -834,26 +853,65 @@
   const SECTORES = [...Object.keys(SECTOR_DIRECCION)]
     .sort((a, b) => a.localeCompare(b, "es")).concat("Otro");
 
+  // Los sectores que atienden al visitante de frente. A estos no se les hace
+  // la pregunta puente: se les da por respondida y pasan derecho a temporada.
+  // Los demás la contestan, y si resulta que también atienden visitantes —el
+  // médico que recibe pacientes de Táchira— la primera opción los manda al
+  // mismo sitio.
+  const CARA_AL_VISITANTE = new Set([
+    "Hoteleros", "Restaurantes | Catering", "Operador turístico | Guías | Agencias viaje",
+    "Transporte turístico", "Deportes extremos", "Spa", "Salud holística",
+    "Economía naranja",
+  ]);
+  const ATIENDE = "Atiendo directamente a visitantes que vienen de fuera";
+
   const OPCIONES = {
     municipio: ["Barinas", "Alberto Arvelo Torrealba (Sabaneta)", "Andrés Eloy Blanco (El Cantón)",
                 "Antonio José de Sucre (Socopó)", "Arismendi", "Barinitas (Bolívar)",
                 "Cruz Paredes (Barrancas)", "Ezequiel Zamora (Santa Bárbara)", "Obispos",
                 "Pedraza (Ciudad Bolivia)", "Rojas (Libertad)", "Sosa (Ciudad de Nutrias)"],
 
-    tamano: ["Solo yo o con un ayudante", "De 3 a 10 personas", "De 11 a 30 personas", "Más de 30 personas"],
+    tamano: ["Solo yo o con un ayudante", "De 3 a 10 personas", "De 11 a 30 personas",
+             "De 31 a 100 personas", "Más de 100 personas"],
 
+    // La pregunta puente. La primera opción no es una respuesta más: es la
+    // puerta. Quien la toca pasa a las preguntas de temporada del hotelero,
+    // aunque su sector no sea turístico — el médico que recibe pacientes de
+    // Táchira, el artista que vende en la feria. Ningún sector predice eso;
+    // la persona sí.
+    vinculo: [
+      ["Atiendo directamente a visitantes que vienen de fuera", "aunque mi oficio no se llame turismo"],
+      ["Le vendo o le presto servicio a posadas, restaurantes u operadores", ""],
+      ["Mis ventas suben en temporada, aunque mi cliente sea de aquí", ""],
+      ["Nada, mi trabajo va igual todo el año", ""],
+    ],
+
+    // Tres marcas por opción: "turismo" solo se le enseña a quien atiende al
+    // visitante —un ferretero no paga INATUR y ofrecérselo ensucia el dato— y
+    // "mas" queda detrás de un pliegue. Veintidós casillas a la vez son un muro
+    // en el que uno se rinde; a la vista quedan los que le aprietan a todos.
     impuestos: [
       ["IVA · nacional", "16% general (alícuota entre 8% y 16,5% según el bien o servicio)"],
+      ["Retenciones de IVA · contribuyente especial", "te retienen 75% o 100% del IVA antes de que lo cobres"],
       ["IGTF · nacional", "3% sobre los pagos en divisas o cripto"],
       ["ISLR · nacional", "impuesto sobre la renta, por tabla progresiva"],
-      ["Aporte al INATUR · nacional", "1% de tus ingresos brutos mensuales (Ley Orgánica de Turismo, art. 53)"],
+      ["Aporte al INATUR · nacional", "1% de tus ingresos brutos mensuales (Ley Orgánica de Turismo, art. 53)", "turismo"],
       ["Aporte de pensiones · nacional", "9% sobre la nómina (Ley de Protección de las Pensiones, 2024)"],
       ["IVSS, INCES, RPE y demás de nómina", "seguro social, paro forzoso, política habitacional, INCES"],
       ["Patente municipal", "actividades económicas, un % de tus ingresos brutos que fija cada alcaldía"],
       ["Aseo urbano municipal", "Ecodeba en el municipio Barinas; se cobra por metro cuadrado y no por basura generada"],
       ["Publicidad, inmuebles y espectáculos", "los municipales pequeños que se van sumando"],
       ["Timbres fiscales y tasas del estado Barinas", ""],
-      ["Tasas del Registro Turístico Nacional (RTN)", "inscripción y renovación anual"],
+      ["Tasas del Registro Turístico Nacional (RTN)", "inscripción y renovación anual", "turismo"],
+      ["Declarar el IVA cada quince días", "el calendario de contribuyente especial", "mas"],
+      ["Anticipos de ISLR · declaración estimada", "pagar antes de saber cuánto se ganó", "mas"],
+      ["Aporte LOCTI · ciencia y tecnología", "sobre los ingresos brutos", "mas"],
+      ["Aporte FONA · Ley Orgánica de Drogas", "para empresas de 50 trabajadores o más", "mas"],
+      ["Aporte de la Ley del Deporte", "1% de la utilidad neta anual", "mas"],
+      ["Aranceles e impuestos de importación", "para quien trae mercancía de afuera", "mas"],
+      ["Impuesto municipal de vehículos", "para quien tiene flota o reparto", "mas"],
+      ["Tasa de bomberos y prevención de incendios", "municipal", "mas"],
+      ["Solvencias, permisos y conformidad de uso", "sanidad, ambiente, la renovación de cada año", "mas"],
       ["Otro", ""],
     ],
 
@@ -941,6 +999,7 @@
     "Las alcaldías y la gobernación deberían ajustarse de verdad a la ley de armonización tributaria.",
     "Vale la pena estar formalizado y al día, aunque salga más caro.",
     "Si se está armando un nuevo modelo tributario, el turismo del interior tiene que estar en esa mesa.",
+    "A mi negocio le va mejor cuando al turismo de Barinas le va bien.",
     "Confío en que esta consulta va a cambiar algo.",
   ];
 
@@ -966,18 +1025,28 @@
 
   const tilde = '<span class="caja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 5 5L20 7"/></svg></span>';
 
-  document.querySelectorAll(".ops[data-campo]").forEach(caja => {
-    const campo = caja.dataset.campo;
+  // Arma una caja de opciones y le pone el oído. Se sacó aparte porque la de
+  // tributos se vuelve a armar cada vez que se entra: no todos ven lo mismo.
+  function armar(caja, campo, lista) {
     const multi = !!caja.dataset.multi;
     const tope = multi ? parseInt(caja.dataset.multi) : 1;
-    const lista = OPCIONES[campo];
-    if (!lista) return;
 
-    caja.innerHTML = lista.map(o => {
+    const boton = o => {
       const [t, sub] = Array.isArray(o) ? o : [o, ""];
       return `<button type="button" class="op ${multi ? "" : "una"}" data-valor="${t}" aria-pressed="false">
         ${tilde}<span><b>${t}</b>${sub ? `<small>${sub}</small>` : ""}</span></button>`;
-    }).join("");
+    };
+
+    // Los marcados como "mas" van detrás de un renglón que se abre. Sin esto
+    // son veintidós casillas de un tirón, y en un muro así la gente se rinde.
+    const suyo = o => (Array.isArray(o) ? o[0] : o) === "Otro";
+    const aLaVista = lista.filter(o => o[2] !== "mas" && !suyo(o));
+    const plegados = lista.filter(o => o[2] === "mas");
+    const otro = lista.filter(suyo);          // «Otro» siempre de último de todos
+    caja.innerHTML = aLaVista.map(boton).join("") + (plegados.length
+      ? `<details class="mas-tributos"><summary>Ver los demás tributos</summary>
+           <div class="ops">${plegados.map(boton).join("")}</div></details>`
+      : "") + otro.map(boton).join("");
 
     caja.querySelectorAll(".op").forEach(b => {
       b.onclick = () => {
@@ -997,7 +1066,28 @@
         revisar();
       };
     });
+  }
+
+  document.querySelectorAll(".ops[data-campo]").forEach(caja => {
+    const lista = OPCIONES[caja.dataset.campo];
+    if (lista) armar(caja, caja.dataset.campo, lista);
   });
+
+  // Los tributos se arman al entrar, no al cargar: INATUR y las tasas del RTN
+  // solo las paga quien atiende al visitante, y ofrecérselas a un ferretero es
+  // ruido en la pantalla y un dato falso en el informe.
+  function pintarImpuestos() {
+    const caja = document.querySelector('.ops[data-campo="impuestos"]');
+    const antes = new Set(R.impuestos);
+    armar(caja, "impuestos",
+          OPCIONES.impuestos.filter(o => o[2] !== "turismo" || R.vinculo === ATIENDE));
+    // Lo ya marcado se vuelve a marcar; lo que dejó de existir se cae solo.
+    caja.querySelectorAll(".op").forEach(b => {
+      if (antes.has(b.dataset.valor)) b.setAttribute("aria-pressed", "true");
+    });
+    R.impuestos = [...caja.querySelectorAll('[aria-pressed="true"]')].map(x => x.dataset.valor);
+    revisarOtro("impuestos");
+  }
 
   // ── El sector ────────────────────────────────────────────────────────────
   //
@@ -1017,6 +1107,9 @@
       // Se guarda igual en lista de uno: así lo respondido antes, cuando se
       // podía marcar varios, se sigue leyendo sin tener que convertir nada.
       R.rubro = caja.value ? [caja.value] : [];
+      // Si atiende al visitante, la puente queda contestada sin preguntarla.
+      // Si no, se limpia: pudo haber cambiado de sector después de responderla.
+      R.vinculo = R.rubro.some(x => CARA_AL_VISITANTE.has(x)) ? ATIENDE : "";
       revisarOtro("rubro");
       revisar();
     };
@@ -1071,6 +1164,7 @@
     switch (donde()) {
       case "negocio":   return $("negocio").value.trim().length > 1;
       case "rubro":     return R.rubro.length > 0;
+      case "vinculo":   return !!R.vinculo;
       case "municipio": return !!R.municipio;
       case "tamano":    return !!R.tamano;
       case "temporada": return R.momentos.length > 0 && !!R.dias && !!R.ocupacion;
@@ -1122,14 +1216,47 @@
     v.play().catch(() => {});
   }
 
+  // Hay dos pantallas que no le tocan a todo el mundo. En vez de esconderlas a
+  // medias, se saltan enteras: quien no atiende visitantes nunca ve la pregunta
+  // de ocupación, y quien sí los atiende nunca ve la pregunta puente.
+  function sobra(k) {
+    const id = pasos[k].dataset.id;
+    if (id === "vinculo")   return R.rubro.some(x => CARA_AL_VISITANTE.has(x));
+    if (id === "temporada") return R.vinculo !== ATIENDE;
+    return false;
+  }
+
+  // «2 de 4» no se puede escribir a mano: el ferretero no ve la pantalla de
+  // ocupación y el hotelero no ve la pregunta puente, así que el camino no mide
+  // igual para los dos. Se cuenta en el momento, sin las que se saltan.
+  function pintarCuenta() {
+    const g = pasos[i].dataset.grupo;
+    const marca = pasos[i].querySelector(".cuenta");
+    if (!marca) return;
+    if (!g) { marca.hidden = true; return; }
+    marca.hidden = false;
+    // Parado en la puente todavía no se sabe si viene la de temporada, y sería
+    // feo que el total saltara de 4 a 5 delante de la persona. Se dice el
+    // grupo y nada más hasta que ella misma resuelva el largo del camino.
+    if (donde() === "vinculo") { marca.textContent = g; return; }
+    const hermanos = pasos.filter((p, k) => p.dataset.grupo === g && !sobra(k));
+    marca.textContent = `${g} · ${hermanos.indexOf(pasos[i]) + 1} de ${hermanos.length}`;
+  }
+
   function ir(n) {
+    // Se salta en la dirección en que se venía andando, para que el botón de
+    // volver no rebote contra una pantalla que no le toca.
+    const paso = n > i ? 1 : -1;
+    while (n > 0 && n < pasos.length && sobra(n)) n += paso;
     pasos[i].classList.remove("on");
     i = n;
     pasos[i].classList.add("on");
     window.scrollTo({ top: 0, behavior: "instant" });
     telon(donde() === "portada");
+    pintarCuenta();
     if (donde() === "contacto") guardarDeCorrido();
     if (donde() === "cierre") pintarCara();
+    if (donde() === "impuestos") pintarImpuestos();
     if (donde() === "servicios" && !$("serviciosBox").innerHTML) pintarServicios();
     if (donde() === "acuerdos" && !$("afirmaBox").innerHTML) pintarAfirmacion();
     revisar();
@@ -1145,7 +1272,7 @@
     const val = id => { const e = $(id); return e ? e.value.trim() : ""; };
     return {
       id: idRespuesta,
-      rubro: R.rubro, otro_rubro: val("otro_rubro"),
+      rubro: R.rubro, otro_rubro: val("otro_rubro"), vinculo: R.vinculo || "",
       municipio: R.municipio, tamano: R.tamano,
       momentos: R.momentos, dias: R.dias || "", ocupacion: R.ocupacion || "",
       impuestos: R.impuestos, otro_impuestos: val("otro_impuestos"),
