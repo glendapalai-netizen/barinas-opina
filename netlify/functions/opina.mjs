@@ -28,7 +28,7 @@ export default async (req) => {
     filas.sort((a, b) => (a.cuando || 0) - (b.cuando || 0));
 
     if (url.searchParams.get("csv")) {
-      const cols = ["cuando", "rubro", "direccion", "coordinacion", "municipio", "tamano",
+      const cols = ["cuando", "rubro", "otro_rubro", "municipio", "tamano",
                     "momentos", "dias", "ocupacion",
                     "impuestos", "otro_impuestos",
                     "cambios", "otro_cambios",
@@ -108,8 +108,7 @@ export default async (req) => {
       cuando,
       completada: Date.now(),
       rubro: lista(d.rubro),
-      direccion: corta(d.direccion, 120),
-      coordinacion: corta(d.coordinacion, 120),
+      otro_rubro: corta(d.otro_rubro, 160),
       municipio: corta(d.municipio, 80),
       tamano: corta(d.tamano, 60),
       momentos: lista(d.momentos),

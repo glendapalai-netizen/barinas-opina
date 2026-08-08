@@ -284,6 +284,39 @@
   @media (prefers-reduced-motion: reduce) { .telon video { display: none; } }
 
   /* El recuadro que asoma al marcar «Otro» */
+
+  /* Buscador de sectores: treinta y siete no caben en botones */
+  .buscador { position: relative; }
+  .buscador input {
+    width: 100%; padding: 15px 17px; border-radius: 16px; font: inherit; color: var(--tinta);
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
+  }
+  .buscador input::placeholder { color: var(--tinta-suave); }
+  .buscador input:focus { outline: none; border-color: color-mix(in srgb, var(--acento) 70%, transparent); }
+  .buscador .lista {
+    margin-top: 10px; max-height: 46vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    display: flex; flex-direction: column; gap: 7px; padding-right: 2px;
+  }
+  .buscador .renglon {
+    width: 100%; text-align: left; padding: 13px 15px; border-radius: 13px; cursor: pointer;
+    font: inherit; color: var(--tinta); line-height: 1.35;
+    background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.11);
+  }
+  .buscador .renglon:active { transform: scale(.99); }
+  .buscador .nada { color: var(--tinta-suave); font-size: .9rem; padding: 14px 2px; }
+
+  /* Lo ya marcado, arriba y a la vista: si no, uno no sabe qué lleva escogido */
+  .marcados { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .marcados:empty { margin-bottom: 0; }
+  .marca {
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+    padding: 9px 13px; border-radius: 999px; font: inherit; font-size: .88rem; font-weight: 700;
+    color: var(--tinta); line-height: 1.2;
+    background: color-mix(in srgb, var(--acento) 24%, transparent);
+    border: 1px solid color-mix(in srgb, var(--acento) 62%, transparent);
+  }
+  .marca svg { width: 13px; height: 13px; opacity: .75; flex: 0 0 13px; }
   .otro-caja { margin-top: 12px; animation: entra .25s ease both; }
 
   /* ── La carita ──────────────────────────────────────────────────────── */
@@ -501,40 +534,32 @@
 </section>
 
 <section class="paso" data-id="rubro" data-color="verde">
-  <span class="cuenta">Tu actividad · 1 de 5</span>
+  <span class="cuenta">Tu actividad · 1 de 4</span>
   <h2>¿A qué <em>sector</em> perteneces?</h2>
-  <p class="ayuda">Puedes marcar más de uno. Sin nombres todavía: eso va al final y es opcional.</p>
-  <div class="ops" data-campo="rubro" data-multi="1"></div>
-</section>
+  <p class="ayuda">Escribe las primeras letras y aparece. Puedes marcar más de uno.
+    Turismo somos todos: aquí está el mecánico, la ferretería y la farmacia, no solo la posada.</p>
 
-<section class="paso" data-id="direccion" data-color="turquesa">
-  <span class="cuenta">Tu actividad · 2 de 5</span>
-  <h2>¿Con cuál <em>dirección</em> de la Cámara te ves?</h2>
-  <p class="ayuda">Turismo somos todos: el mecánico que arregla el autobús de la excursión y la ferretería
-    que le vende al posadero también hacen turismo. Elige por dónde entra tu trabajo.</p>
-  <div class="ops" data-campo="direccion"></div>
-
-  <div id="coordCaja" hidden>
-    <p class="rotulo">Y dentro de esa dirección</p>
-    <p class="ayuda">Opcional. Si ninguna te calza, sigue de largo.</p>
-    <div class="ops" id="coordOps"></div>
+  <div class="marcados" id="marcadosSector"></div>
+  <div class="buscador">
+    <input id="buscaSector" type="text" autocomplete="off" spellcheck="false"
+           placeholder="Busca tu sector — ferre, hotel, salud…" aria-label="Busca tu sector">
+    <div class="lista" id="listaSector" role="listbox"></div>
   </div>
 
-  <details class="porque">
-    <summary>¿Por qué te preguntamos esto?</summary>
-    <p>Porque CADTEBA está organizada en siete direcciones con sus coordinaciones, y el recado que
-      dejes tiene que llegarle a la que le toca atenderlo, no a un buzón general.</p>
-  </details>
+  <div class="otro-caja" id="otroRubroCaja" hidden>
+    <p class="rotulo">¿Cuál otro?</p>
+    <input type="text" id="otro_rubro" placeholder="Escribe a qué te dedicas" maxlength="120">
+  </div>
 </section>
 
 <section class="paso" data-id="municipio" data-color="azul">
-  <span class="cuenta">Tu actividad · 3 de 5</span>
+  <span class="cuenta">Tu actividad · 2 de 4</span>
   <h2>¿En qué municipio estás?</h2>
   <div class="ops" data-campo="municipio"></div>
 </section>
 
 <section class="paso" data-id="tamano" data-color="magenta">
-  <span class="cuenta">Tu actividad · 4 de 5</span>
+  <span class="cuenta">Tu actividad · 3 de 4</span>
   <h2>¿Cuántas personas trabajan contigo?</h2>
   <p class="ayuda">Contándote a ti.</p>
   <div class="ops" data-campo="tamano"></div>
@@ -545,7 +570,7 @@
 </section>
 
 <section class="paso" data-id="temporada" data-color="oro">
-  <span class="cuenta">Tu actividad · 5 de 5</span>
+  <span class="cuenta">Tu actividad · 4 de 4</span>
   <h2>¿Cuándo <em>de verdad</em> te llegan turistas?</h2>
   <p class="ayuda">Aquí no vale el año completo. Vale cuándo hay gente de verdad.</p>
 
@@ -756,25 +781,61 @@
   const $ = id => document.getElementById(id);
 
   // ── Contenido ───────────────────────────────────────────────────────────
+  // Los 37 sectores con que la Cámara ya trabaja, y a cuál de sus siete
+  // direcciones técnicas pertenece cada uno. La persona sólo ve el sector; la
+  // dirección se deduce de aquí al leer el informe. Se guarda el sector y no la
+  // dirección a propósito: si mañana un sector cambia de dirección, se corrige
+  // esta tabla y el informe entero se reacomoda solo, sin tocar lo respondido.
+  const SECTOR_DIRECCION = {
+    "Hoteleros":                                "Gestión de Calidad y Hospitalidad",
+    "Restaurantes | Catering":                  "Gestión de Calidad y Hospitalidad",
+    "Auditoría de Calidad":                     "Gestión de Calidad y Hospitalidad",
+
+    "Clínicas":                                 "Turismo de Salud, Bienestar y Vida",
+    "Spa":                                      "Turismo de Salud, Bienestar y Vida",
+    "Profesional de la salud":                  "Turismo de Salud, Bienestar y Vida",
+    "Salud holística":                          "Turismo de Salud, Bienestar y Vida",
+    "Farmacéutico":                             "Turismo de Salud, Bienestar y Vida",
+    "Laboratorios Bio análisis":                "Turismo de Salud, Bienestar y Vida",
+
+    "Deportes y fitness":                       "Deportes Extremos y Aventura",
+    "Deportes extremos":                        "Deportes Extremos y Aventura",
+
+    "Agroindustria":                            "Agroturismo y Producción",
+    "Campo y ganadería":                        "Agroturismo y Producción",
+    "Cacao | Café | Cereales":                  "Agroturismo y Producción",
+    "Alimentos y bebidas masivo":               "Agroturismo y Producción",
+    "Industria química":                        "Agroturismo y Producción",
+
+    "Arquitectura | Construcción | Ferretero":  "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Mecánica y eléctrica":                     "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Transporte y maquinaria pesada":           "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Inmobiliario":                             "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Inversión y finanzas":                     "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Petrolero":                                "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Sector público":                           "Infraestructura, Seguridad y Desarrollo Sustentable",
+
+    "Educación":                                "Educación, Cultura y Economía Naranja",
+    "Economía naranja":                         "Educación, Cultura y Economía Naranja",
+    "Fotografía | Cine | Audiovisual":          "Educación, Cultura y Economía Naranja",
+    "Ciencias económicas y sociales":           "Educación, Cultura y Economía Naranja",
+    "ONG":                                      "Educación, Cultura y Economía Naranja",
+    "Filantrópico":                             "Educación, Cultura y Economía Naranja",
+
+    "Transporte turístico":                     "Mercadeo, Productos y Relaciones Internacionales",
+    "Operador turístico | Guías | Agencias viaje": "Mercadeo, Productos y Relaciones Internacionales",
+    "Mercadeo":                                 "Mercadeo, Productos y Relaciones Internacionales",
+    "Comercio Exterior":                        "Mercadeo, Productos y Relaciones Internacionales",
+    "Comercio | Boutiques | Moda":              "Mercadeo, Productos y Relaciones Internacionales",
+    "Supermercados | Alimentos | Misceláneos":  "Mercadeo, Productos y Relaciones Internacionales",
+    "Agencia festejos | Decoración | Eventos":  "Mercadeo, Productos y Relaciones Internacionales",
+    "Consultoría legal":                        "Mercadeo, Productos y Relaciones Internacionales",
+  };
+  // En pantalla van en orden alfabético, que es como se busca una lista larga.
+  const SECTORES = [...Object.keys(SECTOR_DIRECCION)]
+    .sort((a, b) => a.localeCompare(b, "es")).concat("Otro");
+
   const OPCIONES = {
-    rubro: ["Posada u hotel", "Restaurante o gastronomía", "Transporte turístico",
-            "Guía o agencia de turismo", "Turismo de aventura o naturaleza",
-            "Salud y bienestar", "Artesanía o producto local", "Eventos y ferias", "Otro"],
-
-    // Las siete direcciones técnicas de CADTEBA, tal como están en los
-    // estatutos. Se preguntan aparte del sector porque el sector dice a qué te
-    // dedicas y la dirección dice por dónde te atiende la Cámara.
-    direccion: [
-      ["Gestión de Calidad y Hospitalidad", "alojamiento, agencias, gastronomía, atención al turista"],
-      ["Turismo de Salud, Bienestar y Vida", "médico, estético, odontológico, holístico, fitness y nutrición"],
-      ["Deportes Extremos y Aventura", "náuticos, senderismo, montañismo, ciclismo, off-road"],
-      ["Agroturismo y Producción", "hatos y fincas, cacao y café, ferias agro-turísticas"],
-      ["Infraestructura, Seguridad y Desarrollo Sustentable", "construcción, vialidad, seguridad, ferretería, servicios y oficios"],
-      ["Educación, Cultura y Economía Naranja", "universidades, arte, artesanía, folklore, diseño"],
-      ["Mercadeo, Productos y Relaciones Internacionales", "rutas, mercadeo digital, información al viajero, comercio exterior"],
-      ["Todavía no lo tengo claro", "puedes seguir sin escoger; la Cámara lo ubica después"],
-    ],
-
     municipio: ["Barinas", "Alberto Arvelo Torrealba (Sabaneta)", "Andrés Eloy Blanco (El Cantón)",
                 "Antonio José de Sucre (Socopó)", "Arismendi", "Barinitas (Bolívar)",
                 "Cruz Paredes (Barrancas)", "Ezequiel Zamora (Santa Bárbara)", "Obispos",
@@ -894,7 +955,7 @@
 
   // Cada «Otro» tiene su recuadro, que solo asoma cuando se marca. Sin esto,
   // «Otro» es un agujero en el informe: se sabe que hay algo más pero no qué.
-  const OTROS = { impuestos: "otroImpuestosCaja", cambios: "otroCambiosCaja",
+  const OTROS = { rubro: "otroRubroCaja", impuestos: "otroImpuestosCaja", cambios: "otroCambiosCaja",
                   inversion: "otroInversionCaja", uno: "otroUnoCaja" };
   function revisarOtro(campo) {
     const caja = $(OTROS[campo]);
@@ -934,67 +995,53 @@
           R[campo] = b.dataset.valor;
         }
         revisarOtro(campo);
-        if (campo === "direccion") pintarCoordinaciones();
         revisar();
       };
     });
   });
 
-  // Las coordinaciones de cada dirección, también de los estatutos. Se muestran
-  // sólo las de la dirección elegida: enseñarlas todas a la vez son veintitantas
-  // casillas y nadie las lee.
-  const COORDINACIONES = {
-    "Gestión de Calidad y Hospitalidad": [
-      "Certificación de Alojamiento y Agencias",
-      "Gastronomía, Rutas del Sabor y Vida Nocturna",
-      "Protocolo de Servicio y Atención al Turista"],
-    "Turismo de Salud, Bienestar y Vida": [
-      "Turismo Médico, Estético y Odontológico",
-      "Turismo Holístico, Espiritual y de Retiro",
-      "Fitness, Vida Activa y Nutrición"],
-    "Deportes Extremos y Aventura": [
-      "Deportes Náuticos y Aguas Bravas",
-      "Senderismo, Montañismo y Rutas Ecológicas",
-      "Ciclismo, Mototurismo y Off-Road 4x4"],
-    "Agroturismo y Producción": [
-      "Rutas Ganaderas, Hatos y Fincas",
-      "Cacao, Café y Rubros Autóctonos",
-      "Ferias Agro-Turísticas"],
-    "Infraestructura, Seguridad y Desarrollo Sustentable": [
-      "Arquitectura, Construcción Biocéntrica y Vialidad",
-      "Seguridad Turística y Enlace Policial",
-      "Inversión Inmobiliaria Turística"],
-    "Educación, Cultura y Economía Naranja": [
-      "Universidades e Investigación",
-      "Arte, Cultura, Artesanía y Folklore",
-      "Nuevas Narrativas, Diseño y Economía Creativa"],
-    "Mercadeo, Productos y Relaciones Internacionales": [
-      "Ingeniería de Producto y Rutas",
-      "Mercadeo y Estrategia Digital",
-      "Centros de Información y Movilidad",
-      "Comercio Exterior e Internacionalización"],
-  };
+  // ── El buscador de sectores ──────────────────────────────────────────────
+  // Treinta y siete opciones no caben como botones: es un rollo de pantalla y
+  // nadie llega al final. Se escribe, se filtra, se marca. Lo marcado queda
+  // arriba a la vista, porque si no, no se sabe qué se lleva escogido.
+  const sinTilde = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-  function pintarCoordinaciones() {
-    const caja = $("coordCaja"), ops = $("coordOps");
-    const lista = COORDINACIONES[R.direccion];
-    R.coordinacion = "";
-    if (!lista) { caja.hidden = true; ops.innerHTML = ""; return; }
-    caja.hidden = false;
-    ops.innerHTML = lista.map(t =>
-      `<button type="button" class="op una" data-valor="${t}" aria-pressed="false">
-        ${tilde}<span><b>${t}</b></span></button>`).join("");
-    ops.querySelectorAll(".op").forEach(b => {
+  function pintarMarcados() {
+    const caja = $("marcadosSector");
+    caja.innerHTML = R.rubro.map(t =>
+      `<button type="button" class="marca" data-valor="${t}">
+         ${t}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+              stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`).join("");
+    caja.querySelectorAll(".marca").forEach(b => {
       b.onclick = () => {
-        const ya = b.getAttribute("aria-pressed") === "true";
-        ops.querySelectorAll(".op").forEach(x => x.setAttribute("aria-pressed", "false"));
-        // Se puede desmarcar: es opcional, y quien se equivocó tiene que poder
-        // dejarlo en blanco sin recargar la página.
-        b.setAttribute("aria-pressed", ya ? "false" : "true");
-        R.coordinacion = ya ? "" : b.dataset.valor;
+        R.rubro = R.rubro.filter(x => x !== b.dataset.valor);
+        pintarMarcados(); pintarLista(); revisarOtro("rubro"); revisar();
       };
     });
   }
+
+  function pintarLista() {
+    const q = sinTilde($("buscaSector").value.trim());
+    const caja = $("listaSector");
+    const cabe = SECTORES.filter(t => !R.rubro.includes(t) && (!q || sinTilde(t).includes(q)));
+    if (!cabe.length) {
+      caja.innerHTML = `<p class="nada">Nada con eso. Prueba con otra palabra, o marca «Otro».</p>`;
+      return;
+    }
+    caja.innerHTML = cabe.map(t =>
+      `<button type="button" class="renglon" data-valor="${t}" role="option">${t}</button>`).join("");
+    caja.querySelectorAll(".renglon").forEach(b => {
+      b.onclick = () => {
+        R.rubro = [...R.rubro, b.dataset.valor];
+        $("buscaSector").value = "";
+        pintarMarcados(); pintarLista(); revisarOtro("rubro"); revisar();
+        $("buscaSector").focus();
+      };
+    });
+  }
+
+  $("buscaSector").oninput = pintarLista;
+  pintarLista();
 
   // La pregunta 3 se arma con lo que él mismo marcó en la 1
   // Un renglón por servicio con sus cuatro notas. Se pinta una sola vez y se
@@ -1045,7 +1092,6 @@
     switch (donde()) {
       case "negocio":   return $("negocio").value.trim().length > 1;
       case "rubro":     return R.rubro.length > 0;
-      case "direccion": return !!R.direccion;   // la coordinación queda opcional
       case "municipio": return !!R.municipio;
       case "tamano":    return !!R.tamano;
       case "temporada": return R.momentos.length > 0 && !!R.dias && !!R.ocupacion;
@@ -1120,7 +1166,7 @@
     const val = id => { const e = $(id); return e ? e.value.trim() : ""; };
     return {
       id: idRespuesta,
-      rubro: R.rubro, direccion: R.direccion || "", coordinacion: R.coordinacion || "",
+      rubro: R.rubro, otro_rubro: val("otro_rubro"),
       municipio: R.municipio, tamano: R.tamano,
       momentos: R.momentos, dias: R.dias || "", ocupacion: R.ocupacion || "",
       impuestos: R.impuestos, otro_impuestos: val("otro_impuestos"),

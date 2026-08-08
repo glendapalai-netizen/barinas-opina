@@ -71,7 +71,6 @@ El recorrido:
 |---|---|
 | `portada` | por qué se está preguntando |
 | `rubro` | a qué sector pertenece — **sin pedir nombres** |
-| `direccion` | con cuál de las siete direcciones de CADTEBA se ve, y su coordinación |
 | `municipio` `tamano` | dónde opera y con cuánta gente |
 | `temporada` | momentos del año, días con afluencia real, ocupación |
 | `impuestos` | cuáles aprietan más (hasta tres) |
@@ -93,12 +92,19 @@ fila, esté completa o no.
 **Ninguna identificación es obligatoria.** El nombre y el teléfono son para
 mandar el informe, nada más. Quien no quiera dejar nada, opina igual.
 
-**La pregunta por dirección abre la consulta más allá del gremio.** Las siete
-direcciones técnicas y sus coordinaciones salen de los estatutos, y están ahí
-porque a esto también responde un mecánico, un ferretero o alguien de una
-farmacia: turismo somos todos. La dirección es obligatoria —hace falta para
-encaminar el recado a quien lo atiende— y la coordinación es opcional, porque
-no todo oficio calza en una casilla.
+**El sector se busca, no se escoge de una lista.** Son los 37 con que la Cámara
+ya trabaja en Luma —desde hoteleros hasta ferretero, farmacéutico o mecánica y
+eléctrica— y treinta y siete botones no se leen en un teléfono. Se escriben las
+primeras letras, se filtra, se marca; lo marcado queda arriba a la vista.
+Turismo somos todos: a esto también responde un mecánico o alguien de una
+farmacia, y tienen dónde ubicarse.
+
+**La dirección de CADTEBA no se pregunta: se deduce.** `SECTOR_DIRECCION` dice
+a cuál de las siete direcciones técnicas pertenece cada sector, y esa tabla
+vive igual en la consulta y en el informe. Se guarda el sector y no la
+dirección **a propósito**: si mañana un sector cambia de dirección, se corrige
+la tabla y todo el informe se reacomoda solo, sin tocar una sola respuesta ya
+recogida. Es una vista interna — quien responde nunca ve la palabra dirección.
 
 **Las pantallas se identifican por nombre (`data-id`), no por número.** Al
 principio iban numeradas y cada pregunta nueva rompía la navegación. Si mañana

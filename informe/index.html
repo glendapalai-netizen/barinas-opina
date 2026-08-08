@@ -78,6 +78,8 @@ button { font:inherit; }
 .dona .centro span { font-size:.64rem; color:var(--suave); font-weight:800;
                      text-transform:uppercase; letter-spacing:.1em; margin-top:5px; }
 .tajadas { flex:1 1 220px; display:flex; flex-direction:column; gap:9px; }
+/* La ficha con foto lleva el crédito abajo: que la leyenda no se le monte */
+.conFoto .tajadas { padding-bottom:18px; }
 .tajada { display:flex; align-items:center; gap:10px; font-size:.84rem; }
 .tajada u { width:12px; height:12px; border-radius:4px; flex:0 0 auto; }
 .tajada b { margin-left:auto; font-weight:900; white-space:nowrap; }
@@ -261,6 +263,12 @@ input:focus { border-color:color-mix(in srgb,var(--oro) 65%,transparent);
 .tarjeta > h3 { font-size:1.02rem; margin-bottom:4px; }
 .tarjeta > h3 em { font-style:normal; color:var(--acento); }
 .nota { color:var(--suave); font-size:.8rem; margin-bottom:16px; line-height:1.5; }
+.pliegue { margin-bottom:14px; }
+.pliegue summary { cursor:pointer; color:var(--suave); font-size:.8rem; font-weight:700;
+  padding:12px 0 2px; list-style:none; }
+.pliegue summary::-webkit-details-marker { display:none; }
+.pliegue summary::before { content:"+ "; color:var(--acento); font-weight:900; }
+.pliegue details[open] summary::before { content:"– "; }
 .rotulo { font-size:.68rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase;
           color:var(--suave); margin:20px 0 10px; }
 .rotulo:first-child { margin-top:0; }
@@ -472,8 +480,8 @@ td.ancho { white-space:normal; min-width:200px; }
         <div class="tarjeta vidrio conFoto c4" style="--acento:var(--oro)">
           <img class="foto" src="/fondo/mochuelo.jpg" alt="">
           <span class="velo"></span>
-          <h3>Sectores que <em>respondieron</em></h3>
-          <p class="nota">Cuántos hay de cada rama.</p>
+          <h3>Direcciones que <em>respondieron</em></h3>
+          <p class="nota">Cada sector entra por una de las siete direcciones de la Cámara. Quien marcó varios sectores cuenta en cada dirección que le toca.</p>
           <div id="gDona"></div>
           <span class="credito">Mochuelo de sabana · foto de Cle</span>
         </div>
@@ -497,8 +505,9 @@ td.ancho { white-space:normal; min-width:200px; }
           <img class="foto" src="/fondo/chiguire.jpg" alt="">
           <span class="velo"></span>
           <h3>Por <em>sector</em></h3>
-          <p class="nota">Todas las ramas de la consulta, incluidas las que todavía no han respondido. Alguien pudo marcar más de una, así que la suma pasa del total.</p>
+          <p class="nota">Los treinta y siete sectores con que trabaja la Cámara, incluidos los que todavía no han respondido. Alguien pudo marcar más de uno, así que la suma pasa del total.</p>
           <div id="gRubro"></div>
+          <div id="ceroSector" class="pliegue"></div>
           <span class="credito">Chigüire y baba en el llano · foto de Cle</span>
         </div>
         <div class="tarjeta vidrio c4" style="--acento:var(--azul)">
@@ -508,10 +517,8 @@ td.ancho { white-space:normal; min-width:200px; }
         </div>
         <div class="tarjeta vidrio c12" style="--acento:var(--turquesa)">
           <h3>Por <em>dirección</em> de la Cámara</h3>
-          <p class="nota">Las siete direcciones técnicas de CADTEBA, según los estatutos. Aquí caben los oficios que no se llaman turismo pero lo sostienen: el mecánico, la ferretería, la farmacia. Turismo somos todos.</p>
+          <p class="nota">Las siete direcciones técnicas de CADTEBA. No se pregunta: se deduce del sector que cada quien marcó, según la tabla de los estatutos. Es la vista interna, para saber a qué dirección le toca cada respuesta.</p>
           <div id="gDireccion"></div>
-          <p class="rotulo">Coordinaciones señaladas</p>
-          <div id="gCoordinacion"></div>
         </div>
         <div class="tarjeta vidrio c12" style="--acento:var(--verde)">
           <h3>Por <em>municipio</em></h3>
@@ -682,18 +689,65 @@ td.ancho { white-space:normal; min-width:200px; }
 
   // Las mismas listas de la consulta. Se muestran completas aunque estén en
   // cero: un sector sin respuestas no es un vacío, es una tarea pendiente.
-  // Las siete direcciones técnicas, en el orden de los estatutos. Van completas
-  // para que la que nadie escogió también se vea: un cero aquí es una dirección
-  // a la que todavía no le ha llegado nadie.
-  const DIRECCIONES = ["Gestión de Calidad y Hospitalidad",
-    "Turismo de Salud, Bienestar y Vida", "Deportes Extremos y Aventura",
-    "Agroturismo y Producción", "Infraestructura, Seguridad y Desarrollo Sustentable",
-    "Educación, Cultura y Economía Naranja",
-    "Mercadeo, Productos y Relaciones Internacionales", "Todavía no lo tengo claro"];
+  // Los 37 sectores con que la Cámara ya trabaja, y a cuál de sus siete
+  // direcciones técnicas pertenece cada uno. La persona sólo ve el sector; la
+  // dirección se deduce de aquí al leer el informe. Se guarda el sector y no la
+  // dirección a propósito: si mañana un sector cambia de dirección, se corrige
+  // esta tabla y el informe entero se reacomoda solo, sin tocar lo respondido.
+  const SECTOR_DIRECCION = {
+    "Hoteleros":                                "Gestión de Calidad y Hospitalidad",
+    "Restaurantes | Catering":                  "Gestión de Calidad y Hospitalidad",
+    "Auditoría de Calidad":                     "Gestión de Calidad y Hospitalidad",
 
-  const SECTORES = ["Posada u hotel", "Restaurante o gastronomía", "Transporte turístico",
-    "Guía o agencia de turismo", "Turismo de aventura o naturaleza", "Salud y bienestar",
-    "Artesanía o producto local", "Eventos y ferias", "Otro"];
+    "Clínicas":                                 "Turismo de Salud, Bienestar y Vida",
+    "Spa":                                      "Turismo de Salud, Bienestar y Vida",
+    "Profesional de la salud":                  "Turismo de Salud, Bienestar y Vida",
+    "Salud holística":                          "Turismo de Salud, Bienestar y Vida",
+    "Farmacéutico":                             "Turismo de Salud, Bienestar y Vida",
+    "Laboratorios Bio análisis":                "Turismo de Salud, Bienestar y Vida",
+
+    "Deportes y fitness":                       "Deportes Extremos y Aventura",
+    "Deportes extremos":                        "Deportes Extremos y Aventura",
+
+    "Agroindustria":                            "Agroturismo y Producción",
+    "Campo y ganadería":                        "Agroturismo y Producción",
+    "Cacao | Café | Cereales":                  "Agroturismo y Producción",
+    "Alimentos y bebidas masivo":               "Agroturismo y Producción",
+    "Industria química":                        "Agroturismo y Producción",
+
+    "Arquitectura | Construcción | Ferretero":  "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Mecánica y eléctrica":                     "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Transporte y maquinaria pesada":           "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Inmobiliario":                             "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Inversión y finanzas":                     "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Petrolero":                                "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Sector público":                           "Infraestructura, Seguridad y Desarrollo Sustentable",
+
+    "Educación":                                "Educación, Cultura y Economía Naranja",
+    "Economía naranja":                         "Educación, Cultura y Economía Naranja",
+    "Fotografía | Cine | Audiovisual":          "Educación, Cultura y Economía Naranja",
+    "Ciencias económicas y sociales":           "Educación, Cultura y Economía Naranja",
+    "ONG":                                      "Educación, Cultura y Economía Naranja",
+    "Filantrópico":                             "Educación, Cultura y Economía Naranja",
+
+    "Transporte turístico":                     "Mercadeo, Productos y Relaciones Internacionales",
+    "Operador turístico | Guías | Agencias viaje": "Mercadeo, Productos y Relaciones Internacionales",
+    "Mercadeo":                                 "Mercadeo, Productos y Relaciones Internacionales",
+    "Comercio Exterior":                        "Mercadeo, Productos y Relaciones Internacionales",
+    "Comercio | Boutiques | Moda":              "Mercadeo, Productos y Relaciones Internacionales",
+    "Supermercados | Alimentos | Misceláneos":  "Mercadeo, Productos y Relaciones Internacionales",
+    "Agencia festejos | Decoración | Eventos":  "Mercadeo, Productos y Relaciones Internacionales",
+    "Consultoría legal":                        "Mercadeo, Productos y Relaciones Internacionales",
+  };
+  // En pantalla van en orden alfabético, que es como se busca una lista larga.
+  const SECTORES = [...Object.keys(SECTOR_DIRECCION)]
+    .sort((a, b) => a.localeCompare(b, "es")).concat("Otro");
+
+  // La dirección no se guarda, se deduce: cada respuesta puede traer varios
+  // sectores y por eso puede contar en más de una dirección.
+  const DIRECCIONES = [...new Set(Object.values(SECTOR_DIRECCION))];
+  const direccionesDe = f =>
+    [...new Set((f.rubro || []).map(r => SECTOR_DIRECCION[r]).filter(Boolean))];
   const MUNICIPIOS = ["Barinas", "Alberto Arvelo Torrealba (Sabaneta)", "Andrés Eloy Blanco (El Cantón)",
     "Antonio José de Sucre (Socopó)", "Arismendi", "Barinitas (Bolívar)", "Cruz Paredes (Barrancas)",
     "Ezequiel Zamora (Santa Bárbara)", "Obispos", "Pedraza (Ciudad Bolivia)", "Rojas (Libertad)",
@@ -852,6 +906,15 @@ td.ancho { white-space:normal; min-width:200px; }
     return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   }
 
+  // Lo mismo que contar(), pero la dirección no está en la respuesta: se saca
+  // del sector. Las siete van completas, para que la que está en cero también
+  // se vea — un cero aquí es una dirección a la que no le ha llegado nadie.
+  function contarDirecciones(filas) {
+    const m = new Map(DIRECCIONES.map(d => [d, 0]));
+    for (const f of filas) for (const d of direccionesDe(f)) m.set(d, (m.get(d) || 0) + 1);
+    return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }
+
   function barras(caja, pares, total, tope) {
     if (!caja) return;
     if (!pares.length) { caja.innerHTML = '<p class="vacio">Todavía nadie ha respondido esto.</p>'; return; }
@@ -892,7 +955,7 @@ td.ancho { white-space:normal; min-width:200px; }
       <div class="dona-caja">
         <div class="dona">
           <div class="aro" style="background:conic-gradient(from -90deg, ${tramos})"></div>
-          <div class="centro"><b>${vivos.length}</b><span>ramas<br>activas</span></div>
+          <div class="centro"><b>${vivos.length}</b><span>direcciones<br>activas</span></div>
         </div>
         <div class="tajadas">
           ${pares.map(([t, n], k) => `
@@ -980,9 +1043,10 @@ td.ancho { white-space:normal; min-width:200px; }
     barras($("gMomentos"), contar(filas, "momentos"), total);
 
     // La temporada, sector por sector — el cruce que pidió Humberto.
-    const sectores = [...new Set([...SECTORES, ...filas.flatMap(f => f.rubro || [])])];
-    const porSector = sectores.map(s => {
-      const g = filas.filter(f => (f.rubro || []).includes(s));
+    // El cruce va por dirección y no por sector: treinta y siete renglones no se
+    // leen en una reunión, y siete sí. El detalle por sector está en su pestaña.
+    const porSector = DIRECCIONES.map(s => {
+      const g = filas.filter(f => direccionesDe(f).includes(s));
       const gd = g.filter(f => RANGOS.includes(f.dias));
       const go = g.filter(f => f.ocupacion);
       return {
@@ -994,7 +1058,7 @@ td.ancho { white-space:normal; min-width:200px; }
     }).sort((a, b) => b.n - a.n || a.s.localeCompare(b.s));
 
     $("tRubro").innerHTML = porSector.length
-      ? "<thead><tr><th>Sector</th><th>Respuestas</th><th>Rango más común</th><th>60 días o menos</th><th>Ocupación bajo 30%</th></tr></thead><tbody>" +
+      ? "<thead><tr><th>Dirección</th><th>Respuestas</th><th>Rango más común</th><th>60 días o menos</th><th>Ocupación bajo 30%</th></tr></thead><tbody>" +
         porSector.map(r => `<tr${r.n ? "" : ' style="opacity:.45"'}>
           <td><b>${esc(r.s)}</b>${r.n < 3 ? ' <small style="color:var(--suave)">(pocas respuestas)</small>' : ""}</td>
           <td>${r.n}</td>
@@ -1165,16 +1229,25 @@ td.ancho { white-space:normal; min-width:200px; }
       </div>`).join("") : '<p class="vacio">No hay recados todavía.</p>';
 
     // ── Quiénes ──
-    barras($("gRubro"), contar(filas, "rubro", SECTORES), total);
-    dona($("gDona"), contar(filas, "rubro", SECTORES), total);
+    // Treinta y siete sectores con treinta y un ceros ahogan la ficha. Se
+    // muestran los que tienen respuestas y los ceros quedan detrás de un
+    // renglón que se abre: siguen estando, pero no estorban.
+    const cSector = contar(filas, "rubro", SECTORES);
+    const conAlgo = cSector.filter(p => p[1] > 0);
+    const enCero  = cSector.filter(p => !p[1]);
+    barras($("gRubro"), conAlgo.length ? conAlgo : cSector, total);
+    $("ceroSector").innerHTML = enCero.length && conAlgo.length
+      ? `<details><summary>Los otros ${enCero.length} sectores todavía sin respuestas</summary>
+           <p class="nota" style="margin-top:10px">${enCero.map(p => esc(p[0])).join(" · ")}</p>
+         </details>` : "";
+    dona($("gDona"), contarDirecciones(filas), total);
     barras($("gMunicipio"), contar(filas, "municipio", MUNICIPIOS), total);
     barras($("gTamano"), contar(filas, "tamano"), total);
-    barras($("gDireccion"), contar(filas, "direccion", DIRECCIONES), total);
-    barras($("gCoordinacion"), contar(filas, "coordinacion"), total);
+    barras($("gDireccion"), contarDirecciones(filas), total);
 
     // ── La base ──
     const cols = [
-      ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["direccion", "Dirección"], ["municipio", "Municipio"],
+      ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["otro_rubro", "Otro sector"], ["direccion", "Dirección"], ["municipio", "Municipio"],
       ["tamano", "Tamaño"], ["dias", "Días al año"], ["ocupacion", "Ocupación"],
       ["impuestos", "Los que aprietan"], ["otro_impuestos", "Otro tributo"],
       ["uno", "Prioridad 1"], ["otro_uno", "Cuál"], ["porque_uno", "Por qué"],
@@ -1183,8 +1256,9 @@ td.ancho { white-space:normal; min-width:200px; }
       ["valoracion", "Nota"], ["nombre", "Contacto"], ["telefono", "WhatsApp"],
       ["correo", "Correo"], ["instagram", "Instagram"], ["web", "Web"], ["afiliado", "Afiliación"],
     ];
-    const celda = (f, c) => c === "cuando"
-      ? new Date(f.cuando).toLocaleDateString("es-VE")
+    const celda = (f, c) =>
+        c === "cuando"    ? new Date(f.cuando).toLocaleDateString("es-VE")
+      : c === "direccion" ? direccionesDe(f).join(" · ")   // se deduce, no se guarda
       : Array.isArray(f[c]) ? f[c].join(" · ") : (f[c] ?? "");
     $("tabla").innerHTML =
       "<thead><tr>" + cols.map(([, t]) => `<th>${t}</th>`).join("") + "</tr></thead><tbody>" +
