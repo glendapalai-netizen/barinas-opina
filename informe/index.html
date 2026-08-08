@@ -60,6 +60,86 @@ button { font:inherit; }
   -webkit-mask-composite:xor; mask-composite:exclude;
 }
 
+
+/* ── Dona de sectores ────────────────────────────────────────────────────
+   Un solo degradado cónico partido en tramos. Cada tramo lleva su color y
+   la leyenda va al lado, no encima: en el teléfono no cabe encima. */
+.dona-caja { display:flex; align-items:center; gap:24px; flex-wrap:wrap; }
+.dona { position:relative; width:190px; height:190px; flex:0 0 auto; }
+.dona .aro {
+  position:absolute; inset:0; border-radius:50%;
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 34px), #000 calc(100% - 33px));
+  mask:radial-gradient(farthest-side, transparent calc(100% - 34px), #000 calc(100% - 33px));
+  filter:drop-shadow(0 6px 18px rgba(0,0,0,.55));
+}
+.dona .centro { position:absolute; inset:0; display:flex; flex-direction:column;
+                align-items:center; justify-content:center; text-align:center; }
+.dona .centro b { font-size:2.1rem; font-weight:900; letter-spacing:-.04em; line-height:1; }
+.dona .centro span { font-size:.64rem; color:var(--suave); font-weight:800;
+                     text-transform:uppercase; letter-spacing:.1em; margin-top:5px; }
+.tajadas { flex:1 1 220px; display:flex; flex-direction:column; gap:9px; }
+.tajada { display:flex; align-items:center; gap:10px; font-size:.84rem; }
+.tajada u { width:12px; height:12px; border-radius:4px; flex:0 0 auto; }
+.tajada b { margin-left:auto; font-weight:900; white-space:nowrap; }
+.tajada.nula { opacity:.42; }
+
+/* ── Tarjetas con foto del llano ─────────────────────────────────────────
+   Son fotos de Cle. Van detrás del contenido, con un velo que garantiza que
+   la letra se lea aunque la foto sea clara. */
+.tarjeta.conFoto { position:relative; }
+.tarjeta.conFoto > .foto {
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  z-index:0; opacity:.5;
+}
+.tarjeta.conFoto > .velo {
+  position:absolute; inset:0; z-index:1;
+  background:linear-gradient(120deg, rgba(7,11,16,.94) 0%, rgba(7,11,16,.72) 55%, rgba(7,11,16,.5) 100%);
+}
+.tarjeta.conFoto > *:not(.foto):not(.velo) { position:relative; z-index:2; }
+.credito { position:absolute; right:14px; bottom:10px; z-index:3; font-size:.62rem;
+           color:rgba(255,255,255,.55); font-weight:700; letter-spacing:.05em; }
+
+/* ── El botón de compartir de cada ficha ─────────────────────────────────
+   Redondito y discreto, abajo a la derecha. Al tocarlo se abren las tres
+   salidas: WhatsApp, imagen o papel. */
+.tarjeta { position:relative; }
+.compartir {
+  position:absolute; right:14px; bottom:14px; z-index:5;
+  width:38px; height:38px; border-radius:50%; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(180deg, #FF7ABE, var(--magenta));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 6px 18px -4px rgba(240,71,159,.6);
+  transition:transform .14s ease;
+}
+.compartir svg { width:17px; height:17px; stroke:#fff; fill:none; stroke-width:2.1;
+                 stroke-linecap:round; stroke-linejoin:round; }
+.compartir:hover { transform:scale(1.08); }
+.tarjeta { padding-bottom:60px; }
+
+.menu-compartir {
+  position:absolute; right:14px; bottom:60px; z-index:6; min-width:190px;
+  border-radius:16px; overflow:hidden; padding:6px;
+  background:rgba(14,20,30,.96); backdrop-filter:blur(18px);
+  box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 20px 44px -10px rgba(0,0,0,.9);
+  animation:entra .18s ease both;
+}
+.menu-compartir button {
+  display:flex; align-items:center; gap:11px; width:100%; padding:11px 13px;
+  border:none; background:none; color:var(--tinta); cursor:pointer;
+  font-size:.84rem; font-weight:700; border-radius:11px; text-align:left;
+}
+.menu-compartir button:hover { background:rgba(255,255,255,.09); }
+.menu-compartir svg { width:16px; height:16px; stroke:currentColor; fill:none;
+                      stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:0 0 auto; }
+.menu-compartir .wa { color:#5BE584; }
+
+/* Al imprimir una sola ficha, el resto se aparta */
+body.solo-una .hoja { display:block !important; }
+body.solo-una .tarjeta:not(.imprimiendo) { display:none !important; }
+body.solo-una .rail, body.solo-una .barra-acciones,
+body.solo-una .rotulo-hoja, body.solo-una .fichas { display:none !important; }
+body.solo-una .compartir, body.solo-una .menu-compartir { display:none !important; }
+
 /* ── Puerta ──────────────────────────────────────────────────────────────── */
 .puerta { position:relative; z-index:2; max-width:420px; margin:14vh auto; padding:34px 26px; text-align:center; }
 .puerta h2 { font-size:1.5rem; margin-bottom:8px; }
@@ -389,10 +469,13 @@ td.ancho { white-space:normal; min-width:200px; }
           <p class="nota">La frase que se dice en voz alta al abrir la reunión. Calculada por el piso de cada rango, para que la cifra quede corta y no larga.</p>
           <div id="titular"></div>
         </div>
-        <div class="tarjeta vidrio c4" style="--acento:var(--oro)">
+        <div class="tarjeta vidrio conFoto c4" style="--acento:var(--oro)">
+          <img class="foto" src="/fondo/mochuelo.jpg" alt="">
+          <span class="velo"></span>
           <h3>Sectores que <em>respondieron</em></h3>
           <p class="nota">Cuántos hay de cada rama.</p>
-          <div id="gRubroMini"></div>
+          <div id="gDona"></div>
+          <span class="credito">Mochuelo de sabana · foto de Cle</span>
         </div>
         <div class="tarjeta vidrio c6" style="--acento:var(--coral)">
           <h3>Los tributos que <em>más aprietan</em></h3>
@@ -410,15 +493,25 @@ td.ancho { white-space:normal; min-width:200px; }
     <!-- ── 2. Sectores que participaron ── -->
     <section class="hoja" data-hoja="sectores">
       <div class="rejilla">
-        <div class="tarjeta vidrio c8" style="--acento:var(--oro)">
+        <div class="tarjeta vidrio conFoto c8" style="--acento:var(--oro)">
+          <img class="foto" src="/fondo/chiguire.jpg" alt="">
+          <span class="velo"></span>
           <h3>Por <em>sector</em></h3>
           <p class="nota">Todas las ramas de la consulta, incluidas las que todavía no han respondido. Alguien pudo marcar más de una, así que la suma pasa del total.</p>
           <div id="gRubro"></div>
+          <span class="credito">Chigüire y baba en el llano · foto de Cle</span>
         </div>
         <div class="tarjeta vidrio c4" style="--acento:var(--azul)">
           <h3>Por <em>tamaño</em></h3>
           <p class="nota">Cuánta gente trabaja en cada negocio.</p>
           <div id="gTamano"></div>
+        </div>
+        <div class="tarjeta vidrio c12" style="--acento:var(--turquesa)">
+          <h3>Por <em>dirección</em> de la Cámara</h3>
+          <p class="nota">Las siete direcciones técnicas de CADTEBA, según los estatutos. Aquí caben los oficios que no se llaman turismo pero lo sostienen: el mecánico, la ferretería, la farmacia. Turismo somos todos.</p>
+          <div id="gDireccion"></div>
+          <p class="rotulo">Coordinaciones señaladas</p>
+          <div id="gCoordinacion"></div>
         </div>
         <div class="tarjeta vidrio c12" style="--acento:var(--verde)">
           <h3>Por <em>municipio</em></h3>
@@ -589,6 +682,15 @@ td.ancho { white-space:normal; min-width:200px; }
 
   // Las mismas listas de la consulta. Se muestran completas aunque estén en
   // cero: un sector sin respuestas no es un vacío, es una tarea pendiente.
+  // Las siete direcciones técnicas, en el orden de los estatutos. Van completas
+  // para que la que nadie escogió también se vea: un cero aquí es una dirección
+  // a la que todavía no le ha llegado nadie.
+  const DIRECCIONES = ["Gestión de Calidad y Hospitalidad",
+    "Turismo de Salud, Bienestar y Vida", "Deportes Extremos y Aventura",
+    "Agroturismo y Producción", "Infraestructura, Seguridad y Desarrollo Sustentable",
+    "Educación, Cultura y Economía Naranja",
+    "Mercadeo, Productos y Relaciones Internacionales", "Todavía no lo tengo claro"];
+
   const SECTORES = ["Posada u hotel", "Restaurante o gastronomía", "Transporte turístico",
     "Guía o agencia de turismo", "Turismo de aventura o naturaleza", "Salud y bienestar",
     "Artesanía o producto local", "Eventos y ferias", "Otro"];
@@ -771,6 +873,35 @@ td.ancho { white-space:normal; min-width:200px; }
         <u style="height:${Math.max(4, Math.round(n * 100 / mayor))}%"></u>
         <em>${esc(t)}</em>
       </div>`).join("")}</div>`;
+  }
+
+  // Una dona de verdad: un solo degradado cónico partido en tramos. La
+  // leyenda va al lado y no encima — encima no cabe en un teléfono.
+  const TONOS = ["var(--oro)","var(--turquesa)","var(--verde)","var(--magenta)",
+                 "var(--azul)","var(--coral)","var(--naranja)","#8B7BE8","#7C8894"];
+  function dona(caja, pares, total) {
+    const vivos = pares.filter(p => p[1] > 0);
+    if (!vivos.length) { caja.innerHTML = '<p class="vacio">Sin respuestas todavía.</p>'; return; }
+    const suma = vivos.reduce((a, p) => a + p[1], 0);
+    let giro = 0;
+    const tramos = vivos.map(([t, n], k) => {
+      const desde = giro; giro += n * 360 / suma;
+      return `${TONOS[k % TONOS.length]} ${desde.toFixed(2)}deg ${giro.toFixed(2)}deg`;
+    }).join(", ");
+    caja.innerHTML = `
+      <div class="dona-caja">
+        <div class="dona">
+          <div class="aro" style="background:conic-gradient(from -90deg, ${tramos})"></div>
+          <div class="centro"><b>${vivos.length}</b><span>ramas<br>activas</span></div>
+        </div>
+        <div class="tajadas">
+          ${pares.map(([t, n], k) => `
+            <div class="tajada ${n ? "" : "nula"}">
+              <u style="background:${n ? TONOS[vivos.findIndex(v => v[0] === t) % TONOS.length] : "rgba(255,255,255,.18)"}"></u>
+              <span>${esc(t)}</span><b>${n} · ${pct(n, total)}%</b>
+            </div>`).join("")}
+        </div>
+      </div>`;
   }
 
   function anillo(caja, valor, centro, pie, leyenda) {
@@ -1035,13 +1166,15 @@ td.ancho { white-space:normal; min-width:200px; }
 
     // ── Quiénes ──
     barras($("gRubro"), contar(filas, "rubro", SECTORES), total);
-    barras($("gRubroMini"), contar(filas, "rubro"), total, 5);
+    dona($("gDona"), contar(filas, "rubro", SECTORES), total);
     barras($("gMunicipio"), contar(filas, "municipio", MUNICIPIOS), total);
     barras($("gTamano"), contar(filas, "tamano"), total);
+    barras($("gDireccion"), contar(filas, "direccion", DIRECCIONES), total);
+    barras($("gCoordinacion"), contar(filas, "coordinacion"), total);
 
     // ── La base ──
     const cols = [
-      ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["municipio", "Municipio"],
+      ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["direccion", "Dirección"], ["municipio", "Municipio"],
       ["tamano", "Tamaño"], ["dias", "Días al año"], ["ocupacion", "Ocupación"],
       ["impuestos", "Los que aprietan"], ["otro_impuestos", "Otro tributo"],
       ["uno", "Prioridad 1"], ["otro_uno", "Cuál"], ["porque_uno", "Por qué"],
@@ -1058,7 +1191,293 @@ td.ancho { white-space:normal; min-width:200px; }
       [...filas].reverse().map(f => "<tr>" + cols.map(([c]) =>
         `<td class="${c === "porque_uno" ? "ancho" : ""}">${esc(celda(f, c))}</td>`).join("") + "</tr>").join("") +
       "</tbody>";
+
+    ponerCompartir();
   }
+
+  // ══ Compartir una sola ficha ═══════════════════════════════════════════
+  // Nadie quiere mandar el informe entero para enseñar un dato. Cada tarjeta
+  // se puede sacar sola: como imagen para WhatsApp, o en papel.
+  //
+  // La imagen NO es una captura de pantalla: la tarjeta se vuelve a dibujar
+  // sobre una lámina con los logos, el fondo y la fecha. Por eso siempre sale
+  // con las cifras del momento y con la marca puesta.
+
+  const ICONO = {
+    compartir: '<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v14"/>',
+    wa: '<path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20.5l1.7-5.3A8.4 8.4 0 1 1 21 11.5z"/>',
+    imagen: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5L7 20"/>',
+    papel: '<path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/>',
+  };
+
+  // Los logos se guardan como texto para poder incrustarlos en la lámina:
+  // una imagen dibujada en un lienzo no puede ir a buscar archivos afuera.
+  const enTexto = {};
+  async function comoTexto(ruta) {
+    if (enTexto[ruta]) return enTexto[ruta];
+    const b = await (await fetch(ruta)).blob();
+    return enTexto[ruta] = await new Promise(ok => {
+      const l = new FileReader(); l.onload = () => ok(l.result); l.readAsDataURL(b);
+    });
+  }
+
+  async function haceLamina(tarjeta) {
+    const A = 1080, borde = 56;
+    const [cad, tur, fondo] = await Promise.all(
+      ["/marcas/cadteba.png", "/marcas/turismo.png", "/fondo/ventana.jpg"].map(comoTexto));
+
+    // Se clona la ficha y se le quitan los botones, que en una imagen no sirven.
+    const copia = tarjeta.cloneNode(true);
+    copia.querySelectorAll(".compartir, .menu-compartir, .credito").forEach(x => x.remove());
+    copia.querySelectorAll("img").forEach(x => x.remove());   // las fotos van aparte
+    copia.querySelectorAll(".velo").forEach(x => x.remove());
+    copia.style.cssText = "background:none;box-shadow:none;padding:0;width:100%";
+
+    const fmt = new Intl.DateTimeFormat("es-VE", { day:"numeric", month:"long", year:"numeric" });
+    const cuerpo = `
+      <div class="lam">
+        <div class="lam-top">
+          <img src="${cad}"/><img src="${tur}"/>
+          <div class="lam-quien"><b>BARINAS OPINA</b><span>CADTEBA · Estado Barinas</span></div>
+        </div>
+        <div class="lam-cuerpo">${copia.outerHTML}</div>
+        <div class="lam-pie">
+          <span>${DATOS.respuestas.length} respuestas · corte al ${fmt.format(new Date())}</span>
+          <span>opina.cadteba.org</span>
+        </div>
+      </div>`;
+
+    // El estilo va aparte y en versión sólida: el desenfoque de cristal no
+    // existe cuando se dibuja en un lienzo, así que se sustituye por color.
+    const estilo = `
+      * { box-sizing:border-box; margin:0; padding:0; font-family:"Segoe UI",system-ui,sans-serif; }
+      .lam { width:${A - borde * 2}px; color:#F2F6F8; display:flex; flex-direction:column; gap:26px; }
+      .lam-top { display:flex; align-items:center; gap:16px; }
+      .lam-top img { height:54px; }
+      .lam-quien { margin-left:auto; text-align:right; }
+      .lam-quien b { display:block; font-size:19px; font-weight:900; letter-spacing:-.01em; }
+      .lam-quien span { font-size:13px; color:#93A3AF; }
+      .lam-cuerpo { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16);
+                    border-radius:24px; padding:30px 32px; }
+      .lam-pie { display:flex; justify-content:space-between; font-size:13px;
+                 color:#93A3AF; font-weight:700; }
+      h3 { font-size:26px; font-weight:900; margin-bottom:6px; letter-spacing:-.02em; }
+      h3 em { font-style:normal; color:#D8A548; }
+      .nota { color:#93A3AF; font-size:14px; margin-bottom:20px; line-height:1.5; }
+      .rotulo { font-size:12px; font-weight:900; letter-spacing:.12em; text-transform:uppercase;
+                color:#93A3AF; margin:22px 0 10px; }
+      .barra { margin-bottom:14px; }
+      .barra .fila { display:flex; align-items:baseline; gap:10px; font-size:15px; margin-bottom:6px; }
+      .barra .fila i { margin-left:auto; font-style:normal; font-weight:900; color:#D8A548; }
+      .barra .via { height:10px; border-radius:99px; background:rgba(255,255,255,.1); overflow:hidden; }
+      .barra .via u { display:block; height:100%; border-radius:99px; background:#D8A548; text-decoration:none; }
+      .titular { display:flex; align-items:center; gap:22px; padding:22px;
+                 border-radius:18px; background:rgba(216,165,72,.14); border:1px solid rgba(216,165,72,.5); }
+      .titular b { font-size:54px; font-weight:900; color:#D8A548; line-height:1; }
+      .titular p { font-size:16px; line-height:1.5; }
+      .tira { display:flex; height:22px; border-radius:7px; overflow:hidden; font-size:11px;
+              font-weight:900; color:#08111C; }
+      .tira span { display:flex; align-items:center; justify-content:center; }
+      .s-b,.a-si { background:#56C93A; } .s-r { background:#FFA42B; }
+      .s-d { background:#FF6B52; } .s-c { background:#C22B18; color:#fff; }
+      .a-paso { background:rgba(255,255,255,.25); color:#F2F6F8; } .a-no { background:#FF6B52; }
+      .serv,.cons { margin-bottom:16px; }
+      .serv .fila,.cons .fila { display:flex; gap:10px; font-size:15px; margin-bottom:6px; }
+      .serv .fila i { margin-left:auto; font-style:normal; font-weight:900; color:#FF6B52; }
+      .cons p.frase { font-weight:700; font-size:15px; margin-bottom:8px; }
+      .etiqueta { display:inline-block; font-size:11px; font-weight:900; letter-spacing:.08em;
+                  text-transform:uppercase; padding:4px 10px; border-radius:99px; margin-bottom:8px;
+                  border:1px solid currentColor; }
+      .et-unido { color:#56C93A; } .et-partido { color:#FFA42B; } .et-rechazo { color:#FF6B52; }
+      table { border-collapse:collapse; width:100%; font-size:13px; }
+      th,td { padding:9px 11px; text-align:left; border-bottom:1px solid rgba(255,255,255,.1); }
+      th { background:rgba(255,255,255,.07); font-size:11px; text-transform:uppercase;
+           letter-spacing:.06em; color:#93A3AF; font-weight:900; }
+      .voz { border-left:3px solid #D8A548; padding-left:14px; margin-bottom:16px; }
+      .voz p { font-size:15px; line-height:1.5; } .voz cite { font-style:normal; font-size:12px; color:#93A3AF; }
+      .dona-caja { display:flex; gap:24px; align-items:center; }
+      .dona { position:relative; width:190px; height:190px; flex:0 0 auto; }
+      .dona .aro { position:absolute; inset:0; border-radius:50%;
+        -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 34px), #000 calc(100% - 33px));
+        mask:radial-gradient(farthest-side, transparent calc(100% - 34px), #000 calc(100% - 33px)); }
+      .dona .centro { position:absolute; inset:0; display:flex; flex-direction:column;
+                      align-items:center; justify-content:center; }
+      .dona .centro b { font-size:34px; font-weight:900; } .dona .centro span { font-size:11px; color:#93A3AF; }
+      .tajadas { flex:1; display:flex; flex-direction:column; gap:9px; }
+      .tajada { display:flex; align-items:center; gap:10px; font-size:14px; }
+      .tajada u { width:12px; height:12px; border-radius:4px; }
+      .tajada b { margin-left:auto; font-weight:900; }
+      .anillo-caja { display:flex; gap:22px; align-items:center; }
+      .anillo { position:relative; width:150px; height:150px; }
+      .anillo .aro { position:absolute; inset:0; border-radius:50%;
+        -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 15px), #000 calc(100% - 14px));
+        mask:radial-gradient(farthest-side, transparent calc(100% - 15px), #000 calc(100% - 14px)); }
+      .anillo .centro { position:absolute; inset:0; display:flex; flex-direction:column;
+                        align-items:center; justify-content:center; }
+      .anillo .centro b { font-size:32px; font-weight:900; }
+      .leyenda { display:flex; flex-direction:column; gap:8px; margin-top:16px; font-size:13px; color:#93A3AF; font-weight:700; }
+      .leyenda span { display:flex; align-items:center; gap:8px; }
+      .leyenda u { width:13px; height:13px; border-radius:4px; }
+      .columnas { display:flex; align-items:flex-end; gap:12px; height:170px; }
+      .columnas .col { flex:1; display:flex; flex-direction:column; align-items:center;
+                       justify-content:flex-end; gap:8px; height:100%; }
+      .columnas .col u { width:100%; border-radius:10px 10px 6px 6px; background:#D8A548; text-decoration:none; }
+      .columnas .col em { font-style:normal; font-size:12px; color:#93A3AF; font-weight:800; text-align:center; }
+      .columnas .col b { font-size:13px; font-weight:900; }
+      .regla-lectura { margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,.12); }
+      .regla-lectura p { color:#93A3AF; font-size:13px; line-height:1.6; margin-bottom:8px; }
+      .vacio { color:#93A3AF; text-align:center; padding:26px; }
+    `;
+
+    // Se mide en un cuarto aparte —un marco vacío— y no en la propia página:
+    // aquí manda el estilo del tablero, y allá dentro sólo manda el de la
+    // lámina. Midiendo aquí saldría un alto que allá nadie ocupa.
+    const regla = document.createElement("iframe");
+    regla.setAttribute("aria-hidden", "true");
+    regla.style.cssText = `position:fixed;left:-9999px;top:0;border:0;
+                           width:${A - borde * 2}px;height:10px`;
+    document.body.appendChild(regla);
+    const doc = regla.contentDocument;
+    doc.open();
+    doc.write(`<!doctype html><meta charset="utf-8"><style>${estilo}</style>${cuerpo}`);
+    doc.close();
+    const lam = doc.querySelector(".lam");
+    // Esta medida sólo sirve para pedir lienzo de sobra; el alto de verdad se
+    // averigua más abajo, mirando dónde termina de veras la tinta.
+    const holgado = Math.ceil(lam.getBoundingClientRect().height) + borde * 2 + 300;
+
+    // El dibujo va dentro de un SVG, y un SVG se lee como XML: no perdona una
+    // etiqueta sin cerrar. El texto que escribe el navegador para una página
+    // sí las deja abiertas, así que se vuelve a escribir en XML antes de usarlo.
+    const xml = new XMLSerializer().serializeToString(lam);
+    document.body.removeChild(regla);
+
+    const dibujo = (h) =>
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${A}" height="${h}">` +
+      `<style><![CDATA[${estilo}]]></style>` +
+      `<foreignObject x="${borde}" y="${borde}" width="${A - borde * 2}" height="${h - borde * 2}">` +
+      xml + `</foreignObject></svg>`;
+
+    const traer = (texto) => new Promise((ok, mal) => {
+      const i = new Image(); i.onload = () => ok(i); i.onerror = mal;
+      i.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(texto);
+    });
+
+    // Se dibuja primero sobre nada, para preguntarle al propio dibujo hasta
+    // dónde llegó. Así el fondo termina donde termina la ficha y no queda
+    // media lámina vacía debajo del pie.
+    const prueba = document.createElement("canvas");
+    prueba.width = A; prueba.height = holgado;
+    const px = prueba.getContext("2d");
+    px.drawImage(await traer(dibujo(holgado)), 0, 0);
+    const puntos = px.getImageData(0, 0, A, holgado).data;
+    let fin = holgado - borde;
+    for (let y = holgado - 1; y >= 0; y--) {
+      let hay = false;
+      for (let x = 0; x < A; x += 3) { if (puntos[(y * A + x) * 4 + 3] > 8) { hay = true; break; } }
+      if (hay) { fin = y; break; }
+    }
+    const alto = Math.min(holgado, fin + 1 + borde);
+    const svg = dibujo(alto);
+
+    const lienzo = document.createElement("canvas");
+    lienzo.width = A * 2; lienzo.height = alto * 2;          // el doble, para que no salga borrosa
+    const cx = lienzo.getContext("2d");
+    cx.scale(2, 2);
+
+    // Primero el atardecer, después el velo, y encima la ficha.
+    const cielo = new Image();
+    await new Promise((ok, mal) => { cielo.onload = ok; cielo.onerror = mal; cielo.src = fondo; });
+    // El atardecer se recorta, no se estira: si la ficha es ancha y baja, se
+    // toma una franja de la foto en vez de aplastarla.
+    const esc = Math.max(A / cielo.width, alto / cielo.height);
+    const rw = A / esc, rh = alto / esc;
+    cx.drawImage(cielo, (cielo.width - rw) / 2, (cielo.height - rh) / 2, rw, rh, 0, 0, A, alto);
+    const velo = cx.createLinearGradient(0, 0, 0, alto);
+    velo.addColorStop(0, "rgba(7,11,16,.72)"); velo.addColorStop(1, "rgba(7,11,16,.94)");
+    cx.fillStyle = velo; cx.fillRect(0, 0, A, alto);
+
+    cx.drawImage(await traer(svg), 0, 0, A, alto);
+
+    return await new Promise(ok => lienzo.toBlob(ok, "image/png", .95));
+  }
+
+  function nombreDe(tarjeta) {
+    const t = tarjeta.querySelector("h3");
+    return "barinas-opina-" + (t ? t.textContent.trim().toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") : "ficha") + ".png";
+  }
+
+  function menuDe(tarjeta) {
+    document.querySelectorAll(".menu-compartir").forEach(m => m.remove());
+    const m = document.createElement("div");
+    m.className = "menu-compartir";
+    m.innerHTML = `
+      <button data-hace="wa"><svg viewBox="0 0 24 24" class="wa">${ICONO.wa}</svg>Enviar por WhatsApp</button>
+      <button data-hace="img"><svg viewBox="0 0 24 24">${ICONO.imagen}</svg>Guardar como imagen</button>
+      <button data-hace="pdf"><svg viewBox="0 0 24 24">${ICONO.papel}</svg>Imprimir o PDF</button>`;
+    tarjeta.appendChild(m);
+
+    m.querySelectorAll("button").forEach(b => {
+      b.onclick = async (e) => {
+        e.stopPropagation();
+        const hace = b.dataset.hace;
+        if (hace === "pdf") {
+          m.remove();
+          tarjeta.classList.add("imprimiendo");
+          document.body.classList.add("solo-una");
+          window.print();
+          setTimeout(() => {
+            document.body.classList.remove("solo-una");
+            tarjeta.classList.remove("imprimiendo");
+          }, 400);
+          return;
+        }
+        const antes = b.textContent;
+        b.textContent = "Preparando…"; b.disabled = true;
+        try {
+          const png = await haceLamina(tarjeta);
+          const archivo = new File([png], nombreDe(tarjeta), { type: "image/png" });
+          if (hace === "wa" && navigator.canShare && navigator.canShare({ files: [archivo] })) {
+            await navigator.share({ files: [archivo], text: "BARINAS OPINA · CADTEBA" });
+          } else {
+            // Sin compartir nativo —una computadora, casi siempre— se baja la
+            // imagen y de ahí se arrastra a WhatsApp.
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(png); a.download = nombreDe(tarjeta); a.click();
+            setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+          }
+          m.remove();
+        } catch (err) {
+          b.textContent = "No se pudo. Intenta de nuevo.";
+          setTimeout(() => { b.textContent = antes; b.disabled = false; }, 2200);
+        }
+      };
+    });
+  }
+
+  // Cada tarjeta estrena su botón. Se hace después de pintar, para que las
+  // tarjetas vacías no lo lleven: no tiene sentido compartir un hueco.
+  function ponerCompartir() {
+    document.querySelectorAll(".tarjeta").forEach(t => {
+      if (t.querySelector(":scope > .compartir")) return;
+      const b = document.createElement("button");
+      b.className = "compartir";
+      b.title = "Compartir esta ficha";
+      b.innerHTML = `<svg viewBox="0 0 24 24">${ICONO.compartir}</svg>`;
+      b.onclick = e => {
+        e.stopPropagation();
+        const abierto = t.querySelector(".menu-compartir");
+        if (abierto) { abierto.remove(); return; }
+        menuDe(t);
+      };
+      t.appendChild(b);
+    });
+  }
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".menu-compartir").forEach(m => m.remove());
+  });
 
   // ── Acciones ─────────────────────────────────────────────────────────────
   $("csv").onclick = () => { location.href = "/api/opina?csv=1&pase=" + encodeURIComponent(PASE); };

@@ -501,20 +501,40 @@
 </section>
 
 <section class="paso" data-id="rubro" data-color="verde">
-  <span class="cuenta">Tu actividad · 1 de 4</span>
+  <span class="cuenta">Tu actividad · 1 de 5</span>
   <h2>¿A qué <em>sector</em> perteneces?</h2>
   <p class="ayuda">Puedes marcar más de uno. Sin nombres todavía: eso va al final y es opcional.</p>
   <div class="ops" data-campo="rubro" data-multi="1"></div>
 </section>
 
+<section class="paso" data-id="direccion" data-color="turquesa">
+  <span class="cuenta">Tu actividad · 2 de 5</span>
+  <h2>¿Con cuál <em>dirección</em> de la Cámara te ves?</h2>
+  <p class="ayuda">Turismo somos todos: el mecánico que arregla el autobús de la excursión y la ferretería
+    que le vende al posadero también hacen turismo. Elige por dónde entra tu trabajo.</p>
+  <div class="ops" data-campo="direccion"></div>
+
+  <div id="coordCaja" hidden>
+    <p class="rotulo">Y dentro de esa dirección</p>
+    <p class="ayuda">Opcional. Si ninguna te calza, sigue de largo.</p>
+    <div class="ops" id="coordOps"></div>
+  </div>
+
+  <details class="porque">
+    <summary>¿Por qué te preguntamos esto?</summary>
+    <p>Porque CADTEBA está organizada en siete direcciones con sus coordinaciones, y el recado que
+      dejes tiene que llegarle a la que le toca atenderlo, no a un buzón general.</p>
+  </details>
+</section>
+
 <section class="paso" data-id="municipio" data-color="azul">
-  <span class="cuenta">Tu actividad · 2 de 4</span>
+  <span class="cuenta">Tu actividad · 3 de 5</span>
   <h2>¿En qué municipio estás?</h2>
   <div class="ops" data-campo="municipio"></div>
 </section>
 
 <section class="paso" data-id="tamano" data-color="magenta">
-  <span class="cuenta">Tu actividad · 3 de 4</span>
+  <span class="cuenta">Tu actividad · 4 de 5</span>
   <h2>¿Cuántas personas trabajan contigo?</h2>
   <p class="ayuda">Contándote a ti.</p>
   <div class="ops" data-campo="tamano"></div>
@@ -525,7 +545,7 @@
 </section>
 
 <section class="paso" data-id="temporada" data-color="oro">
-  <span class="cuenta">Tu actividad · 4 de 4</span>
+  <span class="cuenta">Tu actividad · 5 de 5</span>
   <h2>¿Cuándo <em>de verdad</em> te llegan turistas?</h2>
   <p class="ayuda">Aquí no vale el año completo. Vale cuándo hay gente de verdad.</p>
 
@@ -741,6 +761,20 @@
             "Guía o agencia de turismo", "Turismo de aventura o naturaleza",
             "Salud y bienestar", "Artesanía o producto local", "Eventos y ferias", "Otro"],
 
+    // Las siete direcciones técnicas de CADTEBA, tal como están en los
+    // estatutos. Se preguntan aparte del sector porque el sector dice a qué te
+    // dedicas y la dirección dice por dónde te atiende la Cámara.
+    direccion: [
+      ["Gestión de Calidad y Hospitalidad", "alojamiento, agencias, gastronomía, atención al turista"],
+      ["Turismo de Salud, Bienestar y Vida", "médico, estético, odontológico, holístico, fitness y nutrición"],
+      ["Deportes Extremos y Aventura", "náuticos, senderismo, montañismo, ciclismo, off-road"],
+      ["Agroturismo y Producción", "hatos y fincas, cacao y café, ferias agro-turísticas"],
+      ["Infraestructura, Seguridad y Desarrollo Sustentable", "construcción, vialidad, seguridad, ferretería, servicios y oficios"],
+      ["Educación, Cultura y Economía Naranja", "universidades, arte, artesanía, folklore, diseño"],
+      ["Mercadeo, Productos y Relaciones Internacionales", "rutas, mercadeo digital, información al viajero, comercio exterior"],
+      ["Todavía no lo tengo claro", "puedes seguir sin escoger; la Cámara lo ubica después"],
+    ],
+
     municipio: ["Barinas", "Alberto Arvelo Torrealba (Sabaneta)", "Andrés Eloy Blanco (El Cantón)",
                 "Antonio José de Sucre (Socopó)", "Arismendi", "Barinitas (Bolívar)",
                 "Cruz Paredes (Barrancas)", "Ezequiel Zamora (Santa Bárbara)", "Obispos",
@@ -900,10 +934,67 @@
           R[campo] = b.dataset.valor;
         }
         revisarOtro(campo);
+        if (campo === "direccion") pintarCoordinaciones();
         revisar();
       };
     });
   });
+
+  // Las coordinaciones de cada dirección, también de los estatutos. Se muestran
+  // sólo las de la dirección elegida: enseñarlas todas a la vez son veintitantas
+  // casillas y nadie las lee.
+  const COORDINACIONES = {
+    "Gestión de Calidad y Hospitalidad": [
+      "Certificación de Alojamiento y Agencias",
+      "Gastronomía, Rutas del Sabor y Vida Nocturna",
+      "Protocolo de Servicio y Atención al Turista"],
+    "Turismo de Salud, Bienestar y Vida": [
+      "Turismo Médico, Estético y Odontológico",
+      "Turismo Holístico, Espiritual y de Retiro",
+      "Fitness, Vida Activa y Nutrición"],
+    "Deportes Extremos y Aventura": [
+      "Deportes Náuticos y Aguas Bravas",
+      "Senderismo, Montañismo y Rutas Ecológicas",
+      "Ciclismo, Mototurismo y Off-Road 4x4"],
+    "Agroturismo y Producción": [
+      "Rutas Ganaderas, Hatos y Fincas",
+      "Cacao, Café y Rubros Autóctonos",
+      "Ferias Agro-Turísticas"],
+    "Infraestructura, Seguridad y Desarrollo Sustentable": [
+      "Arquitectura, Construcción Biocéntrica y Vialidad",
+      "Seguridad Turística y Enlace Policial",
+      "Inversión Inmobiliaria Turística"],
+    "Educación, Cultura y Economía Naranja": [
+      "Universidades e Investigación",
+      "Arte, Cultura, Artesanía y Folklore",
+      "Nuevas Narrativas, Diseño y Economía Creativa"],
+    "Mercadeo, Productos y Relaciones Internacionales": [
+      "Ingeniería de Producto y Rutas",
+      "Mercadeo y Estrategia Digital",
+      "Centros de Información y Movilidad",
+      "Comercio Exterior e Internacionalización"],
+  };
+
+  function pintarCoordinaciones() {
+    const caja = $("coordCaja"), ops = $("coordOps");
+    const lista = COORDINACIONES[R.direccion];
+    R.coordinacion = "";
+    if (!lista) { caja.hidden = true; ops.innerHTML = ""; return; }
+    caja.hidden = false;
+    ops.innerHTML = lista.map(t =>
+      `<button type="button" class="op una" data-valor="${t}" aria-pressed="false">
+        ${tilde}<span><b>${t}</b></span></button>`).join("");
+    ops.querySelectorAll(".op").forEach(b => {
+      b.onclick = () => {
+        const ya = b.getAttribute("aria-pressed") === "true";
+        ops.querySelectorAll(".op").forEach(x => x.setAttribute("aria-pressed", "false"));
+        // Se puede desmarcar: es opcional, y quien se equivocó tiene que poder
+        // dejarlo en blanco sin recargar la página.
+        b.setAttribute("aria-pressed", ya ? "false" : "true");
+        R.coordinacion = ya ? "" : b.dataset.valor;
+      };
+    });
+  }
 
   // La pregunta 3 se arma con lo que él mismo marcó en la 1
   // Un renglón por servicio con sus cuatro notas. Se pinta una sola vez y se
@@ -954,6 +1045,7 @@
     switch (donde()) {
       case "negocio":   return $("negocio").value.trim().length > 1;
       case "rubro":     return R.rubro.length > 0;
+      case "direccion": return !!R.direccion;   // la coordinación queda opcional
       case "municipio": return !!R.municipio;
       case "tamano":    return !!R.tamano;
       case "temporada": return R.momentos.length > 0 && !!R.dias && !!R.ocupacion;
@@ -1028,7 +1120,8 @@
     const val = id => { const e = $(id); return e ? e.value.trim() : ""; };
     return {
       id: idRespuesta,
-      rubro: R.rubro, municipio: R.municipio, tamano: R.tamano,
+      rubro: R.rubro, direccion: R.direccion || "", coordinacion: R.coordinacion || "",
+      municipio: R.municipio, tamano: R.tamano,
       momentos: R.momentos, dias: R.dias || "", ocupacion: R.ocupacion || "",
       impuestos: R.impuestos, otro_impuestos: val("otro_impuestos"),
       cambios: R.cambios, otro_cambios: val("otro_cambios"),

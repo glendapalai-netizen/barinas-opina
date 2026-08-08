@@ -70,7 +70,9 @@ El recorrido:
 | Pantalla | Qué recoge |
 |---|---|
 | `portada` | por qué se está preguntando |
-| `rubro` `municipio` `tamano` | a qué sector pertenece — **sin pedir nombres** |
+| `rubro` | a qué sector pertenece — **sin pedir nombres** |
+| `direccion` | con cuál de las siete direcciones de CADTEBA se ve, y su coordinación |
+| `municipio` `tamano` | dónde opera y con cuánta gente |
 | `temporada` | momentos del año, días con afluencia real, ocupación |
 | `impuestos` | cuáles aprietan más (hasta tres) |
 | `cambios` | qué haría falta |
@@ -90,6 +92,13 @@ fila, esté completa o no.
 
 **Ninguna identificación es obligatoria.** El nombre y el teléfono son para
 mandar el informe, nada más. Quien no quiera dejar nada, opina igual.
+
+**La pregunta por dirección abre la consulta más allá del gremio.** Las siete
+direcciones técnicas y sus coordinaciones salen de los estatutos, y están ahí
+porque a esto también responde un mecánico, un ferretero o alguien de una
+farmacia: turismo somos todos. La dirección es obligatoria —hace falta para
+encaminar el recado a quien lo atiende— y la coordinación es opcional, porque
+no todo oficio calza en una casilla.
 
 **Las pantallas se identifican por nombre (`data-id`), no por número.** Al
 principio iban numeradas y cada pregunta nueva rompía la navegación. Si mañana
@@ -114,6 +123,19 @@ Se arma solo con lo que va entrando. Tiene, en orden:
    respuesta, para no sacar conclusión de aire.
 5. Citas textuales, perfil de quienes respondieron, y la base completa con
    descarga en CSV e impresión a PDF.
+
+**Cada ficha se comparte sola.** El circulito rosado de cada tarjeta abre tres
+salidas: WhatsApp, imagen y PDF. La imagen se arma en el momento —cifras al
+día, logos y atardecer— clonando la tarjeta, volviéndola a escribir en XML
+(un SVG no perdona una etiqueta sin cerrar) y dibujándola en un lienzo.
+
+Tres cosas de ahí conviene no tocarlas. **Los logos van como texto**, no como
+ruta: un lienzo que va a buscar archivos afuera se ensucia y ya no deja
+guardar la imagen. **El estilo de la lámina va aparte y en color sólido**,
+porque el desenfoque de cristal no existe cuando se dibuja. Y **el alto no se
+calcula, se mira**: se dibuja primero sobre nada, se busca dónde terminó la
+tinta y ahí se corta. Medir en la propia página daba de más —manda el estilo
+del tablero— y medir en un marco aparte daba de menos.
 
 ### El acceso al informe
 
@@ -278,9 +300,11 @@ color distinto, igual que cada letra de los logos toma el suyo.
 
 ## Lo que falta
 
-- [ ] Dominio propio: `opina.cadteba.org` (Wix) o `opina.cadteba.info` (Squarespace)
+- [x] Dominio propio: `opina.cadteba.org` (Wix) o `opina.cadteba.info` (Squarespace)
 - [ ] Configurar `SECRETO_ACCESO` en Netlify
 - [ ] Borrar las respuestas de prueba antes de repartir el enlace
+- [ ] Respaldo en Airtable (falta decidir espacio de trabajo y si una tabla o dos)
+- [ ] Encaminar cada recado a la dirección de CADTEBA que le toca
 - [ ] Asistente de Gemini dentro de la consulta, para explicar los tributos y las
       leyes mientras se responde. Sin dar asesoría tributaria: explica y remite.
 - [ ] Enlace y código QR en la lámina de una página
