@@ -125,6 +125,7 @@ input:focus { border-color:color-mix(in srgb,var(--oro) 65%,transparent);
   box-shadow:0 0 0 1px rgba(255,255,255,.1); opacity:0; pointer-events:none; transition:opacity .16s;
 }
 .pest:hover .globo { opacity:1; }
+.pest.on .globo { display:none; }
 
 /* Cuerpo */
 .cuerpo { flex:1; min-width:0; padding:24px 26px 40px 0; }
@@ -141,7 +142,24 @@ input:focus { border-color:color-mix(in srgb,var(--oro) 65%,transparent);
 .marcas-alto { display:flex; align-items:center; gap:12px; }
 .marcas-alto img { height:38px; width:auto; object-fit:contain; }
 
-.barra-acciones { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+.barra-acciones { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
+.chip.buscador { padding:0 15px; gap:9px; min-width:min(320px,100%); }
+.chip.buscador input {
+  border:none; background:none; outline:none; color:var(--tinta);
+  font:inherit; font-weight:600; font-size:.85rem; padding:10px 0; width:100%;
+}
+.chip.buscador input::placeholder { color:var(--suave); font-weight:600; }
+.chip.buscador input::-webkit-search-cancel-button { filter:invert(1); opacity:.5; }
+
+/* El título de la pestaña: qué se está mirando, dicho en cristiano */
+.rotulo-hoja { margin:6px 0 18px; }
+.rotulo-hoja h2 { font-size:1.35rem; }
+.rotulo-hoja p { color:var(--suave); font-size:.86rem; margin-top:3px; }
+
+/* Las herramientas, al final y no de entrada */
+.herramientas { display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+
+
 .chip {
   display:inline-flex; align-items:center; gap:7px; padding:9px 15px; border-radius:99px;
   font-size:.8rem; font-weight:700; cursor:pointer; border:none; color:var(--tinta);
@@ -209,6 +227,10 @@ input:focus { border-color:color-mix(in srgb,var(--oro) 65%,transparent);
 .anillo .centro span { font-size:.68rem; color:var(--suave); font-weight:800; text-transform:uppercase; letter-spacing:.1em; margin-top:5px; }
 .leyenda { display:flex; flex-wrap:wrap; gap:14px; font-size:.76rem; color:var(--suave); font-weight:700; }
 .leyenda span { display:flex; align-items:center; gap:7px; }
+.leyenda.vertical { flex-direction:column; gap:8px; margin-top:18px; }
+.regla-lectura { margin-top:20px; padding-top:16px; border-top:1px solid var(--linea); }
+.regla-lectura p { color:var(--suave); font-size:.83rem; line-height:1.6; margin-bottom:8px; }
+.regla-lectura b { color:var(--tinta); font-weight:900; }
 .leyenda u { width:11px; height:11px; border-radius:4px; display:inline-block; }
 
 /* Tira de cuatro tramos */
@@ -249,7 +271,11 @@ th,td { padding:10px 13px; text-align:left; border-bottom:1px solid var(--linea)
 th { background:rgba(255,255,255,.05); font-size:.66rem; letter-spacing:.07em; text-transform:uppercase;
      font-weight:900; color:var(--suave); position:sticky; top:0; backdrop-filter:blur(10px); }
 tr:last-child td { border-bottom:0; }
-td.ancho { white-space:normal; min-width:230px; }
+td.ancho { white-space:normal; min-width:200px; }
+/* Las tablas de cruce se ajustan al ancho de su tarjeta */
+#tImpMun, #tServicios, #tRubro { white-space:normal; table-layout:fixed; }
+#tImpMun th:first-child, #tServicios th:first-child { width:34%; }
+#tImpMun th:nth-child(2), #tServicios th:nth-child(2) { width:16%; }
 .vacio { text-align:center; color:var(--suave); padding:30px 10px; font-size:.88rem; }
 
 .hoja { display:none; }
@@ -340,13 +366,21 @@ td.ancho { white-space:normal; min-width:230px; }
 
     <div class="barra-acciones">
       <span class="chip corte" id="corte">—</span>
-      <button class="chip" id="csv"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Bajar en Excel</button>
-      <button class="chip" id="imprimir"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4v-6h16v6h-2M8 14h8v7H8z"/></svg>Imprimir o PDF</button>
-      <button class="chip" id="refrescar"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Actualizar</button>
-      <button class="chip" id="salir"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Salir</button>
+      <label class="chip buscador">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="buscar" placeholder="Buscar en todo el tablero…" autocomplete="off">
+      </label>
     </div>
 
-    <!-- ── Resumen ── -->
+    <div class="rotulo-hoja">
+      <h2 id="hojaNombre">Resumen</h2>
+      <p id="hojaQue">Lo esencial de un vistazo</p>
+    </div>
+
+    <p class="vacio" id="sinRastro" hidden>Nada coincide con eso. Prueba con otra palabra —
+       «IVA», «agua», «Pedraza», «posada»…</p>
+
+    <!-- ── 1. Resumen ── -->
     <section class="hoja on" data-hoja="resumen">
       <div class="fichas" id="fichas"></div>
       <div class="rejilla">
@@ -355,10 +389,10 @@ td.ancho { white-space:normal; min-width:230px; }
           <p class="nota">La frase que se dice en voz alta al abrir la reunión. Calculada por el piso de cada rango, para que la cifra quede corta y no larga.</p>
           <div id="titular"></div>
         </div>
-        <div class="tarjeta vidrio c4" style="--acento:var(--verde)">
-          <h3>Nota de la <em>consulta</em></h3>
-          <p class="nota">La carita del final.</p>
-          <div id="gNota"></div>
+        <div class="tarjeta vidrio c4" style="--acento:var(--oro)">
+          <h3>Sectores que <em>respondieron</em></h3>
+          <p class="nota">Cuántos hay de cada rama.</p>
+          <div id="gRubroMini"></div>
         </div>
         <div class="tarjeta vidrio c6" style="--acento:var(--coral)">
           <h3>Los tributos que <em>más aprietan</em></h3>
@@ -373,7 +407,28 @@ td.ancho { white-space:normal; min-width:230px; }
       </div>
     </section>
 
-    <!-- ── Temporada ── -->
+    <!-- ── 2. Sectores que participaron ── -->
+    <section class="hoja" data-hoja="sectores">
+      <div class="rejilla">
+        <div class="tarjeta vidrio c8" style="--acento:var(--oro)">
+          <h3>Por <em>sector</em></h3>
+          <p class="nota">Todas las ramas de la consulta, incluidas las que todavía no han respondido. Alguien pudo marcar más de una, así que la suma pasa del total.</p>
+          <div id="gRubro"></div>
+        </div>
+        <div class="tarjeta vidrio c4" style="--acento:var(--azul)">
+          <h3>Por <em>tamaño</em></h3>
+          <p class="nota">Cuánta gente trabaja en cada negocio.</p>
+          <div id="gTamano"></div>
+        </div>
+        <div class="tarjeta vidrio c12" style="--acento:var(--verde)">
+          <h3>Por <em>municipio</em></h3>
+          <p class="nota">Los doce municipios del estado. Los que aparecen en cero todavía no han participado — sirve para saber a dónde hay que ir a buscar.</p>
+          <div id="gMunicipio"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 3. Afluencia ── -->
     <section class="hoja" data-hoja="temporada">
       <div class="rejilla">
         <div class="tarjeta vidrio c8" style="--acento:var(--oro)">
@@ -389,76 +444,87 @@ td.ancho { white-space:normal; min-width:230px; }
           <div id="gMomentos"></div>
         </div>
         <div class="tarjeta vidrio c12" style="--acento:var(--magenta)">
-          <h3>La temporada, <em>sector por sector</em></h3>
-          <p class="nota">Una posada y un restaurante no viven el año igual: el restaurante trabaja con el de la ciudad y la posada solo cuando llega el visitante. Promediarlos juntos diluye el argumento, así que aquí van separados.</p>
+          <h3>La afluencia, <em>sector por sector</em></h3>
+          <p class="nota">Una posada y un restaurante no viven el año igual: el restaurante trabaja con el de la ciudad y la posada solo cuando llega el visitante. Promediarlos juntos diluye el argumento, así que aquí van separados — todas las ramas, incluidas las que aún no responden.</p>
           <div class="marco"><table id="tRubro"></table></div>
         </div>
       </div>
     </section>
 
-    <!-- ── Tributos ── -->
+    <!-- ── 4. Tributos ── -->
     <section class="hoja" data-hoja="tributos">
       <div class="rejilla">
         <div class="tarjeta vidrio c6" style="--acento:var(--coral)">
           <h3>Los que <em>más aprietan</em></h3>
-          <p class="nota">Cada quien marcó hasta tres. El porcentaje es sobre el total.</p>
+          <p class="nota">Cada quien marcó hasta tres. El porcentaje es sobre el total de respuestas.</p>
           <div id="gImpuestos"></div>
           <div id="otrosImpuestos"></div>
         </div>
-        <div class="tarjeta vidrio c6" style="--acento:var(--azul)">
-          <h3>Si pudieran cambiar <em>uno solo</em></h3>
-          <p class="nota">La prioridad número uno. Es la pregunta que obliga a escoger.</p>
-          <div id="gUno"></div>
-          <div id="otrosUno"></div>
-        </div>
         <div class="tarjeta vidrio c6" style="--acento:var(--naranja)">
-          <h3>Qué hace falta para <em>fortalecer</em></h3>
-          <p class="nota">Hasta cinco medidas. Las de la mesa nacional permiten comparar a Barinas con lo que ya pidieron Fedecámaras y Consecomercio.</p>
+          <h3>El que más aprieta en <em>cada municipio</em></h3>
+          <p class="nota">Los tributos municipales no se cobran igual en todas partes. Aquí se ve dónde duele cuál — que es lo que hay que llevarle a cada alcaldía.</p>
+          <div class="marco"><table id="tImpMun"></table></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 5. Fortalecer ── -->
+    <section class="hoja" data-hoja="fortalecer">
+      <div class="rejilla">
+        <div class="tarjeta vidrio c6" style="--acento:var(--naranja)">
+          <h3>Qué hace falta para <em>fortalecer</em> el turismo</h3>
+          <p class="nota">Hasta cinco medidas. Las que están en la mesa nacional permiten comparar a Barinas con lo que ya pidieron Fedecámaras y Consecomercio.</p>
           <div id="gCambios"></div>
           <div id="otrosCambios"></div>
         </div>
-        <div class="tarjeta vidrio c6" style="--acento:var(--verde)">
-          <h3>Qué los haría <em>invertir</em></h3>
-          <p class="nota">Aquí está el argumento de empleo.</p>
+        <div class="tarjeta vidrio c6" style="--acento:var(--azul)">
+          <h3>Si pudieran cambiar <em>uno solo</em></h3>
+          <p class="nota">La prioridad número uno de cada quien. Es la pregunta que obliga a escoger, y por eso es la que más pesa.</p>
+          <div id="gUno"></div>
+          <div id="otrosUno"></div>
+        </div>
+        <div class="tarjeta vidrio c12" style="--acento:var(--verde)">
+          <h3>Qué los haría <em>invertir o contratar</em></h3>
+          <p class="nota">Aquí está el argumento de empleo: lo que el sector dice que necesita para crecer.</p>
           <div id="gInversion"></div>
           <div id="otrosInversion"></div>
         </div>
       </div>
     </section>
 
-    <!-- ── Servicios ── -->
+    <!-- ── 6. Servicios ── -->
     <section class="hoja" data-hoja="servicios">
       <div class="rejilla">
-        <div class="tarjeta vidrio c8" style="--acento:var(--turquesa)">
-          <h3>Servicio por <em>servicio</em></h3>
-          <p class="nota">Las mismas seis casillas y las mismas cuatro notas del diagnóstico nacional, para poder volcarlas tal cual.</p>
+        <div class="tarjeta vidrio c12" style="--acento:var(--turquesa)">
+          <h3>Cómo están los servicios <em>donde cada quien opera</em></h3>
+          <p class="nota">A cada persona se le pidió calificar, uno por uno, los seis servicios tal como los vive en su sitio de trabajo — no como deberían ser. La barra muestra cómo se repartieron las cuatro notas, y la cifra de la derecha suma los que dijeron «deficiente» o «crítico»: es la que se lleva a la mesa.</p>
           <div id="gServicios"></div>
         </div>
-        <div class="tarjeta vidrio c4" style="--acento:var(--coral)">
-          <h3>Calidad <em>general</em></h3>
-          <p class="nota">Para poder recibir y atender visitantes.</p>
+        <div class="tarjeta vidrio c6" style="--acento:var(--coral)">
+          <h3>Calidad <em>general</em> para poder trabajar</h3>
+          <p class="nota">Más allá de cada servicio por separado: si el conjunto da o no da para recibir y atender visitantes.</p>
           <div id="gCalidad"></div>
         </div>
-        <div class="tarjeta vidrio c12" style="--acento:var(--turquesa)">
+        <div class="tarjeta vidrio c6" style="--acento:var(--turquesa)">
           <h3>Municipio por <em>municipio</em></h3>
-          <p class="nota">Esto es lo que un promedio nacional no puede decir. Es la ventaja de Barinas en esa mesa.</p>
+          <p class="nota">Esto es lo que un promedio nacional no puede decir, y es la ventaja de Barinas en esa mesa. Los doce municipios, con el porcentaje que califica cada servicio como deficiente o crítico.</p>
           <div class="marco"><table id="tServicios"></table></div>
         </div>
       </div>
     </section>
 
-    <!-- ── Consenso ── -->
+    <!-- ── 7. Consenso ── -->
     <section class="hoja" data-hoja="consenso">
       <div class="rejilla">
         <div class="tarjeta vidrio c12" style="--acento:var(--magenta)">
-          <h3>Dónde el sector está <em>unido</em> y dónde partido</h3>
-          <p class="nota">Verde: de acuerdo · gris: paso · coral: en desacuerdo. Sobre 75% es posición de gremio; entre 40% y 60% es un tema que hay que conversar antes de llevarlo.</p>
+          <h3>Dónde el sector está <em>de acuerdo</em> y dónde se fragmenta</h3>
+          <p class="nota">A cada persona se le mostraron las frases de una en una, para responder rápido y sin pensarlo mucho. Están ordenadas de mayor a menor acuerdo.</p>
           <div id="gConsenso"></div>
         </div>
       </div>
     </section>
 
-    <!-- ── Voces ── -->
+    <!-- ── 8. Voces ── -->
     <section class="hoja" data-hoja="voces">
       <div class="rejilla">
         <div class="tarjeta vidrio c6" style="--acento:var(--azul)">
@@ -473,24 +539,30 @@ td.ancho { white-space:normal; min-width:230px; }
         </div>
         <div class="tarjeta vidrio c12" style="--acento:var(--magenta)">
           <h3>Recados para la <em>Cámara</em></h3>
-          <p class="nota">Estos sí esperan respuesta.</p>
+          <p class="nota">Estos sí esperan respuesta. Cada uno trae su nombre y su teléfono para poder derivarlo a la dirección que corresponda.</p>
           <div id="gMensajes"></div>
         </div>
       </div>
     </section>
 
-    <!-- ── Quiénes ── -->
-    <section class="hoja" data-hoja="quienes">
-      <div class="rejilla">
-        <div class="tarjeta vidrio c4" style="--acento:var(--oro)"><h3>Por <em>sector</em></h3><div id="gRubro"></div></div>
-        <div class="tarjeta vidrio c4" style="--acento:var(--verde)"><h3>Por <em>municipio</em></h3><div id="gMunicipio"></div></div>
-        <div class="tarjeta vidrio c4" style="--acento:var(--azul)"><h3>Por <em>tamaño</em></h3><div id="gTamano"></div></div>
-      </div>
-    </section>
-
-    <!-- ── Base ── -->
+    <!-- ── 9. La base ── -->
     <section class="hoja" data-hoja="base">
       <div class="rejilla">
+        <div class="tarjeta vidrio c8" style="--acento:var(--oro)">
+          <h3>Herramientas</h3>
+          <p class="nota">Bajar la base a Excel para trabajarla, o imprimir el tablero completo — sale en blanco y cada pestaña en su propia página.</p>
+          <div class="herramientas">
+            <button class="btn" id="csv">Bajar la base en Excel</button>
+            <button class="btn claro" id="imprimir">Imprimir o guardar en PDF</button>
+            <button class="btn claro" id="refrescar">Actualizar</button>
+            <button class="btn claro" id="salir">Cerrar sesión</button>
+          </div>
+        </div>
+        <div class="tarjeta vidrio c4" style="--acento:var(--verde)">
+          <h3>Nota de <em>la consulta</em></h3>
+          <p class="nota">La carita del final. Dice si el instrumento gusta, antes de repetirlo con otro tema.</p>
+          <div id="gNota"></div>
+        </div>
         <div class="tarjeta vidrio c12" style="--acento:var(--oro)">
           <h3>Respuesta por <em>respuesta</em></h3>
           <p class="nota">La base completa, con los datos de contacto de quien los dejó. Esta parte no se publica: es para el trabajo de la Cámara.</p>
@@ -515,30 +587,84 @@ td.ancho { white-space:normal; min-width:230px; }
 
   let DATOS = null, PASE = "", QUIEN = "";
 
+  // Las mismas listas de la consulta. Se muestran completas aunque estén en
+  // cero: un sector sin respuestas no es un vacío, es una tarea pendiente.
+  const SECTORES = ["Posada u hotel", "Restaurante o gastronomía", "Transporte turístico",
+    "Guía o agencia de turismo", "Turismo de aventura o naturaleza", "Salud y bienestar",
+    "Artesanía o producto local", "Eventos y ferias", "Otro"];
+  const MUNICIPIOS = ["Barinas", "Alberto Arvelo Torrealba (Sabaneta)", "Andrés Eloy Blanco (El Cantón)",
+    "Antonio José de Sucre (Socopó)", "Arismendi", "Barinitas (Bolívar)", "Cruz Paredes (Barrancas)",
+    "Ezequiel Zamora (Santa Bárbara)", "Obispos", "Pedraza (Ciudad Bolivia)", "Rojas (Libertad)",
+    "Sosa (Ciudad de Nutrias)"];
+
   // ── Las pestañas del rail ────────────────────────────────────────────────
+  // Cada pestaña lleva el nombre de lo que se preguntó, no de lo que calcula.
+  // Quien la abre tiene que saber qué está mirando sin que se lo expliquen.
   const HOJAS = [
-    ["resumen",   "Resumen",   "M3 12h4l3 8 4-16 3 8h4"],
-    ["temporada", "Temporada", "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"],
-    ["tributos",  "Tributos",  "M3 21h18M6 21V9l6-5 6 5v12M10 21v-6h4v6"],
-    ["servicios", "Servicios", "M13 2 4 14h7l-1 8 9-12h-7l1-8z"],
-    ["consenso",  "Consenso",  "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"],
-    ["voces",     "Voces",     "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"],
-    ["quienes",   "Quiénes",   "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"],
-    ["base",      "La base",   "M3 5h18M3 12h18M3 19h18"],
+    ["resumen",   "Resumen",    "Lo esencial de un vistazo",
+     "M3 12h4l3 8 4-16 3 8h4"],
+    ["sectores",  "Sectores",   "Quiénes participaron en la consulta",
+     "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"],
+    ["temporada", "Afluencia",  "Cuándo llega el turista al estado Barinas",
+     "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"],
+    ["tributos",  "Tributos",   "Los impuestos que más aprietan al sector",
+     "M3 21h18M6 21V9l6-5 6 5v12M10 21v-6h4v6"],
+    ["fortalecer","Fortalecer", "Qué hace falta, qué cambiar primero y qué haría invertir",
+     "M12 2v20M2 12h20M19 5l-14 14M5 5l14 14"],
+    ["servicios", "Servicios",  "Cómo están los servicios públicos donde cada quien opera",
+     "M13 2 4 14h7l-1 8 9-12h-7l1-8z"],
+    ["consenso",  "Consenso",   "En qué está de acuerdo el sector y en qué se fragmenta",
+     "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"],
+    ["voces",     "Voces",      "Lo que escribieron con sus propias palabras",
+     "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"],
+    ["base",      "La base",    "Respuesta por respuesta, y las herramientas",
+     "M3 5h18M3 12h18M3 19h18"],
   ];
+
   const rail = $("rail");
-  HOJAS.forEach(([id, nombre, d], k) => {
+  function irA(id) {
+    rail.querySelectorAll(".pest").forEach(x => x.classList.toggle("on", x.dataset.va === id));
+    document.querySelectorAll(".hoja").forEach(h => h.classList.toggle("on", h.dataset.hoja === id));
+    const h = HOJAS.find(x => x[0] === id);
+    if (h) { $("hojaNombre").textContent = h[1]; $("hojaQue").textContent = h[2]; }
+    $("buscar").value = "";
+    document.querySelectorAll(".tarjeta").forEach(t => t.hidden = false);
+    $("sinRastro").hidden = true;
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }
+  HOJAS.forEach(([id, nombre, que, d], k) => {
     const b = document.createElement("button");
     b.className = "pest" + (k === 0 ? " on" : "");
     b.dataset.va = id;
     b.innerHTML = `<svg viewBox="0 0 24 24"><path d="${d}"/></svg><span class="globo">${nombre}</span>`;
-    b.onclick = () => {
-      rail.querySelectorAll(".pest").forEach(x => x.classList.toggle("on", x === b));
-      document.querySelectorAll(".hoja").forEach(h => h.classList.toggle("on", h.dataset.hoja === id));
-      window.scrollTo({ top: 0, behavior: "instant" });
-    };
+    b.onclick = () => irA(id);
     rail.appendChild(b);
   });
+
+  // ── El buscador ───────────────────────────────────────────────────────
+  // Humberto no quiere navegar ocho pestañas para ver un dato. Escribe una
+  // palabra y se le muestran, juntas, todas las tarjetas que la mencionan —
+  // vengan de la pestaña que vengan.
+  $("buscar").oninput = () => {
+    const q = $("buscar").value.trim().toLowerCase();
+    const hojas = [...document.querySelectorAll(".hoja")];
+    if (q.length < 2) {
+      const activa = rail.querySelector(".pest.on");
+      hojas.forEach(h => h.classList.toggle("on", h.dataset.hoja === (activa ? activa.dataset.va : "resumen")));
+      document.querySelectorAll(".tarjeta").forEach(t => t.hidden = false);
+      $("sinRastro").hidden = true;
+      return;
+    }
+    let hallados = 0;
+    hojas.forEach(h => h.classList.add("on"));
+    document.querySelectorAll(".tarjeta").forEach(t => {
+      const dice = (t.textContent || "").toLowerCase();
+      const cabe = dice.includes(q);
+      t.hidden = !cabe;
+      if (cabe) hallados++;
+    });
+    $("sinRastro").hidden = hallados > 0;
+  };
 
   // ── Puerta ───────────────────────────────────────────────────────────────
   const guardado = sessionStorage.getItem("pase-informe");
@@ -613,8 +739,9 @@ td.ancho { white-space:normal; min-width:230px; }
 
   // ── Dibujos ──────────────────────────────────────────────────────────────
   // Cuenta negocios, no marcas: si alguien repitiera un valor, vale por uno.
-  function contar(filas, campo) {
+  function contar(filas, campo, completa) {
     const m = new Map();
+    if (completa) for (const x of completa) m.set(x, 0);
     for (const f of filas) {
       const v = f[campo];
       const vs = Array.isArray(v) ? [...new Set(v)] : (v ? [v] : []);
@@ -627,11 +754,11 @@ td.ancho { white-space:normal; min-width:230px; }
     if (!caja) return;
     if (!pares.length) { caja.innerHTML = '<p class="vacio">Todavía nadie ha respondido esto.</p>'; return; }
     const lista = tope ? pares.slice(0, tope) : pares;
-    const mayor = lista[0][1];
+    const mayor = Math.max(1, ...lista.map(p => p[1]));
     caja.innerHTML = lista.map(([t, n], k) => `
-      <div class="barra ${k === 0 ? "top1" : ""}">
+      <div class="barra ${k === 0 && n ? "top1" : ""}"${n ? "" : ' style="opacity:.5"'}>
         <div class="fila"><b>${esc(t)}</b><i>${n} · ${pct(n, total)}%</i></div>
-        <div class="via"><u style="width:${Math.round(n * 100 / mayor)}%"></u></div>
+        <div class="via"><u style="width:${n ? Math.max(2, Math.round(n * 100 / mayor)) : 0}%"></u></div>
       </div>`).join("");
   }
 
@@ -657,10 +784,16 @@ td.ancho { white-space:normal; min-width:230px; }
 
   function otros(caja, filas, campo) {
     if (!caja) return;
-    const dichos = filas.map(f => (f[campo] || "").trim()).filter(t => t.length > 1);
+    const cuenta = new Map();
+    for (const f of filas) {
+      const t = (f[campo] || "").trim();
+      if (t.length > 1) cuenta.set(t, (cuenta.get(t) || 0) + 1);
+    }
+    const dichos = [...cuenta.entries()].sort((a, b) => b[1] - a[1]);
     caja.innerHTML = dichos.length
       ? `<p class="rotulo">Los que escribieron «otro»</p>` +
-        dichos.map(t => `<div class="voz"><p>«${esc(t)}»</p></div>`).join("")
+        dichos.map(([t, n]) => `<div class="voz"><p>«${esc(t)}»${
+          n > 1 ? ` <b style="color:var(--acento)">· ${n} veces</b>` : ""}</p></div>`).join("")
       : "";
   }
 
@@ -716,7 +849,7 @@ td.ancho { white-space:normal; min-width:230px; }
     barras($("gMomentos"), contar(filas, "momentos"), total);
 
     // La temporada, sector por sector — el cruce que pidió Humberto.
-    const sectores = [...new Set(filas.flatMap(f => f.rubro || []))];
+    const sectores = [...new Set([...SECTORES, ...filas.flatMap(f => f.rubro || [])])];
     const porSector = sectores.map(s => {
       const g = filas.filter(f => (f.rubro || []).includes(s));
       const gd = g.filter(f => RANGOS.includes(f.dias));
@@ -727,11 +860,11 @@ td.ancho { white-space:normal; min-width:230px; }
         baja: go.length ? pct(go.filter(f => /Menos del 25|Entre 25/.test(f.ocupacion)).length, go.length) : null,
         moda: (contar(g, "dias")[0] || ["—"])[0],
       };
-    }).sort((a, b) => b.n - a.n);
+    }).sort((a, b) => b.n - a.n || a.s.localeCompare(b.s));
 
     $("tRubro").innerHTML = porSector.length
       ? "<thead><tr><th>Sector</th><th>Respuestas</th><th>Rango más común</th><th>60 días o menos</th><th>Ocupación bajo 30%</th></tr></thead><tbody>" +
-        porSector.map(r => `<tr>
+        porSector.map(r => `<tr${r.n ? "" : ' style="opacity:.45"'}>
           <td><b>${esc(r.s)}</b>${r.n < 3 ? ' <small style="color:var(--suave)">(pocas respuestas)</small>' : ""}</td>
           <td>${r.n}</td>
           <td>${esc(r.moda)}</td>
@@ -750,6 +883,24 @@ td.ancho { white-space:normal; min-width:230px; }
     otros($("otrosCambios"), filas, "otro_cambios");
     otros($("otrosInversion"), filas, "otro_inversion");
     barras($("gTop"), contar(filas, "impuestos"), total, 5);
+
+    // El que más aprieta en cada municipio. Los tributos municipales no se
+    // cobran igual en todas partes: esto es lo que se le lleva a cada alcaldía.
+    const impMun = MUNICIPIOS.map(mun => {
+      const g = filas.filter(f => f.municipio === mun);
+      const c = contar(g, "impuestos");
+      return { mun, n: g.length, top: c.slice(0, 3) };
+    }).sort((a, b) => b.n - a.n);
+
+    $("tImpMun").innerHTML =
+      "<thead><tr><th>Municipio</th><th>Respuestas</th><th>Los que más aprietan allí</th></tr></thead><tbody>" +
+      impMun.map(m => `<tr${m.n ? "" : ' style="opacity:.45"'}>
+        <td><b>${esc(m.mun)}</b></td>
+        <td>${m.n}</td>
+        <td class="ancho">${m.top.length
+          ? m.top.map(([t, n]) => `${esc(t)} <b style="color:var(--coral)">${pct(n, m.n)}%</b>`).join(" · ")
+          : "sin respuestas todavía"}</td>
+      </tr>`).join("") + "</tbody>";
 
     // ── Servicios ──
     const NOTAS = ["Bueno", "Regular", "Deficiente", "Crítico"];
@@ -786,20 +937,26 @@ td.ancho { white-space:normal; min-width:230px; }
       }
       porMun.set(f.municipio, g);
     }
-    const filasMun = [...porMun.entries()].map(([mun, g]) => ({
-      mun, n: g.n,
-      peores: Object.entries(g.s).map(([nom, d]) => ({ nom, p: pct(d.mal, d.t) }))
-                .sort((a, b) => b.p - a.p).filter(x => x.p > 0).slice(0, 3),
-    })).sort((a, b) => b.n - a.n);
+    // Los doce municipios siempre, con su porcentaje. Un cero no es un hueco:
+    // dice a dónde no ha llegado la consulta.
+    const filasMun = MUNICIPIOS.map(mun => {
+      const g = porMun.get(mun) || { n:0, s:{} };
+      return {
+        mun, n: g.n,
+        peores: Object.entries(g.s).map(([nom, d]) => ({ nom, p: pct(d.mal, d.t) }))
+                  .sort((a, b) => b.p - a.p).slice(0, 3),
+      };
+    }).sort((a, b) => b.n - a.n);
 
-    $("tServicios").innerHTML = filasMun.length
-      ? "<thead><tr><th>Municipio</th><th>Respuestas</th><th>Lo que está peor</th></tr></thead><tbody>" +
-        filasMun.map(m => `<tr>
-          <td><b>${esc(m.mun)}</b>${m.n === 1 ? ' <small style="color:var(--suave)">(una sola respuesta)</small>' : ""}</td>
-          <td>${m.n}</td>
-          <td class="ancho">${m.peores.length ? m.peores.map(x => `${esc(x.nom)} <b>${x.p}%</b>`).join(" · ") : "sin fallas reportadas"}</td>
-        </tr>`).join("") + "</tbody>"
-      : "";
+    $("tServicios").innerHTML =
+      "<thead><tr><th>Municipio</th><th>Respuestas</th><th>Lo que está peor</th></tr></thead><tbody>" +
+      filasMun.map(m => `<tr${m.n ? "" : ' style="opacity:.45"'}>
+        <td><b>${esc(m.mun)}</b></td>
+        <td>${m.n}</td>
+        <td class="ancho">${m.n
+          ? m.peores.map(x => `${esc(x.nom)} <b style="color:${x.p ? "var(--coral)" : "var(--suave)"}">${x.p}%</b>`).join(" · ")
+          : "0% · sin respuestas todavía"}</td>
+      </tr>`).join("") + "</tbody>";
 
     // ── Consenso ──
     const frases = new Map();
@@ -815,9 +972,9 @@ td.ancho { white-space:normal; min-width:230px; }
       .sort((x, y) => y.ac - x.ac);
 
     $("gConsenso").innerHTML = cons.length ? cons.map(c => {
-      const et = c.ac >= 75 ? ["et-unido", "El sector está unido"]
+      const et = c.ac >= 75 ? ["et-unido", "El sector está de acuerdo"]
                : c.ac <= 35 ? ["et-rechazo", "El sector lo rechaza"]
-               : c.ac >= 40 && c.ac <= 60 ? ["et-partido", "El sector está partido"] : null;
+               : c.ac >= 40 && c.ac <= 60 ? ["et-partido", "Aquí el sector se fragmenta"] : null;
       const w = n => (c.t ? (n * 100 / c.t) : 0).toFixed(1) + "%";
       return `<div class="cons">
         ${et ? `<span class="etiqueta ${et[0]}">${et[1]}</span>` : ""}
@@ -828,8 +985,19 @@ td.ancho { white-space:normal; min-width:230px; }
           <span class="a-no" style="width:${w(c.d)}">${pct(c.d, c.t) >= 12 ? pct(c.d, c.t) + "%" : ""}</span>
         </div>
       </div>`;
-    }).join("") + `<div class="leyenda" style="margin-top:16px">
-        <span><u class="a-si"></u>De acuerdo</span><span><u class="a-paso"></u>Paso</span><span><u class="a-no"></u>En desacuerdo</span>
+    }).join("") + `
+      <div class="leyenda vertical">
+        <span><u class="a-si"></u>Verde — de acuerdo</span>
+        <span><u class="a-paso"></u>Gris — pasó sin responder</span>
+        <span><u class="a-no"></u>Coral — en desacuerdo</span>
+      </div>
+      <div class="regla-lectura">
+        <p class="rotulo">Cómo leerlo</p>
+        <p>Cuando el acuerdo pasa del <b>75%</b>, esa frase se puede llevar como <b>posición de la Cámara</b>:
+           el sector habla con una sola voz.</p>
+        <p>Cuando queda <b>entre 40% y 60%</b>, el sector <b>se fragmenta</b>. Ese tema hay que conversarlo
+           en asamblea antes de llevarlo a ninguna mesa — llevarlo sin acordarlo divide en vez de sumar.</p>
+        <p>Por debajo de <b>35%</b>, el sector <b>lo rechaza</b>, y conviene saberlo antes de proponerlo.</p>
       </div>` : '<p class="vacio">Nadie ha llegado a esta parte todavía.</p>';
 
     // ── Nota de la consulta ──
@@ -866,8 +1034,9 @@ td.ancho { white-space:normal; min-width:230px; }
       </div>`).join("") : '<p class="vacio">No hay recados todavía.</p>';
 
     // ── Quiénes ──
-    barras($("gRubro"), contar(filas, "rubro"), total);
-    barras($("gMunicipio"), contar(filas, "municipio"), total);
+    barras($("gRubro"), contar(filas, "rubro", SECTORES), total);
+    barras($("gRubroMini"), contar(filas, "rubro"), total, 5);
+    barras($("gMunicipio"), contar(filas, "municipio", MUNICIPIOS), total);
     barras($("gTamano"), contar(filas, "tamano"), total);
 
     // ── La base ──
