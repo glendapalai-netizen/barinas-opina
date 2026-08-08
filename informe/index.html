@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#FBF3DE">
+<meta name="robots" content="noindex, nofollow">
+<title>BARINAS OPINA · informe para CADTEBA</title>
+<link rel="icon" type="image/png" href="/icono.png">
+
+<style>
+  /* Misma paleta y mismo pulso que la consulta: crema, planos de color y
+     grecas. Lo que cambia es el oficio — aquí se lee, no se responde. */
+  :root {
+    --crema:#FBF3DE; --papel:#FFFFFF; --tinta:#1D2A34; --tinta-suave:#6C7A83; --borde:#E6DAC0;
+    --naranja:#F5900A; --azul:#0C34D6; --coral:#F0472E; --verde:#2E8F14;
+    --turquesa:#00A0AE; --magenta:#C4187C; --oro:#B8862F;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  body { background:var(--crema); color:var(--tinta); -webkit-font-smoothing:antialiased;
+         font:16px/1.6 "Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,sans-serif; }
+  h1,h2,h3 { font-weight:900; line-height:1.1; letter-spacing:-.022em; text-wrap:balance; }
+
+  .cenefa { height:12px; width:100%;
+    background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='72' height='12' viewBox='0 0 72 12'>\
+<g fill='none' stroke-width='2.4' stroke-linecap='square'>\
+<path d='M2 10V4h6v4h4V2h6' stroke='%23F5900A'/>\
+<path d='M26 10V4h6v4h4V2h6' stroke='%2300A0AE'/>\
+<path d='M50 10V4h6v4h4V2h6' stroke='%23C4187C'/>\
+</g></svg>");
+    background-repeat:repeat-x; background-size:72px 12px; }
+
+  main { max-width:940px; margin:0 auto; padding:28px 20px 90px; }
+
+  /* ── Portada del informe ─────────────────────────────────────────── */
+  .encabezado { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:22px; }
+  .encabezado img { height:58px; width:auto; object-fit:contain; }
+  .encabezado .mq { height:46px; margin-left:auto; }
+  .titulo { margin-bottom:6px; font-size:clamp(1.6rem,5.2vw,2.4rem);
+            text-transform:uppercase; letter-spacing:-.005em; }
+  .titulo .b1 { color:var(--azul); } .titulo .b2 { color:var(--naranja); }
+  .bajada { color:var(--tinta-suave); font-size:.95rem; }
+  .sello { display:inline-block; margin-top:14px; font-size:.7rem; font-weight:800;
+           letter-spacing:.1em; text-transform:uppercase; padding:6px 14px; border-radius:99px;
+           background:var(--oro); color:#fff; }
+
+  /* ── Puerta ──────────────────────────────────────────────────────── */
+  .puerta { max-width:420px; margin:12vh auto; text-align:center; }
+  .puerta h2 { font-size:1.5rem; margin-bottom:8px; }
+  .puerta p { color:var(--tinta-suave); font-size:.92rem; margin-bottom:22px; }
+  .campos { display:flex; flex-direction:column; gap:10px; }
+  input[type=password], input[type=text] { width:100%; padding:16px 17px; border-radius:16px; font:inherit;
+    background:var(--papel); border:2px solid var(--borde); color:var(--tinta); outline:none; text-align:center; }
+  .pista { font-size:.8rem; color:var(--tinta-suave); margin-top:14px; line-height:1.5; }
+  .pista b { color:var(--coral); font-weight:800; }
+  .quien-entro { font-size:.78rem; color:var(--tinta-suave); font-weight:700; margin-top:10px; }
+  input:focus { border-color:var(--oro); }
+  .btn { padding:15px 24px; border-radius:99px; border:0; cursor:pointer;
+         font:inherit; font-weight:800; background:var(--tinta); color:#fff; }
+  .btn:active { transform:scale(.98); }
+  .btn.claro { background:var(--papel); color:var(--tinta); border:2px solid var(--borde); }
+  .btn:disabled { opacity:.5; cursor:default; }
+  .error { color:var(--coral); font-size:.86rem; font-weight:700; margin-top:14px; min-height:20px; }
+
+  /* ── Cifras de arriba ────────────────────────────────────────────── */
+  .cifras { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:26px 0 34px; }
+  .cifra { background:var(--papel); border:2px solid var(--borde); border-radius:18px; padding:18px;
+           box-shadow:0 2px 0 rgba(29,42,52,.05); }
+  .cifra b { display:block; font-size:2.1rem; font-weight:900; line-height:1; letter-spacing:-.03em; color:var(--acento,var(--azul)); }
+  .cifra span { display:block; margin-top:7px; font-size:.79rem; color:var(--tinta-suave); font-weight:700; }
+
+  /* ── Bloques ─────────────────────────────────────────────────────── */
+  section.bloque { background:var(--papel); border:2px solid var(--borde); border-radius:22px;
+                   padding:22px; margin-bottom:20px; box-shadow:0 3px 0 rgba(29,42,52,.05); }
+  section.bloque > h2 { font-size:1.18rem; margin-bottom:4px; }
+  section.bloque > h2 em { font-style:normal; color:var(--acento); }
+  .nota { color:var(--tinta-suave); font-size:.84rem; margin-bottom:18px; }
+
+  /* Barras */
+  .barra { margin-bottom:13px; }
+  .barra .fila { display:flex; align-items:baseline; gap:10px; font-size:.9rem; margin-bottom:5px; }
+  .barra .fila b { font-weight:700; }
+  .barra .fila i { margin-left:auto; font-style:normal; font-weight:900; color:var(--acento); white-space:nowrap; }
+  .barra .via { height:11px; border-radius:99px; background:#F2E9D4; overflow:hidden; }
+  .barra .via u { display:block; height:100%; border-radius:99px; background:var(--acento);
+                  text-decoration:none; transition:width .7s cubic-bezier(.2,.8,.3,1); }
+  .barra.top1 .fila b::before { content:"▲ "; color:var(--acento); }
+  /* En las tres columnas del perfil el espacio es angosto: letra más chica
+     y el rótulo encima de la cifra, para que nada se pise. */
+  .perfil .barra .fila { display:block; font-size:.82rem; line-height:1.35; }
+  .perfil .barra .fila i { display:block; margin:2px 0 0; font-size:.78rem; }
+
+  /* Consenso */
+  .cons { border-top:1px solid var(--borde); padding:15px 0; }
+  .cons:first-of-type { border-top:0; }
+  .cons p.frase { font-weight:700; font-size:.95rem; margin-bottom:9px; }
+  .cons .tira { display:flex; height:22px; border-radius:7px; overflow:hidden; font-size:.68rem;
+                font-weight:800; color:#fff; }
+  .cons .tira span { display:flex; align-items:center; justify-content:center; min-width:0; }
+  .cons .tira .a { background:var(--verde); } .cons .tira .p { background:#C9BFA8; }
+  .cons .tira .d { background:var(--coral); }
+  .etiqueta { display:inline-block; font-size:.66rem; font-weight:900; letter-spacing:.08em;
+              text-transform:uppercase; padding:4px 10px; border-radius:99px; margin-bottom:8px; }
+  .et-unido { background:color-mix(in srgb,var(--verde) 15%,#fff); color:var(--verde); border:1.5px solid var(--verde); }
+  .et-partido { background:color-mix(in srgb,var(--naranja) 15%,#fff); color:#9A5A00; border:1.5px solid var(--naranja); }
+  .et-rechazo { background:color-mix(in srgb,var(--coral) 13%,#fff); color:var(--coral); border:1.5px solid var(--coral); }
+
+
+  /* El titular: la cifra que se dice en voz alta al abrir la reunión */
+  .titular { display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+    background:color-mix(in srgb,var(--oro) 10%,#fff); border:2px solid var(--oro);
+    border-radius:18px; padding:20px 22px; }
+  .titular b { font-size:3.2rem; font-weight:900; line-height:1; letter-spacing:-.04em; color:var(--oro); }
+  .titular p { flex:1 1 260px; font-size:.95rem; line-height:1.55; color:var(--tinta); }
+  .titular strong { font-weight:900; }
+
+  /* Servicios: una tira de cuatro tramos, del verde al rojo */
+  .serv { margin-bottom: 15px; }
+  .serv .fila { display:flex; align-items:baseline; gap:10px; font-size:.9rem; margin-bottom:5px; }
+  .serv .fila i { margin-left:auto; font-style:normal; font-weight:900; color:var(--coral); white-space:nowrap; }
+  .serv .tira { display:flex; height:22px; border-radius:7px; overflow:hidden;
+                font-size:.68rem; font-weight:800; color:#fff; }
+  .serv .tira span { display:flex; align-items:center; justify-content:center; min-width:0; }
+  .s-b { background:var(--verde); } .s-r { background:var(--naranja); }
+  .s-d { background:var(--coral); } .s-c { background:#A8121B; }
+  .leyenda { display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-size:.76rem;
+             color:var(--tinta-suave); font-weight:700; }
+  .leyenda span { display:flex; align-items:center; gap:6px; }
+  .leyenda u { width:13px; height:13px; border-radius:4px; display:inline-block; }
+
+  /* Voces */
+  .voz { border-left:4px solid var(--acento); padding:4px 0 4px 14px; margin-bottom:16px; }
+  .voz p { font-size:.95rem; line-height:1.55; }
+  .voz cite { display:block; font-style:normal; margin-top:6px; font-size:.78rem;
+              color:var(--tinta-suave); font-weight:700; }
+
+  /* Tabla */
+  .marco { overflow-x:auto; border:2px solid var(--borde); border-radius:16px; background:var(--papel); }
+  table { border-collapse:collapse; width:100%; font-size:.82rem; white-space:nowrap; }
+  th, td { padding:10px 13px; text-align:left; border-bottom:1px solid var(--borde); }
+  th { background:#F6EEDB; font-size:.7rem; letter-spacing:.06em; text-transform:uppercase;
+       font-weight:900; color:var(--tinta-suave); position:sticky; top:0; }
+  tr:last-child td { border-bottom:0; }
+  td.ancho { white-space:normal; min-width:250px; }
+
+  .acciones { display:flex; gap:10px; flex-wrap:wrap; margin:26px 0 8px; }
+  .pie-doc { text-align:center; color:var(--tinta-suave); font-size:.76rem; margin-top:34px; line-height:1.7; }
+  .vacio { text-align:center; color:var(--tinta-suave); padding:34px 10px; font-size:.9rem; }
+
+  @media print {
+    body { background:#fff; } .acciones, .cenefa { display:none; }
+    section.bloque { break-inside:avoid; box-shadow:none; }
+    .marco { overflow:visible; } table { white-space:normal; }
+  }
+</style></head>
+<body>
+
+<div class="cenefa"></div>
+
+<!-- ══ Puerta ══ -->
+<div class="puerta" id="puerta">
+  <h2>Informe de la consulta</h2>
+  <p>Esta vista es de la directiva de CADTEBA.</p>
+  <div class="campos">
+    <input type="text" id="usuario" placeholder="Usuario" autocomplete="username" autocapitalize="none" spellcheck="false">
+    <input type="password" id="clave" placeholder="Clave" autocomplete="current-password">
+  </div>
+  <div class="error" id="error"></div>
+  <button class="btn" id="entrar" style="margin-top:6px">Entrar</button>
+</div>
+
+<!-- ══ Estreno: la primera vez hay que cambiar la clave ══ -->
+<div class="puerta" id="estreno" hidden>
+  <h2>Ponle tu clave</h2>
+  <p id="saludo">Es tu primera entrada. La clave de estreno no sirve para ver el informe:
+     elige la tuya y solo tú la vas a saber.</p>
+  <div class="campos">
+    <input type="password" id="nueva" placeholder="Tu clave nueva" autocomplete="new-password">
+    <input type="password" id="nueva2" placeholder="Escríbela otra vez" autocomplete="new-password">
+  </div>
+  <p class="pista">Mínimo 8 caracteres. Anótala donde no se te pierda: <b>no hay forma de recuperarla</b>
+     — si se te olvida, hay que reiniciarla a mano.</p>
+  <div class="error" id="error2"></div>
+  <button class="btn" id="guardar" style="margin-top:6px">Guardar y entrar</button>
+</div>
+
+<!-- ══ Informe ══ -->
+<main id="informe" hidden>
+
+  <div class="encabezado">
+    <img src="/marcas/cadteba.png" alt="CADTEBA">
+    <img src="/marcas/turismo.png" alt="Turismo somos todos">
+    <img class="mq" src="/marcas/masquellano.png" alt="Barinas, más que llano">
+  </div>
+
+  <h1 class="titulo"><span class="b1">Barinas</span> <span class="b2">opina</span></h1>
+  <p class="bajada">Lo que dijo el sector turismo del estado Barinas sobre la carga tributaria,
+     de cara al nuevo modelo que se discute en el Consejo Nacional de Economía Productiva.</p>
+  <p class="sello" id="sello">—</p>
+  <p class="quien-entro" id="visor"></p>
+
+  <div class="cifras" id="cifras"></div>
+
+  <section class="bloque" style="--acento:var(--oro)">
+    <h2>La temporada: cuántos días <em>de verdad</em> se trabaja</h2>
+    <p class="nota">El argumento central de Barinas. Se tributa doce meses sobre el ingreso bruto,
+       pero el turista llega en unos pocos momentos contados. Aquí está medido, no estimado.</p>
+    <div id="titular"></div>
+    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:24px 0 12px">Días al año con afluencia real</h3>
+    <div id="gDias"></div>
+    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Ocupación en la mejor temporada</h3>
+    <div id="gOcupacion"></div>
+    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Cuáles son esas temporadas</h3>
+    <div id="gMomentos"></div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--coral)">
+    <h2>Los tributos que <em>más aprietan</em></h2>
+    <p class="nota">Cada negocio marcó hasta tres. El porcentaje es sobre el total de negocios que respondieron.</p>
+    <div id="gImpuestos"></div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--azul)">
+    <h2>Si pudieran cambiar <em>uno solo</em></h2>
+    <p class="nota">La prioridad número uno de cada negocio. Es la pregunta que más pesa: obliga a escoger.</p>
+    <div id="gUno"></div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--naranja)">
+    <h2>Qué hace falta para <em>fortalecer</em> el turismo</h2>
+    <p class="nota">Las medidas marcadas como necesarias. Las que dicen «está planteado en la mesa nacional» permiten comparar a Barinas con lo que ya pidieron Fedecámaras y Consecomercio.</p>
+    <div id="gCambios"></div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--verde)">
+    <h2>Qué los haría <em>invertir o contratar</em></h2>
+    <p class="nota">Aquí está el argumento de empleo: lo que el sector dice que necesita para crecer.</p>
+    <div id="gInversion"></div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--magenta)">
+    <h2>Dónde el gremio está <em>unido</em> y dónde partido</h2>
+    <p class="nota">Ordenado por nivel de acuerdo. Verde: de acuerdo · gris: paso · coral: en desacuerdo.
+       Lo que pasa del 75% es posición de gremio; lo que queda entre 40% y 60% es un tema que hay que conversar antes de llevarlo.</p>
+    <div id="gConsenso"></div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--turquesa)">
+    <h2>Los servicios públicos, servicio por <em>servicio</em></h2>
+    <p class="nota">Las mismas seis casillas y las mismas cuatro notas del diagnóstico nacional, para poder volcarlas tal cual.
+       Ordenados por lo que está peor: manda la suma de «deficiente» más «crítico».</p>
+    <div id="gServicios"></div>
+    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Calidad general para poder trabajar</h3>
+    <div id="gCalidad"></div>
+    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Servicio en peor estado, municipio por municipio</h3>
+    <p class="nota">Esto es lo que un promedio nacional no puede decir. Es la ventaja de Barinas en esa mesa.</p>
+    <div class="marco"><table id="tServicios"></table></div>
+    <h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin:26px 0 12px">Lo que piden atender de primero</h3>
+    <div id="gPrioridades"></div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--turquesa)">
+    <h2>En sus <em>propias palabras</em></h2>
+    <p class="nota">Por qué escogieron esa prioridad. Estas son las citas que se llevan a la mesa.</p>
+    <div id="gVoces"></div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--oro)">
+    <h2>Quiénes respondieron</h2>
+    <div class="perfil" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:26px;margin-top:14px">
+      <div><h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:12px">Por rubro</h3><div id="gRubro"></div></div>
+      <div><h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:12px">Por municipio</h3><div id="gMunicipio"></div></div>
+      <div><h3 style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:12px">Por tamaño</h3><div id="gTamano"></div></div>
+    </div>
+  </section>
+
+  <section class="bloque" style="--acento:var(--tinta)">
+    <h2>Respuesta por respuesta</h2>
+    <p class="nota">La base completa, con los datos de contacto. Esta parte no se publica: es para el trabajo de la cámara.</p>
+    <div class="marco"><table id="tabla"></table></div>
+    <div class="acciones">
+      <button class="btn" id="csv">Bajar la base en Excel (CSV)</button>
+      <button class="btn claro" id="imprimir">Imprimir o guardar en PDF</button>
+      <button class="btn claro" id="refrescar">Actualizar</button>
+      <button class="btn claro" id="salir">Cerrar sesión</button>
+    </div>
+  </section>
+
+  <p class="pie-doc">
+    Cámara de Desarrollo Turístico del Estado Barinas · CADTEBA<br>
+    Consulta levantada con «BARINAS OPINA» · documento de trabajo interno
+  </p>
+</main>
+
+<div class="cenefa"></div>
+
+<script>
+(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const esc = t => String(t ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+  const pct = (n, t) => t ? Math.round(n * 100 / t) : 0;
+
+  let DATOS = null, PASE = "", QUIEN = "";
+
+  // ── Puerta ───────────────────────────────────────────────────────────
+  // El pase vive solo en esta pestaña: al cerrarla hay que volver a entrar.
+  const guardado = sessionStorage.getItem("pase-informe");
+  if (guardado) { PASE = guardado; QUIEN = sessionStorage.getItem("quien-informe") || ""; cargar(true); }
+
+  $("entrar").onclick = entrar;
+  $("guardar").onclick = guardar;
+  for (const id of ["usuario", "clave"]) $(id).onkeydown = e => { if (e.key === "Enter") entrar(); };
+  for (const id of ["nueva", "nueva2"]) $(id).onkeydown = e => { if (e.key === "Enter") guardar(); };
+
+  async function pedir(cuerpo) {
+    const r = await fetch("/api/acceso", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify(cuerpo),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || "No se pudo entrar. Intenta de nuevo.");
+    return d;
+  }
+
+  async function entrar() {
+    const usuario = $("usuario").value.trim();
+    const clave = $("clave").value;
+    if (!usuario || !clave) return;
+    $("error").textContent = "";
+    $("entrar").disabled = true; $("entrar").textContent = "Entrando…";
+    try {
+      const d = await pedir({ usuario, clave });
+      if (d.estrenando) {
+        // Entró con la de estreno: no se le da pase hasta que ponga la suya.
+        $("puerta").hidden = true;
+        $("estreno").hidden = false;
+        $("saludo").textContent = `Hola, ${d.nombre}. Es tu primera entrada. La clave de estreno no sirve para ver el informe: elige la tuya y solo tú la vas a saber.`;
+        $("nueva").focus();
+        return;
+      }
+      PASE = d.pase; QUIEN = d.nombre;
+      sessionStorage.setItem("pase-informe", PASE);
+      sessionStorage.setItem("quien-informe", QUIEN);
+      await cargar(false);
+    } catch (e) {
+      $("error").textContent = e.message;
+    } finally {
+      $("entrar").disabled = false; $("entrar").textContent = "Entrar";
+    }
+  }
+
+  async function guardar() {
+    const nueva = $("nueva").value, nueva2 = $("nueva2").value;
+    $("error2").textContent = "";
+    if (nueva !== nueva2) return void ($("error2").textContent = "Las dos no coinciden.");
+    if (nueva.length < 8) return void ($("error2").textContent = "Mínimo 8 caracteres.");
+    $("guardar").disabled = true; $("guardar").textContent = "Guardando…";
+    try {
+      const d = await pedir({ usuario: $("usuario").value.trim(), clave: $("clave").value, nueva });
+      PASE = d.pase; QUIEN = d.nombre;
+      sessionStorage.setItem("pase-informe", PASE);
+      sessionStorage.setItem("quien-informe", QUIEN);
+      $("estreno").hidden = true;
+      await cargar(false);
+    } catch (e) {
+      $("error2").textContent = e.message;
+    } finally {
+      $("guardar").disabled = false; $("guardar").textContent = "Guardar y entrar";
+    }
+  }
+
+  async function cargar(callada) {
+    try {
+      const r = await fetch("/api/opina", { headers: { authorization: "Bearer " + PASE } });
+      if (r.status === 401) throw new Error("Tu sesión venció. Entra otra vez.");
+      if (!r.ok) throw new Error("No se pudo leer la consulta. Intenta de nuevo.");
+      DATOS = await r.json();
+      $("puerta").hidden = true;
+      $("estreno").hidden = true;
+      $("informe").hidden = false;
+      pintar();
+    } catch (e) {
+      sessionStorage.removeItem("pase-informe");
+      PASE = "";
+      if (!callada) $("error").textContent = e.message;
+      $("puerta").hidden = false;
+      $("informe").hidden = true;
+    }
+  }
+
+  // ── Conteos ──────────────────────────────────────────────────────────
+  // Cuenta cuántos negocios marcaron cada opción. Ojo: cuenta negocios, no
+  // marcas — si alguien repitiera un valor, sigue valiendo por uno.
+  function contar(filas, campo) {
+    const m = new Map();
+    for (const f of filas) {
+      const v = f[campo];
+      const vs = Array.isArray(v) ? [...new Set(v)] : (v ? [v] : []);
+      for (const x of vs) m.set(x, (m.get(x) || 0) + 1);
+    }
+    return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }
+
+  function barras(caja, pares, total) {
+    if (!pares.length) { caja.innerHTML = '<p class="vacio">Todavía nadie ha respondido esto.</p>'; return; }
+    const tope = pares[0][1];
+    caja.innerHTML = pares.map(([t, n], k) => `
+      <div class="barra ${k === 0 ? "top1" : ""}">
+        <div class="fila"><b>${esc(t)}</b><i>${n} · ${pct(n, total)}%</i></div>
+        <div class="via"><u style="width:${Math.round(n * 100 / tope)}%"></u></div>
+      </div>`).join("");
+  }
+
+  // ── Pintar ───────────────────────────────────────────────────────────
+  function pintar() {
+    const filas = DATOS.respuestas || [];
+    const total = filas.length;
+
+    // Fecha de corte y sello
+    const fmt = new Intl.DateTimeFormat("es-VE", { day:"numeric", month:"long", year:"numeric" });
+    $("sello").textContent = total
+      ? `${total} ${total === 1 ? "respuesta" : "respuestas"} · corte al ${fmt.format(new Date())}`
+      : "Sin respuestas todavía";
+    $("visor").textContent = QUIEN ? `Abierto por ${QUIEN}` : "";
+
+    if (!total) {
+      for (const id of ["gImpuestos","gUno","gCambios","gInversion","gConsenso","gVoces","gRubro","gMunicipio","gTamano"])
+        $(id).innerHTML = '<p class="vacio">Aún no hay respuestas. En cuanto entre la primera, este informe se llena solo.</p>';
+      $("cifras").innerHTML = "";
+      $("tabla").innerHTML = "";
+      return;
+    }
+
+    // Cifras de arriba
+    const municipios = new Set(filas.map(f => f.municipio).filter(Boolean));
+    const afiliados = filas.filter(f => /ya estoy afiliado/i.test(f.afiliado || "")).length;
+    const quieren = filas.filter(f => /quiero saber/i.test(f.afiliado || "")).length;
+    // Empleo representado: se toma el piso de cada rango, para no inflar la cifra.
+    const piso = { "Solo yo o con un ayudante":1, "De 3 a 10 personas":3, "De 11 a 30 personas":11, "Más de 30 personas":31 };
+    const empleo = filas.reduce((s, f) => s + (piso[f.tamano] || 0), 0);
+
+    $("cifras").innerHTML = [
+      [total, "negocios respondieron", "var(--azul)"],
+      [municipios.size, "municipios representados", "var(--verde)"],
+      [empleo + "+", "empleos representados (mínimo)", "var(--naranja)"],
+      [afiliados, "ya afiliados a CADTEBA", "var(--oro)"],
+      [quieren, "quieren afiliarse", "var(--magenta)"],
+    ].map(([n, t, c]) => `<div class="cifra" style="--acento:${c}"><b>${n}</b><span>${t}</span></div>`).join("");
+
+    // ── Temporada ─────────────────────────────────────────────────────
+    // Para el titular se toma el piso de cada rango: la frase queda del lado
+    // conservador y nadie puede acusar al informe de exagerar.
+    const PISO_DIAS = { "Menos de 30 días al año":0, "Entre 30 y 60 días":30,
+                        "Entre 60 y 120 días":60, "Entre 120 y 200 días":120, "Más de 200 días":200 };
+    const cortos = filas.filter(f => f.dias === "Menos de 30 días al año" || f.dias === "Entre 30 y 60 días").length;
+    const conDias = filas.filter(f => f.dias in PISO_DIAS);
+    const bajaOcup = filas.filter(f => f.ocupacion === "Menos del 25%" || f.ocupacion === "Entre 25% y 30%").length;
+
+    $("titular").innerHTML = conDias.length ? `
+      <div class="titular">
+        <b>${pct(cortos, conDias.length)}%</b>
+        <p>de los negocios que respondieron trabaja con afluencia real
+           <strong>sesenta días al año o menos</strong>${
+             bajaOcup ? `, y ${pct(bajaOcup, filas.filter(f => f.ocupacion).length)}% no pasa del 30% de ocupación ni en su mejor temporada` : ""}.
+           Sobre esa operación se paga IVA, patente municipal y el 1% al INATUR <strong>los doce meses</strong>.</p>
+      </div>` : '<p class="vacio">Todavía no hay respuestas sobre la temporada.</p>';
+
+    barras($("gDias"),      contar(filas, "dias"),      total);
+    barras($("gOcupacion"), contar(filas, "ocupacion"), total);
+    barras($("gMomentos"),  contar(filas, "momentos"),  total);
+
+    barras($("gImpuestos"), contar(filas, "impuestos"), total);
+    barras($("gUno"),       contar(filas, "uno"),       total);
+    barras($("gCambios"),   contar(filas, "cambios"),   total);
+    barras($("gInversion"), contar(filas, "inversion"), total);
+    barras($("gRubro"),     contar(filas, "rubro"),     total);
+    barras($("gMunicipio"), contar(filas, "municipio"), total);
+    barras($("gTamano"),    contar(filas, "tamano"),    total);
+
+    // Consenso
+    const frases = new Map();
+    for (const f of filas) {
+      for (const [frase, v] of Object.entries(f.acuerdos || {})) {
+        const c = frases.get(frase) || { a:0, p:0, d:0 };
+        if (v === "de acuerdo") c.a++; else if (v === "en desacuerdo") c.d++; else c.p++;
+        frases.set(frase, c);
+      }
+    }
+    const cons = [...frases.entries()]
+      .map(([frase, c]) => { const t = c.a + c.p + c.d; return { frase, ...c, t, ac: pct(c.a, t) }; })
+      .sort((x, y) => y.ac - x.ac);
+
+    $("gConsenso").innerHTML = cons.length ? cons.map(c => {
+      const et = c.ac >= 75 ? ["et-unido", "El gremio está unido"]
+               : c.ac <= 35 ? ["et-rechazo", "El gremio lo rechaza"]
+               : c.ac >= 40 && c.ac <= 60 ? ["et-partido", "El gremio está partido"]
+               : null;
+      const w = n => (c.t ? (n * 100 / c.t) : 0).toFixed(1) + "%";
+      return `<div class="cons">
+        ${et ? `<span class="etiqueta ${et[0]}">${et[1]}</span>` : ""}
+        <p class="frase">${esc(c.frase)}</p>
+        <div class="tira">
+          <span class="a" style="width:${w(c.a)}">${c.ac >= 12 ? c.ac + "%" : ""}</span>
+          <span class="p" style="width:${w(c.p)}"></span>
+          <span class="d" style="width:${w(c.d)}">${pct(c.d, c.t) >= 12 ? pct(c.d, c.t) + "%" : ""}</span>
+        </div>
+      </div>`;
+    }).join("") : '<p class="vacio">Nadie ha llegado a esta parte todavía.</p>';
+
+    // ── Servicios públicos ────────────────────────────────────────────
+    // Cada servicio se resume por su parte «mala» (deficiente + crítico),
+    // que es la cifra que se lleva a la mesa.
+    const NOTAS = ["Bueno", "Regular", "Deficiente", "Crítico"];
+    const CLASE = { "Bueno":"b", "Regular":"r", "Deficiente":"d", "Crítico":"c" };
+    const nombres = [...new Set(filas.flatMap(f => Object.keys(f.servicios || {})))];
+
+    const servs = nombres.map(nom => {
+      const c = { Bueno:0, Regular:0, Deficiente:0, "Crítico":0 };
+      let t = 0;
+      for (const f of filas) { const v = (f.servicios || {})[nom]; if (v in c) { c[v]++; t++; } }
+      return { nom, c, t, mal: pct(c.Deficiente + c["Crítico"], t) };
+    }).filter(s => s.t).sort((a, b) => b.mal - a.mal);
+
+    $("gServicios").innerHTML = servs.length ? servs.map(s => `
+      <div class="serv">
+        <div class="fila"><b>${esc(s.nom)}</b><i>${s.mal}% deficiente o crítico</i></div>
+        <div class="tira">${NOTAS.map(n =>
+          `<span class="s-${CLASE[n]}" style="width:${(s.c[n] * 100 / s.t).toFixed(1)}%"
+             title="${n}: ${s.c[n]}">${pct(s.c[n], s.t) >= 11 ? pct(s.c[n], s.t) + "%" : ""}</span>`).join("")}</div>
+      </div>`).join("") + `
+      <div class="leyenda">
+        ${NOTAS.map(n => `<span><u class="s-${CLASE[n]}"></u>${n}</span>`).join("")}
+      </div>` : '<p class="vacio">Todavía nadie ha calificado los servicios.</p>';
+
+    barras($("gCalidad"), contar(filas, "calidad_servicios"), total);
+
+    // Peor servicio por municipio: se muestra el que más «deficiente o crítico»
+    // acumula en cada uno. Con una sola respuesta no se saca conclusión, y se avisa.
+    const porMun = new Map();
+    for (const f of filas) {
+      if (!f.municipio) continue;
+      const g = porMun.get(f.municipio) || { n:0, s:{} };
+      g.n++;
+      for (const [nom, v] of Object.entries(f.servicios || {})) {
+        g.s[nom] = g.s[nom] || { mal:0, t:0 };
+        g.s[nom].t++;
+        if (v === "Deficiente" || v === "Crítico") g.s[nom].mal++;
+      }
+      porMun.set(f.municipio, g);
+    }
+    const filasMun = [...porMun.entries()].map(([mun, g]) => {
+      const peores = Object.entries(g.s).map(([nom, d]) => ({ nom, p: pct(d.mal, d.t) }))
+                           .sort((a, b) => b.p - a.p);
+      return { mun, n: g.n, peores: peores.filter(x => x.p > 0).slice(0, 3) };
+    }).sort((a, b) => b.n - a.n);
+
+    $("tServicios").innerHTML = filasMun.length
+      ? "<thead><tr><th>Municipio</th><th>Respuestas</th><th>Lo que está peor</th></tr></thead><tbody>" +
+        filasMun.map(m => `<tr>
+          <td><b>${esc(m.mun)}</b>${m.n === 1 ? ' <small style="color:var(--tinta-suave)">(una sola respuesta)</small>' : ""}</td>
+          <td>${m.n}</td>
+          <td class="ancho">${m.peores.length
+            ? m.peores.map(x => `${esc(x.nom)} <b>${x.p}%</b>`).join(" · ")
+            : "sin fallas reportadas"}</td>
+        </tr>`).join("") + "</tbody>"
+      : "";
+
+    const prio = filas.filter(f => (f.prioridad_servicio || "").trim().length > 3);
+    $("gPrioridades").innerHTML = prio.length ? prio.map(f => `
+      <div class="voz">
+        <p>«${esc(f.prioridad_servicio)}»</p>
+        <cite>${esc(f.negocio || "Sin nombre")}${f.municipio ? " · " + esc(f.municipio) : ""}</cite>
+      </div>`).join("") : '<p class="vacio">Nadie ha escrito una prioridad todavía.</p>';
+
+    // Voces
+    const voces = filas.filter(f => (f.porque_uno || "").trim().length > 3)
+                       .sort((a, b) => (b.porque_uno || "").length - (a.porque_uno || "").length);
+    $("gVoces").innerHTML = voces.length ? voces.map(f => `
+      <div class="voz">
+        <p>«${esc(f.porque_uno)}»</p>
+        <cite>${esc(f.negocio || "Sin nombre")}${f.municipio ? " · " + esc(f.municipio) : ""}${f.uno ? " · sobre: " + esc(f.uno) : ""}</cite>
+      </div>`).join("") : '<p class="vacio">Todavía nadie ha escrito su porqué.</p>';
+
+    // Tabla
+    const cols = [
+      ["cuando", "Fecha"], ["negocio", "Negocio"], ["rubro", "Rubro"], ["municipio", "Municipio"],
+      ["tamano", "Tamaño"], ["impuestos", "Los que aprietan"], ["uno", "Prioridad 1"],
+      ["porque_uno", "Por qué"], ["cambios", "Qué hace falta"], ["inversion", "Para invertir"],
+      ["nombre", "Contacto"], ["telefono", "WhatsApp"], ["correo", "Correo"], ["afiliado", "Afiliación"],
+    ];
+    const celda = (f, c) => c === "cuando"
+      ? new Date(f.cuando).toLocaleDateString("es-VE")
+      : Array.isArray(f[c]) ? f[c].join(" · ") : (f[c] || "");
+    $("tabla").innerHTML =
+      "<thead><tr>" + cols.map(([, t]) => `<th>${t}</th>`).join("") + "</tr></thead><tbody>" +
+      [...filas].reverse().map(f => "<tr>" + cols.map(([c]) =>
+        `<td class="${c === "porque_uno" ? "ancho" : ""}">${esc(celda(f, c))}</td>`).join("") + "</tr>").join("") +
+      "</tbody>";
+  }
+
+  // ── Acciones ─────────────────────────────────────────────────────────
+  $("csv").onclick = () => { location.href = "/api/opina?csv=1&pase=" + encodeURIComponent(PASE); };
+  $("imprimir").onclick = () => window.print();
+  $("refrescar").onclick = () => cargar(false);
+  $("salir").onclick = () => {
+    sessionStorage.removeItem("pase-informe");
+    sessionStorage.removeItem("quien-informe");
+    location.reload();
+  };
+})();
+</script>
+</body></html>

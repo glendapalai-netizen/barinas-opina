@@ -1,0 +1,40 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex">
+<style>
+  :root{--crema:#FBF3DE;--azul:#0C34D6;--naranja:#F5900A;--verde:#2E8F14;--turquesa:#00A0AE;--tinta:#1B2430;--tinta-suave:#5A6572}
+  *{box-sizing:border-box;margin:0}
+  body{width:1200px;height:630px;background:var(--crema);color:var(--tinta);
+       font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+       display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .cenefa {
+    height: 36px; width: 100%;
+    background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='72' height='12' viewBox='0 0 72 12'>\
+<g fill='none' stroke-width='2.4' stroke-linecap='square'>\
+<path d='M2 10V4h6v4h4V2h6' stroke='%23F5900A'/>\
+<path d='M26 10V4h6v4h4V2h6' stroke='%2300A0AE'/>\
+<path d='M50 10V4h6v4h4V2h6' stroke='%23C4187C'/>\
+</g></svg>");
+    background-repeat: repeat-x; background-size: 216px 36px;
+  }
+  .cenefa{position:absolute;left:0;right:0}
+  .cenefa.arriba{top:0}
+  .cenefa.abajo{bottom:0;transform:scaleY(-1)}
+  .logos{display:flex;align-items:center;gap:26px;margin-bottom:26px}
+  .logos img{height:96px;width:auto;object-fit:contain}
+  h1{font-size:76px;line-height:1;font-weight:800;letter-spacing:-.005em;text-transform:uppercase}
+  h1 .b1{color:var(--azul)} h1 .b2{color:var(--naranja)}
+  .lema{margin-top:14px;color:var(--verde);font-weight:800;font-size:20px;letter-spacing:.22em;text-transform:uppercase}
+  .frase{margin-top:26px;max-width:760px;text-align:center;font-size:28px;line-height:1.35;color:var(--tinta-suave)}
+  .frase b{color:var(--tinta);font-weight:800}
+  .chip{margin-top:28px;background:var(--turquesa);color:#fff;font-weight:800;font-size:20px;padding:14px 28px;border-radius:999px}
+  .mq{position:absolute;right:44px;bottom:76px;height:70px}
+</style></head><body>
+<div class="cenefa arriba"></div>
+<div class="logos"><img src="/marcas/cadteba.png" alt="CADTEBA"><img src="/marcas/turismo.png" alt="Turismo somos todos"></div>
+<h1><span class="b1">Barinas</span> <span class="b2">opina</span></h1>
+<p class="lema">Turismo somos todos</p>
+<p class="frase">Se está armando un <b>nuevo modelo tributario</b> en el país. El comercio ya llevó sus números. El turismo de Barinas todavía no. Tu negocio tiene 3 minutos.</p>
+<div class="chip">CADTEBA · Estado Barinas</div>
+<img class="mq" src="/marcas/masquellano.png" alt="Más que llano">
+<div class="cenefa abajo"></div>
+</body></html>

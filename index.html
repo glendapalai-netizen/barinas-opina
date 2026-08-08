@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FBF3DE">
+<title>BARINAS OPINA · consulta del sector turismo</title>
+
+<meta name="description" content="Se está discutiendo un nuevo modelo tributario en Venezuela. Tu negocio tiene 3 minutos para que el turismo de Barinas lleve números. CADTEBA · Turismo somos todos.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CADTEBA · Barinas">
+<meta property="og:title" content="BARINAS OPINA · tu negocio tiene 3 minutos para opinar">
+<meta property="og:description" content="Se discute un nuevo modelo tributario en el país. El comercio ya llevó sus números; el turismo de Barinas todavía no. CADTEBA está armando los suyos.">
+<meta property="og:image" content="https://barinas-opina.netlify.app/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="/icono.png">
+<link rel="icon" type="image/png" href="/icono.png">
+
+<style>
+  /* ═══ La paleta sale de las tres marcas: el crema y los planos de
+     «Más que llano», los tonos pintados de «Turismo somos todos», y el oro
+     de CADTEBA. Cada pantalla toma un color distinto, igual que cada letra
+     de los logos toma el suyo. ═══ */
+  :root {
+    --crema: #FBF3DE;
+    --papel: #FFFFFF;
+    --tinta: #1D2A34;
+    --tinta-suave: #6C7A83;
+    --borde: #E6DAC0;
+
+    --naranja: #F5900A;   /* el chigüire, la M de MÁS */
+    --azul:    #0C34D6;   /* las alas, la A de LLANO */
+    --coral:   #F0472E;   /* la garza, la O de NO */
+    --verde:   #2E8F14;   /* las hojas, el QUE */
+    --turquesa:#00A0AE;   /* de Turismo somos todos */
+    --magenta: #C4187C;   /* de Turismo somos todos */
+    --oro:     #B8862F;   /* de CADTEBA */
+
+    --acento: var(--naranja);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--crema);
+    color: var(--tinta);
+    font: 16px/1.6 "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  h1, h2 {
+    font-weight: 900; line-height: 1.08; letter-spacing: -.022em; text-wrap: balance;
+  }
+
+  /* La cenefa de grecas: el motivo que comparten CADTEBA y Turismo somos todos */
+  .cenefa {
+    height: 12px; width: 100%;
+    background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='72' height='12' viewBox='0 0 72 12'>\
+<g fill='none' stroke-width='2.4' stroke-linecap='square'>\
+<path d='M2 10V4h6v4h4V2h6' stroke='%23F5900A'/>\
+<path d='M26 10V4h6v4h4V2h6' stroke='%2300A0AE'/>\
+<path d='M50 10V4h6v4h4V2h6' stroke='%23C4187C'/>\
+</g></svg>");
+    background-repeat: repeat-x; background-size: 72px 12px;
+  }
+
+  /* Barra de avance, del color de la pantalla en que va */
+  .tope { position: sticky; top: 0; z-index: 30; background: var(--crema); }
+  .avance { height: 5px; background: #EFE4CA; }
+  .avance i { display: block; height: 100%; width: 0; background: var(--acento); transition: width .35s ease, background .35s ease; }
+
+  main { width: 100%; max-width: 560px; margin: 0 auto; padding: 24px 20px 132px; }
+
+  .paso { display: none; animation: entra .32s cubic-bezier(.2,.7,.3,1) both; }
+  .paso.on { display: block; }
+  @keyframes entra { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* Número de pregunta en pastilla de color, como las letras del logo */
+  .cuenta {
+    display: inline-block; font-size: .7rem; font-weight: 800; letter-spacing: .1em;
+    text-transform: uppercase; padding: 6px 14px; border-radius: 99px;
+    background: var(--acento); color: #fff; margin-bottom: 16px;
+  }
+  .paso h2 { font-size: clamp(1.5rem, 6.4vw, 2rem); margin-bottom: 10px; }
+  .paso h2 em { font-style: normal; color: var(--acento); }
+  .ayuda { color: var(--tinta-suave); font-size: .94rem; margin-bottom: 22px; }
+
+  /* Opciones: tarjetas blancas con sombra de papel */
+  .ops { display: flex; flex-direction: column; gap: 10px; }
+  .op {
+    display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+    padding: 15px 17px; border-radius: 16px; cursor: pointer;
+    background: var(--papel); border: 2px solid var(--borde);
+    color: var(--tinta); font-size: .96rem; font-family: inherit; line-height: 1.4;
+    box-shadow: 0 2px 0 rgba(29,42,52,.05);
+    transition: border-color .14s ease, background .14s ease, transform .1s ease;
+  }
+  .op:active { transform: scale(.99); }
+  .op .caja {
+    flex: 0 0 24px; width: 24px; height: 24px; border-radius: 8px;
+    border: 2px solid var(--borde); display: flex; align-items: center; justify-content: center;
+    transition: background .14s ease, border-color .14s ease;
+  }
+  .op.una .caja { border-radius: 50%; }
+  .op .caja svg { width: 14px; height: 14px; opacity: 0; color: #fff; }
+  .op[aria-pressed="true"] { border-color: var(--acento); background: color-mix(in srgb, var(--acento) 8%, #fff); }
+  .op[aria-pressed="true"] .caja { background: var(--acento); border-color: var(--acento); }
+  .op[aria-pressed="true"] .caja svg { opacity: 1; }
+  .op b { font-weight: 700; }
+  .op small { display: block; color: var(--tinta-suave); font-size: .79rem; font-weight: 400; margin-top: 1px; }
+
+  input[type="text"], input[type="email"], input[type="tel"], textarea {
+    width: 100%; padding: 16px 17px; border-radius: 16px; font-family: inherit; font-size: 1rem;
+    background: var(--papel); border: 2px solid var(--borde); color: var(--tinta); outline: none;
+  }
+  input:focus, textarea:focus { border-color: var(--acento); }
+  textarea { resize: none; min-height: 100px; }
+  ::placeholder { color: #A9B3B9; }
+
+  /* El porqué de cada pregunta */
+  details.porque {
+    margin-top: 20px; background: color-mix(in srgb, var(--acento) 7%, var(--crema));
+    border: 2px dashed color-mix(in srgb, var(--acento) 35%, var(--crema));
+    border-radius: 15px; padding: 14px 16px;
+  }
+  details.porque summary {
+    cursor: pointer; list-style: none; color: var(--acento); font-size: .84rem; font-weight: 800;
+    display: flex; align-items: center; gap: 8px;
+  }
+  details.porque summary::-webkit-details-marker { display: none; }
+  details.porque summary::after { content: "+"; margin-left: auto; font-size: 1.2rem; }
+  details.porque[open] summary::after { content: "−"; }
+  details.porque p { color: var(--tinta-suave); font-size: .87rem; margin-top: 10px; line-height: 1.62; }
+
+  /* Rótulo de cada grupo dentro de una misma pantalla */
+  .rotulo {
+    font-size: .72rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--acento); margin: 22px 0 10px;
+  }
+  .rotulo:first-of-type { margin-top: 0; }
+
+  /* Tablero de servicios: un renglón por servicio, cuatro notas del verde al
+     coral. Se califican todos a la vista, para que uno compare mientras marca. */
+  .servicio {
+    background: var(--papel); border: 2px solid var(--borde); border-radius: 16px;
+    padding: 13px 15px; margin-bottom: 10px; box-shadow: 0 2px 0 rgba(29,42,52,.05);
+  }
+  .servicio .nombre { font-weight: 800; font-size: .95rem; margin-bottom: 10px; }
+  .servicio .notas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .servicio .nota {
+    padding: 11px 2px; border-radius: 11px; cursor: pointer; font-family: inherit;
+    font-size: .74rem; font-weight: 800; line-height: 1.2;
+    border: 2px solid var(--borde); background: var(--papel); color: var(--tinta-suave);
+    transition: background .14s ease, color .14s ease, border-color .14s ease;
+  }
+  .servicio .nota:active { transform: scale(.96); }
+  .n-b { --nota: var(--verde); } .n-r { --nota: var(--naranja); }
+  .n-d { --nota: var(--coral); } .n-c { --nota: #A8121B; }
+  .servicio .nota.puesta { background: var(--nota); border-color: var(--nota); color: #fff; }
+
+  /* Deslizador de consenso */
+  .afirma {
+    background: var(--papel); border: 3px solid var(--acento); border-radius: 22px;
+    padding: 30px 22px; text-align: center; margin-bottom: 16px;
+    box-shadow: 0 6px 0 color-mix(in srgb, var(--acento) 22%, var(--crema));
+  }
+  .afirma p { font-size: 1.2rem; font-weight: 700; line-height: 1.38; text-wrap: balance; }
+  .tres { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 9px; }
+  .tres button {
+    padding: 16px 6px; border-radius: 15px; font-family: inherit; font-size: .87rem; font-weight: 800;
+    cursor: pointer; border: 2px solid var(--borde); background: var(--papel); color: var(--tinta-suave);
+  }
+  .tres button.si { border-color: var(--verde); color: var(--verde); }
+  .tres button.no { border-color: var(--coral); color: var(--coral); }
+  .tres button:active { transform: scale(.96); }
+  .llevamos { color: var(--tinta-suave); font-size: .8rem; text-align: center; margin-bottom: 14px; font-weight: 700; }
+
+  /* Barra de abajo */
+  .pie {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--crema) 66%, transparent);
+    display: flex; gap: 10px; max-width: 560px; margin: 0 auto;
+  }
+  .btn {
+    flex: 1; padding: 17px; border-radius: 16px; font-family: inherit; font-size: 1.02rem; font-weight: 800;
+    cursor: pointer; border: none; background: var(--acento); color: #fff;
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--acento) 65%, #000);
+    transition: background .3s ease;
+  }
+  .btn:disabled { background: #D9CFB8; box-shadow: 0 4px 0 #C6BAA0; color: #fff; }
+  .btn.atras {
+    flex: 0 0 58px; background: var(--papel); border: 2px solid var(--borde);
+    color: var(--tinta-suave); font-size: 1.3rem; box-shadow: 0 4px 0 var(--borde);
+  }
+  .btn:active { transform: translateY(2px); box-shadow: none; }
+
+  /* Portada */
+  .portada { text-align: center; }
+  .portada .sellos { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 26px; }
+  .portada .sellos img.cad { height: 84px; width: auto; }
+  .portada .sellos img.tur { height: 74px; width: auto; }
+  .portada h1 { font-size: clamp(2.2rem, 10vw, 3.2rem); margin-bottom: 6px;
+                 text-transform: uppercase; letter-spacing: -.005em; }
+  .portada h1 .b1 { color: var(--azul); }
+  .portada h1 .b2 { color: var(--naranja); }
+  .portada .lema {
+    font-size: .72rem; font-weight: 800; letter-spacing: .24em; text-transform: uppercase;
+    color: var(--verde); margin-bottom: 22px;
+  }
+  .portada p { color: var(--tinta-suave); font-size: 1rem; max-width: 40ch; margin: 0 auto 12px; }
+  .portada p strong { color: var(--tinta); font-weight: 800; }
+  .minutos {
+    display: inline-flex; align-items: center; gap: 8px; margin: 20px 0 4px;
+    padding: 10px 18px; border-radius: 99px; font-size: .84rem; font-weight: 800;
+    color: #fff; background: var(--turquesa);
+  }
+  .aviso {
+    color: var(--tinta-suave); font-size: .78rem; line-height: 1.62; margin-top: 24px;
+    border-top: 2px dotted var(--borde); padding-top: 18px;
+  }
+
+  /* Cierre */
+  .cierre { text-align: center; }
+  .cierre .tilde {
+    width: 84px; height: 84px; border-radius: 50%; margin: 8px auto 22px;
+    background: var(--verde); display: flex; align-items: center; justify-content: center; color: #fff;
+    box-shadow: 0 5px 0 color-mix(in srgb, var(--verde) 60%, #000);
+  }
+  .contador { font-size: 3.4rem; font-weight: 900; color: var(--azul); line-height: 1; }
+  .marcas-pie {
+    display: flex; align-items: center; justify-content: center; gap: 22px;
+    margin-top: 34px; padding-top: 24px; border-top: 2px dotted var(--borde);
+  }
+  .marcas-pie img { height: 46px; width: auto; }
+  .marcas-pie img.mq { height: 40px; }
+</style></head>
+<body>
+
+<div class="tope">
+  <div class="avance"><i id="avance"></i></div>
+  <div class="cenefa"></div>
+</div>
+
+<main>
+
+<!-- ══ Portada ══ -->
+<section class="paso on" data-id="portada" data-color="naranja">
+  <div class="portada">
+    <div class="sellos">
+      <img class="cad" src="/marcas/cadteba.png" alt="CADTEBA · Cámara de Desarrollo Turístico del Estado Barinas">
+      <img class="tur" src="/marcas/turismo.png" alt="Turismo somos todos · Explora Barinas">
+    </div>
+    <h1><span class="b1">Barinas</span> <span class="b2">opina</span></h1>
+    <p class="lema">Turismo somos todos</p>
+    <p>Se está discutiendo en el país un <strong>nuevo modelo tributario</strong>. El comercio y la industria ya llevaron sus propuestas. El turismo del interior todavía no lleva números.</p>
+    <p>CADTEBA está armando los de Barinas. Para que queden completos, falta tu negocio.</p>
+    <span class="minutos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="16" height="16"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      3 minutos · casi todo es tocar
+    </span>
+    <p class="aviso">
+      Tus respuestas se suman a las de los demás y forman el informe con el que CADTEBA sustenta la posición de Barinas.
+      Tus datos de contacto los guarda CADTEBA para escribirte sobre esta consulta y sobre el gremio — nada más, y nunca se venden.
+    </p>
+  </div>
+</section>
+
+<!-- ══ Ficha ══ -->
+<section class="paso" data-id="negocio" data-color="turquesa">
+  <span class="cuenta">Tu negocio · 1 de 5</span>
+  <h2>¿Cómo se llama tu negocio?</h2>
+  <p class="ayuda">Si eres guía o prestas el servicio por tu cuenta, pon tu nombre.</p>
+  <input type="text" id="negocio" placeholder="Ej: Posada El Garcero" autocomplete="organization">
+</section>
+
+<section class="paso" data-id="rubro" data-color="verde">
+  <span class="cuenta">Tu negocio · 2 de 5</span>
+  <h2>¿A qué te dedicas?</h2>
+  <p class="ayuda">Puedes marcar más de una.</p>
+  <div class="ops" data-campo="rubro" data-multi="1"></div>
+</section>
+
+<section class="paso" data-id="municipio" data-color="azul">
+  <span class="cuenta">Tu negocio · 3 de 5</span>
+  <h2>¿En qué municipio estás?</h2>
+  <div class="ops" data-campo="municipio"></div>
+</section>
+
+<section class="paso" data-id="tamano" data-color="magenta">
+  <span class="cuenta">Tu negocio · 4 de 5</span>
+  <h2>¿Cuántas personas trabajan contigo?</h2>
+  <p class="ayuda">Contándote a ti.</p>
+  <div class="ops" data-campo="tamano"></div>
+  <details class="porque">
+    <summary>¿Por qué te preguntamos esto?</summary>
+    <p>Porque una posada de tres habitaciones y un hotel de cuarenta no cargan el mismo peso fiscal, y el informe tiene que poder decirlo con números.</p>
+  </details>
+</section>
+
+<section class="paso" data-id="temporada" data-color="oro">
+  <span class="cuenta">Tu negocio · 5 de 5</span>
+  <h2>¿Cuándo <em>de verdad</em> te llegan turistas?</h2>
+  <p class="ayuda">Aquí no vale el año completo. Vale cuándo hay gente de verdad.</p>
+
+  <p class="rotulo">Tus temporadas</p>
+  <div class="ops" data-campo="momentos" data-multi="1"></div>
+
+  <p class="rotulo">Días al año con afluencia real</p>
+  <div class="ops" data-campo="dias"></div>
+
+  <p class="rotulo">Ocupación promedio en tu mejor temporada</p>
+  <div class="ops" data-campo="ocupacion"></div>
+
+  <details class="porque">
+    <summary>¿Por qué te preguntamos esto?</summary>
+    <p>Porque los impuestos se pagan todos los meses sobre el ingreso bruto, pero en Barinas el turista llega en cuatro momentos contados. Un destino de flujo continuo y uno de temporada corta no pueden tributar igual, y ése es el argumento más fuerte que tiene el estado — pero solo sirve si se puede decir con un número medido y no calculado a ojo. Ese número lo estás dando tú.</p>
+  </details>
+</section>
+
+<!-- ══ Las cuatro de fondo ══ -->
+<section class="paso" data-id="impuestos" data-color="coral">
+  <span class="cuenta">Pregunta 1 de 4</span>
+  <h2>¿Cuáles impuestos te <em>aprietan más</em> hoy?</h2>
+  <p class="ayuda">Marca hasta tres. Los que de verdad te duelen.</p>
+  <div class="ops" data-campo="impuestos" data-multi="3"></div>
+  <details class="porque">
+    <summary>¿Por qué te preguntamos esto?</summary>
+    <p>Con las respuestas de todos, CADTEBA puede decir con datos cuáles son los tres tributos que más ahogan al turismo en Barinas, en vez de una opinión suelta.</p>
+  </details>
+  <details class="porque">
+    <summary>¿Cuáles son las reglas hoy?</summary>
+    <p><strong>Ley Orgánica de Turismo</strong> — Decreto 1.441, Gaceta Oficial 6.152 Extraordinario del 18 de noviembre de 2014. Su artículo 53 fija la contribución especial al INATUR: <strong>1% de los ingresos brutos mensuales</strong> del prestador de servicios turísticos. La misma ley contempla exenciones de IVA para el turismo receptivo, de escasa aplicación en la práctica.</p>
+    <p><strong>Ley de Protección de las Pensiones</strong> — Gaceta Oficial 6.806 Extraordinario del 8 de mayo de 2024. El aporte del <strong>9% sobre la nómina</strong> quedó fijado por el Decreto 4.952, Gaceta Oficial 42.880 del 16 de mayo de 2024. Es el tributo más reciente que se le sumó al sector.</p>
+    <p><strong>LOCAPTEM</strong> — Ley Orgánica de Coordinación y Armonización de las Potestades Tributarias de Estados y Municipios, promulgada el <strong>11 de agosto de 2023</strong>. Es la que debería poner techo y orden a lo que cobran alcaldías y gobernaciones. Buena parte del reclamo del gremio es que en la práctica no se aplica parejo.</p>
+  </details>
+  <details class="porque">
+    <summary>¿Y qué se está discutiendo ahora?</summary>
+    <p>El <strong>8 de abril de 2026</strong> se instaló el <strong>Consejo Nacional de Economía Productiva</strong>, con el mandato expreso de diseñar un <strong>nuevo modelo tributario</strong>. Sesiona de manera permanente y participan el Estado, el sector privado y el poder popular. No es todavía un proyecto de ley introducido: es la mesa donde se está armando.</p>
+    <p>El <strong>21 de julio de 2026</strong>, Fedecámaras, Consecomercio y Conindustria se reunieron con el SENIAT y pusieron sobre la mesa un modelo <em>«menos punitivo»</em>: extender la declaración de IVA de 15 a 30 días, bajar las retenciones del 75% al 50% o 25%, <strong>suprimir el IGTF</strong>, evitar la sobreposición de tributos municipales, digitalizar para eliminar el papeleo y armonizar criterios entre lo tributario y lo aduanal.</p>
+    <p><strong>Aquí está el punto.</strong> Esa mesa hoy la ocupan el comercio y la industria. El turismo — y menos aún el turismo del interior — no tiene números propios que poner encima. Lo que respondas aquí es lo que le da a Barinas una cifra que mostrar en vez de una queja.</p>
+    <p>Como referencia: en mayo de 2026 el gremio turístico nacional estimó que entre tributos nacionales, estadales y municipales el sector entrega <strong>más del 50% de sus ingresos brutos</strong>.</p>
+  </details>
+</section>
+
+<section class="paso" data-id="cambios" data-color="naranja">
+  <span class="cuenta">Pregunta 2 de 4</span>
+  <h2>¿Qué haría falta para fortalecer el turismo aquí?</h2>
+  <p class="ayuda">Marca todas las que veas necesarias.</p>
+  <div class="ops" data-campo="cambios" data-multi="1"></div>
+</section>
+
+<section class="paso" data-id="uno" data-color="azul">
+  <span class="cuenta">Pregunta 3 de 4</span>
+  <h2>Si pudieras cambiar <em>uno solo</em>, ¿cuál?</h2>
+  <p class="ayuda">Elige uno y cuéntanos en una línea por qué.</p>
+  <div class="ops" data-campo="uno"></div>
+  <div style="margin-top:14px"><textarea id="porque_uno" placeholder="¿Por qué ése? (opcional, pero es lo que más pesa en el informe)"></textarea></div>
+</section>
+
+<section class="paso" data-id="inversion" data-color="verde">
+  <span class="cuenta">Pregunta 4 de 4</span>
+  <h2>¿Qué te haría invertir o contratar más gente?</h2>
+  <p class="ayuda">Marca todas las que apliquen.</p>
+  <div class="ops" data-campo="inversion" data-multi="1"></div>
+</section>
+
+<!-- ══ Servicios públicos ══ -->
+<section class="paso" data-id="servicios" data-color="turquesa">
+  <span class="cuenta">Servicios · 1 de 2</span>
+  <h2>¿Cómo están los servicios <em>donde tú operas</em>?</h2>
+  <p class="ayuda">Uno por uno, como lo vives tú — no como debería ser.</p>
+  <div id="serviciosBox"></div>
+  <details class="porque">
+    <summary>¿Por qué te preguntamos esto?</summary>
+    <p>Porque de nada sirve que bajen los impuestos si no hay luz, agua o vía para llegar. Los servicios son la otra mitad del problema, y hasta ahora se discuten en promedio nacional — sin decir qué pasa en cada municipio de Barinas. Con esto CADTEBA puede decirlo con nombre y apellido.</p>
+  </details>
+</section>
+
+<section class="paso" data-id="servicios-general" data-color="coral">
+  <span class="cuenta">Servicios · 2 de 2</span>
+  <h2>En general, ¿los servicios <em>dan para trabajar</em>?</h2>
+  <p class="ayuda">Pensando en poder recibir y atender visitantes.</p>
+  <div class="ops" data-campo="calidad_servicios"></div>
+  <div style="margin-top:18px">
+    <p class="ayuda" style="margin-bottom:10px">Si hay una sola cosa que debería atenderse de primero, escríbela aquí.</p>
+    <textarea id="prioridad_servicio" placeholder="Ej: el bombeo de agua en Pedraza se cayó y las posadas compran cisternas todas las semanas"></textarea>
+  </div>
+</section>
+
+<!-- ══ Deslizador ══ -->
+<section class="paso" data-id="acuerdos" data-color="magenta">
+  <span class="cuenta">Última parte · un minuto</span>
+  <h2>¿Estás de acuerdo?</h2>
+  <p class="ayuda">Frases sueltas del gremio. Responde rápido, sin pensarlo mucho — aquí sale dónde el sector está unido y dónde está partido.</p>
+  <div id="afirmaBox"></div>
+</section>
+
+<!-- ══ Contacto ══ -->
+<section class="paso" data-id="contacto" data-color="turquesa">
+  <span class="cuenta">Para cerrar</span>
+  <h2>¿Cómo te ubicamos?</h2>
+  <p class="ayuda">Para mandarte el informe cuando esté listo, y avisarte de lo que se vaya logrando.</p>
+  <div class="ops" style="gap:12px">
+    <input type="text" id="nombre" placeholder="Tu nombre" autocomplete="name">
+    <input type="tel" id="telefono" placeholder="Tu WhatsApp" autocomplete="tel">
+    <input type="email" id="correo" placeholder="Tu correo (opcional)" autocomplete="email">
+  </div>
+  <div style="margin-top:16px" class="ops" data-campo="afiliado"></div>
+</section>
+
+<!-- ══ Cierre ══ -->
+<section class="paso" data-id="cierre" data-color="verde">
+  <div class="cierre">
+    <div class="tilde">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" width="38" height="38" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 5 5L20 7"/></svg>
+    </div>
+    <h2>Tu voz quedó registrada</h2>
+    <p style="color:var(--tinta-suave); margin-top:10px">Gracias. Esto es lo que CADTEBA lleva a la mesa.</p>
+    <div style="margin:30px 0 4px"><span class="contador" id="cuantos">—</span></div>
+    <p style="color:var(--tinta-suave)">negocios turísticos de Barinas ya opinaron</p>
+    <div style="margin-top:28px" class="ops">
+      <button class="btn" id="compartir">Pásasela a otro del gremio</button>
+    </div>
+    <p class="aviso" style="border:0; padding-top:14px">Mientras más seamos, más peso tiene Barinas en esa reforma.</p>
+    <div class="marcas-pie">
+      <img src="/marcas/cadteba.png" alt="CADTEBA">
+      <img class="mq" src="/marcas/masquellano.png" alt="Barinas, más que llano">
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="pie" id="pie">
+  <button class="btn atras" id="atras" aria-label="Volver">‹</button>
+  <button class="btn" id="seguir">Comenzar</button>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+
+  // ── Contenido ───────────────────────────────────────────────────────────
+  const OPCIONES = {
+    rubro: ["Posada u hotel", "Restaurante o gastronomía", "Transporte turístico",
+            "Guía o agencia de turismo", "Turismo de aventura o naturaleza",
+            "Salud y bienestar", "Artesanía o producto local", "Eventos y ferias", "Otro"],
+
+    municipio: ["Barinas", "Alberto Arvelo Torrealba (Sabaneta)", "Andrés Eloy Blanco (El Cantón)",
+                "Antonio José de Sucre (Socopó)", "Arismendi", "Barinitas (Bolívar)",
+                "Cruz Paredes (Barrancas)", "Ezequiel Zamora (Santa Bárbara)", "Obispos",
+                "Pedraza (Ciudad Bolivia)", "Rojas (Libertad)", "Sosa (Ciudad de Nutrias)"],
+
+    tamano: ["Solo yo o con un ayudante", "De 3 a 10 personas", "De 11 a 30 personas", "Más de 30 personas"],
+
+    impuestos: [
+      ["IVA · nacional", "16% general (alícuota entre 8% y 16,5% según el bien o servicio)"],
+      ["IGTF · nacional", "3% sobre los pagos en divisas o cripto"],
+      ["ISLR · nacional", "impuesto sobre la renta, por tabla progresiva"],
+      ["Aporte al INATUR · nacional", "1% de tus ingresos brutos mensuales (Ley Orgánica de Turismo, art. 53)"],
+      ["Aporte de pensiones · nacional", "9% sobre la nómina (Ley de Protección de las Pensiones, 2024)"],
+      ["IVSS, INCES, RPE y demás de nómina", "seguro social, paro forzoso, política habitacional, INCES"],
+      ["Patente municipal", "actividades económicas, un % de tus ingresos brutos que fija cada alcaldía"],
+      ["Aseo urbano municipal", "Ecodeba en el municipio Barinas; se cobra por metro cuadrado y no por basura generada"],
+      ["Publicidad, inmuebles y espectáculos", "los municipales pequeños que se van sumando"],
+      ["Timbres fiscales y tasas del estado Barinas", ""],
+      ["Tasas del Registro Turístico Nacional (RTN)", "inscripción y renovación anual"],
+      ["Otro", ""],
+    ],
+
+    cambios: [
+      ["Tarifa de IVA reducida para el turismo", "como tienen otros países de la región"],
+      ["Exonerar o rebajar el aporte al INATUR", ""],
+      ["Unificar los tributos municipales", "una sola ventanilla en vez de cinco"],
+      ["Rebaja de ISLR a quien reinvierta en su negocio", ""],
+      ["Crédito turístico con interés preferencial", ""],
+      ["Régimen simplificado para los negocios pequeños", ""],
+      ["Estabilidad: que no cambien las reglas cada año", ""],
+      ["Trámites más rápidos y menos permisos", ""],
+      ["Incentivos por contratar gente joven", ""],
+      ["Suprimir el IGTF", "está planteado en la mesa nacional"],
+      ["Bajar las retenciones de IVA del 75%", ""],
+      ["Declarar el IVA cada 30 días y no cada 15", ""],
+      ["Digitalizar todo y acabar con el papeleo", ""],
+      ["Otro", ""],
+    ],
+
+    inversion: [
+      ["Que me rebajen impuestos si contrato más gente", ""],
+      ["Poder descontar de impuestos lo que invierta en mejorar", ""],
+      ["Crédito con plazo largo y tasa razonable", ""],
+      ["Certeza de que las reglas no van a cambiar", ""],
+      ["Menos trámites para abrir o ampliar", ""],
+      ["Promoción del destino pagada con fondos públicos", ""],
+      ["Servicios que funcionen: luz, agua, internet, vías", ""],
+      ["Formación gratis para mi personal", ""],
+      ["Otro", ""],
+    ],
+
+    momentos: ["Carnaval", "Semana Santa", "Vacaciones escolares (julio y agosto)",
+               "Diciembre y fin de año", "Puentes y feriados largos",
+               "Ferias y fiestas patronales", "Congresos, eventos o deporte", "Otro"],
+
+    dias: [
+      ["Menos de 30 días al año", "poco más de un mes bueno"],
+      ["Entre 30 y 60 días", ""],
+      ["Entre 60 y 120 días", ""],
+      ["Entre 120 y 200 días", ""],
+      ["Más de 200 días", "flujo casi todo el año"],
+    ],
+
+    ocupacion: [
+      ["Menos del 25%", ""],
+      ["Entre 25% y 30%", ""],
+      ["Entre 31% y 50%", ""],
+      ["Entre 51% y 75%", ""],
+      ["Más del 75%", ""],
+    ],
+
+    calidad_servicios: [
+      ["Adecuada", "se puede trabajar sin sobresaltos"],
+      ["Aceptable con limitaciones", "se trabaja, pero uno se las arregla"],
+      ["Deficiente", "los servicios me cuestan clientes"],
+      ["Crítica", "hay días en que no puedo operar"],
+    ],
+
+    afiliado: ["Ya estoy afiliado a CADTEBA", "No, pero quiero saber cómo", "No, gracias"],
+  };
+
+  // Los seis servicios, en el mismo orden y con las mismas cuatro notas que
+  // usa el diagnóstico nacional, para que las respuestas se puedan volcar tal cual.
+  const SERVICIOS = ["Electricidad", "Agua potable", "Internet", "Combustible",
+                     "Vialidad", "Recolección de desechos"];
+  const NOTAS = [["Bueno", "b"], ["Regular", "r"], ["Deficiente", "d"], ["Crítico", "c"]];
+
+  const AFIRMACIONES = [
+    "El turismo en Barinas paga más impuestos de los que puede sostener.",
+    "Un negocio turístico pequeño no debería pagar lo mismo que una cadena grande.",
+    "Prefiero pagar un impuesto único y claro, aunque sea algo más alto, que cinco distintos.",
+    "Los trámites me quitan más tiempo y plata que los impuestos mismos.",
+    "Si me bajaran los impuestos, contrataría más gente este mismo año.",
+    "El estado Barinas no se promociona como destino y eso me cuesta clientes.",
+    "El aseo urbano debería cobrarse por la basura que uno genera, no por los metros del local.",
+    "Las alcaldías y la gobernación deberían ajustarse de verdad a la ley de armonización tributaria.",
+    "Vale la pena estar formalizado y al día, aunque salga más caro.",
+    "Si se está armando un nuevo modelo tributario, el turismo del interior tiene que estar en esa mesa.",
+    "Confío en que esta consulta va a cambiar algo.",
+  ];
+
+  const R = { rubro: [], impuestos: [], cambios: [], inversion: [], acuerdos: {}, servicios: {}, momentos: [] };
+  const pasos = [...document.querySelectorAll(".paso")];
+  const donde = () => pasos[i].dataset.id;          // en qué pantalla vamos
+  const ultimo = pasos.length - 1;                  // el cierre
+  let i = 0;
+
+  const tilde = '<span class="caja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 5 5L20 7"/></svg></span>';
+
+  document.querySelectorAll(".ops[data-campo]").forEach(caja => {
+    const campo = caja.dataset.campo;
+    const multi = !!caja.dataset.multi;
+    const tope = multi ? parseInt(caja.dataset.multi) : 1;
+    const lista = OPCIONES[campo];
+    if (!lista) return;
+
+    caja.innerHTML = lista.map(o => {
+      const [t, sub] = Array.isArray(o) ? o : [o, ""];
+      return `<button type="button" class="op ${multi ? "" : "una"}" data-valor="${t}" aria-pressed="false">
+        ${tilde}<span><b>${t}</b>${sub ? `<small>${sub}</small>` : ""}</span></button>`;
+    }).join("");
+
+    caja.querySelectorAll(".op").forEach(b => {
+      b.onclick = () => {
+        if (multi) {
+          const puestos = caja.querySelectorAll('[aria-pressed="true"]');
+          const ya = b.getAttribute("aria-pressed") === "true";
+          if (!ya && tope > 1 && puestos.length >= tope) return;
+          b.setAttribute("aria-pressed", ya ? "false" : "true");
+          R[campo] = [...caja.querySelectorAll('[aria-pressed="true"]')].map(x => x.dataset.valor);
+        } else {
+          caja.querySelectorAll(".op").forEach(x => x.setAttribute("aria-pressed", "false"));
+          b.setAttribute("aria-pressed", "true");
+          R[campo] = b.dataset.valor;
+        }
+        revisar();
+      };
+    });
+  });
+
+  // La pregunta 3 se arma con lo que él mismo marcó en la 1
+  function armarUno() {
+    const caja = document.querySelector('[data-campo="uno"]');
+    const suyos = R.impuestos.length ? R.impuestos : OPCIONES.impuestos.map(o => o[0]);
+    caja.innerHTML = suyos.map(t =>
+      `<button type="button" class="op una" data-valor="${t}" aria-pressed="false">${tilde}<span><b>${t}</b></span></button>`
+    ).join("");
+    caja.querySelectorAll(".op").forEach(b => {
+      b.onclick = () => {
+        caja.querySelectorAll(".op").forEach(x => x.setAttribute("aria-pressed", "false"));
+        b.setAttribute("aria-pressed", "true");
+        R.uno = b.dataset.valor;
+        revisar();
+      };
+    });
+  }
+
+  let af = 0;
+  // Un renglón por servicio con sus cuatro notas. Se pinta una sola vez y se
+  // queda a la vista: la gente compara un servicio con otro mientras califica.
+  function pintarServicios() {
+    $("serviciosBox").innerHTML = SERVICIOS.map(nom => `
+      <div class="servicio">
+        <p class="nombre">${nom}</p>
+        <div class="notas" data-servicio="${nom}">
+          ${NOTAS.map(([t, k]) => `<button type="button" class="nota n-${k}" data-v="${t}">${t}</button>`).join("")}
+        </div>
+      </div>`).join("");
+
+    $("serviciosBox").querySelectorAll(".notas").forEach(fila => {
+      fila.querySelectorAll("button").forEach(b => {
+        b.onclick = () => {
+          fila.querySelectorAll("button").forEach(x => x.classList.remove("puesta"));
+          b.classList.add("puesta");
+          R.servicios[fila.dataset.servicio] = b.dataset.v;
+          revisar();
+        };
+      });
+    });
+  }
+
+  function pintarAfirmacion() {
+    const caja = $("afirmaBox");
+    if (af >= AFIRMACIONES.length) {
+      caja.innerHTML = `<div class="afirma" style="border-color:var(--verde);box-shadow:0 6px 0 color-mix(in srgb, var(--verde) 22%, var(--crema))">
+        <p style="color:var(--verde)">Listo, terminaste esta parte 💛</p></div>`;
+      revisar(); return;
+    }
+    caja.innerHTML = `
+      <p class="llevamos">${af + 1} de ${AFIRMACIONES.length}</p>
+      <div class="afirma"><p>${AFIRMACIONES[af]}</p></div>
+      <div class="tres">
+        <button class="si" data-v="de acuerdo">De acuerdo</button>
+        <button data-v="paso">Paso</button>
+        <button class="no" data-v="en desacuerdo">En desacuerdo</button>
+      </div>`;
+    caja.querySelectorAll(".tres button").forEach(b => {
+      b.onclick = () => { R.acuerdos[AFIRMACIONES[af]] = b.dataset.v; af++; pintarAfirmacion(); };
+    });
+    revisar();
+  }
+
+  function listo() {
+    switch (donde()) {
+      case "negocio":   return $("negocio").value.trim().length > 1;
+      case "rubro":     return R.rubro.length > 0;
+      case "municipio": return !!R.municipio;
+      case "tamano":    return !!R.tamano;
+      case "temporada": return R.momentos.length > 0 && !!R.dias && !!R.ocupacion;
+      case "impuestos": return R.impuestos.length > 0;
+      case "cambios":   return R.cambios.length > 0;
+      case "uno":       return !!R.uno;
+      case "inversion": return R.inversion.length > 0;
+      case "servicios": return SERVICIOS.every(x => R.servicios[x]);
+      case "servicios-general": return !!R.calidad_servicios;
+      case "acuerdos":  return af >= AFIRMACIONES.length;
+      case "contacto":  return $("nombre").value.trim().length > 1 && $("telefono").value.trim().length > 6;
+      default: return true;
+    }
+  }
+
+  function revisar() {
+    $("seguir").disabled = !listo();
+    $("seguir").textContent =
+        donde() === "portada"  ? "Comenzar"
+      : donde() === "contacto" ? "Enviar mi opinión"
+      : donde() === "acuerdos" && af < AFIRMACIONES.length ? "Responde arriba"
+      : donde() === "servicios" && !listo() ? "Falta calificar alguno"
+      : "Seguir";
+    $("atras").style.visibility = i > 0 && i < ultimo ? "visible" : "hidden";
+    $("avance").style.width = (i / ultimo) * 100 + "%";
+    $("pie").style.display = i === ultimo ? "none" : "flex";
+    // Cada pantalla toma su color, como cada letra del logo
+    document.documentElement.style.setProperty("--acento", `var(--${pasos[i].dataset.color})`);
+  }
+  function ir(n) {
+    pasos[i].classList.remove("on");
+    i = n;
+    pasos[i].classList.add("on");
+    window.scrollTo({ top: 0, behavior: "instant" });
+    if (donde() === "uno") armarUno();
+    if (donde() === "servicios" && !$("serviciosBox").innerHTML) pintarServicios();
+    if (donde() === "acuerdos" && !$("afirmaBox").innerHTML) pintarAfirmacion();
+    revisar();
+  }
+
+  $("seguir").onclick = () => { if (donde() === "contacto") return enviar(); ir(i + 1); };
+  $("atras").onclick = () => ir(Math.max(0, i - 1));
+  ["negocio", "nombre", "telefono", "correo"].forEach(id => { $(id).oninput = revisar; });
+
+  async function enviar() {
+    const btn = $("seguir");
+    btn.disabled = true; btn.textContent = "Enviando…";
+    const cuerpo = {
+      negocio: $("negocio").value.trim(),
+      rubro: R.rubro, municipio: R.municipio, tamano: R.tamano,
+      impuestos: R.impuestos, cambios: R.cambios,
+      uno: R.uno, porque_uno: $("porque_uno").value.trim(),
+      inversion: R.inversion, acuerdos: R.acuerdos,
+      momentos: R.momentos, dias: R.dias || "", ocupacion: R.ocupacion || "",
+      servicios: R.servicios,
+      calidad_servicios: R.calidad_servicios || "",
+      prioridad_servicio: $("prioridad_servicio").value.trim(),
+      nombre: $("nombre").value.trim(),
+      telefono: $("telefono").value.trim(),
+      correo: $("correo").value.trim(),
+      afiliado: R.afiliado || "",
+    };
+    try {
+      const r = await fetch("/api/opina", {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify(cuerpo),
+      });
+      const d = await r.json();
+      $("cuantos").textContent = d.total || "—";
+    } catch (e) { $("cuantos").textContent = "—"; }
+    ir(ultimo);
+  }
+
+  $("compartir").onclick = () => {
+    const msg = "El turismo de Barinas está opinando sobre la reforma de impuestos. Son 3 minutos y casi todo es tocar 👉 " + location.origin;
+    if (navigator.share) navigator.share({ text: msg });
+    else location.href = "https://wa.me/?text=" + encodeURIComponent(msg);
+  };
+
+  revisar();
+})();
+</script>
+</body></html>
