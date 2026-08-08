@@ -208,7 +208,16 @@ en los dos casos.
 
 | Nombre | Para qué |
 |---|---|
-| `SECRETO_ACCESO` | firma de los pases. **Configúrala en Netlify.** Mientras no exista, el código usa un valor de respaldo que está a la vista en este repositorio — sirve para arrancar, no para quedarse. |
+| `SECRETO_ACCESO` | firma de los pases. Opcional: si no existe, se inventa uno al azar la primera vez y se guarda en Blobs. Ponerla igual sirve para poder rotarla a voluntad. |
+| `AIRTABLE_LLAVE` | token de Airtable con permiso de leer y escribir sobre la base de la consulta, y nada más. Sin ella, el respaldo no hace nada y la app funciona igual. |
+
+**Aquí no va ni un secreto escrito a mano.** Hubo uno —el de respaldo de
+`SECRETO_ACCESO`, que estaba en el código— y como este repositorio es público,
+cualquiera que lo leyera podía firmarse un pase y entrar al informe sin usuario
+ni clave. Se descubrió antes de repartir el enlace, cuando todavía no había una
+sola respuesta de verdad guardada. Un secreto publicado no es un secreto: si
+mañana hace falta otro, va en variable de entorno o se genera y se guarda, nunca
+en un archivo que se sube.
 
 ## Desplegar
 
@@ -232,6 +241,7 @@ se sirve la carpeta en local y se le toma una captura de 1200×630.
 | `GET /api/opina` | el informe en JSON. Exige pase. |
 | `GET /api/opina?csv=1&pase=…` | la base en CSV, con BOM para que Excel abra bien los acentos. El pase va por la dirección porque la descarga la dispara el navegador y no lleva cabeceras. |
 | `POST /api/acceso` | `{usuario, clave}` para entrar · `{usuario, clave, nueva}` para cambiarla. |
+| `DELETE /api/opina?que=respuestas` | borra todas las respuestas. Exige pase, y exige decir qué: no hay un «borrar todo» que se dispare con un clic distraído. `que=recados` para los recados. |
 
 Todo se guarda en el almacén de Blobs **`consulta-barinas`**: las respuestas bajo
 `r/<fecha>-<azar>` y los usuarios bajo `u/<usuario>`. Cada respuesta va en su
@@ -344,8 +354,6 @@ color distinto, igual que cada letra de los logos toma el suyo.
 ## Lo que falta
 
 - [x] Dominio propio: `opina.cadteba.org` (Wix) o `opina.cadteba.info` (Squarespace)
-- [ ] Configurar `SECRETO_ACCESO` en Netlify
-- [ ] Borrar las respuestas de prueba antes de repartir el enlace
 - [x] Poner `AIRTABLE_LLAVE` en Netlify para que arranque el respaldo
 - [ ] Encaminar cada recado a la dirección de CADTEBA que le toca (el campo ya está en Airtable, falta llenarlo solo)
 - [ ] Asistente de Gemini dentro de la consulta, para explicar los tributos y las

@@ -12,7 +12,30 @@ const VIGENCIA = 12 * 60 * 60 * 1000;    // el pase dura 12 horas
 const TOPE_FALLOS = 8;                   // después de esto, la cuenta se traba
 const INICIAL = "12345";                 // clave de estreno, hay que cambiarla
 
-const secreto = () => process.env.SECRETO_ACCESO || "barinas-opina-2026-cadteba";
+// El secreto con que se firman los pases.
+//
+// Antes había aquí un valor de respaldo escrito a mano, y como este repositorio
+// es público, cualquiera que lo leyera podía firmarse un pase y entrar al
+// informe sin usuario ni clave. Un secreto que está publicado no es un secreto.
+//
+// Ahora, si no hay variable de entorno, se inventa uno al azar la primera vez y
+// se guarda: no está en el código, no está en el repositorio, y a nadie le toca
+// acordarse de ponerlo. Aun así conviene poner SECRETO_ACCESO en Netlify —manda
+// sobre este— porque así se puede rotar a voluntad si alguna vez hace falta.
+let enMemoria = null;
+async function secreto() {
+  if (process.env.SECRETO_ACCESO) return process.env.SECRETO_ACCESO;
+  if (enMemoria) return enMemoria;
+  const store = getStore("consulta-barinas");
+  let s = await store.get("sys/secreto", { type: "text", consistency: "strong" });
+  if (!s) {
+    s = Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString("base64url");
+    await store.set("sys/secreto", s);
+    // Por si dos arranques simultáneos lo inventaron a la vez: gana el guardado.
+    s = await store.get("sys/secreto", { type: "text", consistency: "strong" }) || s;
+  }
+  return enMemoria = s;
+}
 
 // Los dos de la directiva. Si mañana entra alguien más, se agrega aquí y en el
 // próximo despliegue aparece con su clave de estreno.
@@ -42,7 +65,7 @@ function iguales(a, b) {
 
 async function firmar(texto) {
   const llave = await crypto.subtle.importKey(
-    "raw", new TextEncoder().encode(secreto()),
+    "raw", new TextEncoder().encode(await secreto()),
     { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   const f = await crypto.subtle.sign("HMAC", llave, new TextEncoder().encode(texto));
   return b64(new Uint8Array(f));

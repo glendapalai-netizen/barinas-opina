@@ -208,6 +208,25 @@ export default async (req) => {
     return Response.json({ ok: true, id, total: blobs.length });
   }
 
+  // --- Borrar, que también hace falta ---------------------------------------
+  //
+  // Sirve para limpiar las pruebas antes de repartir el enlace. Pide el mismo
+  // pase que el informe y, además, que se diga en voz alta qué se va a borrar:
+  // no hay un «borrar todo» que se dispare con un clic distraído.
+  if (req.method === "DELETE") {
+    const pase = (req.headers.get("authorization") || "").replace(/^Bearer /, "")
+                 || url.searchParams.get("pase");
+    if (!await revisarPase(pase)) return Response.json({ error: "no autorizado" }, { status: 401 });
+
+    const que = url.searchParams.get("que");        // "respuestas" | "recados"
+    const prefijo = que === "respuestas" ? "r/" : que === "recados" ? "m/" : null;
+    if (!prefijo) return Response.json({ error: "falta decir qué" }, { status: 400 });
+
+    const { blobs } = await store.list({ prefix: prefijo });
+    for (const b of blobs) await store.delete(b.key);
+    return Response.json({ ok: true, borrados: blobs.length });
+  }
+
   return new Response("method not allowed", { status: 405 });
 };
 
