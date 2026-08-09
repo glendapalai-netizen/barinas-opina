@@ -570,6 +570,27 @@
   <span class="cuenta"></span>
   <h2>¿En qué municipio estás?</h2>
   <div class="ops" data-campo="municipio"></div>
+
+  <p class="rotulo">¿Y dónde queda?</p>
+  <div class="ops" data-campo="zona"></div>
+
+  <div class="otro-caja" id="zonaCaja" hidden>
+    <p class="rotulo">¿Qué gastos cargas que un negocio de ciudad no carga?</p>
+    <p class="ayuda">Marca hasta cuatro. Esto es lo que no se ve en ningún papel.</p>
+    <div class="ops" data-campo="costos" data-multi="4"></div>
+    <div class="otro-caja" id="otroCostosCaja" hidden>
+      <p class="rotulo">¿Cuál otro?</p>
+      <input type="text" id="otro_costos" placeholder="Escribe cuál" maxlength="160">
+    </div>
+  </div>
+
+  <details class="porque">
+    <summary>¿Por qué te preguntamos esto?</summary>
+    <p>Porque a treinta kilómetros del casco urbano todo cuesta más, y eso no aparece en ninguna
+      declaración. Quien opera en el campo aloja y le da de comer a su personal, mueve el combustible,
+      lava la lencería y sostiene la vía. Paga los mismos impuestos que una posada de avenida y
+      arranca con la cuenta en contra.</p>
+  </details>
 </section>
 
 <section class="paso" data-id="tamano" data-grupo="Tu actividad" data-color="magenta">
@@ -874,6 +895,31 @@
     tamano: ["Solo yo o con un ayudante", "De 3 a 10 personas", "De 11 a 30 personas",
              "De 31 a 100 personas", "Más de 100 personas"],
 
+    // Ciudad y campo no son el mismo negocio, aunque paguen igual. Se pregunta
+    // con distancia y no solo con la palabra «rural», porque «rural» cada quien
+    // la entiende a su manera y treinta kilómetros son treinta kilómetros.
+    zona: [
+      ["En el casco urbano", "dentro de la ciudad o del pueblo"],
+      ["A las afueras, a menos de 15 km", "cerca, pero ya fuera del casco"],
+      ["En zona rural, a más de 15 km", "camino, finca, hato, vía de tierra"],
+    ],
+
+    // Solo se le enseña a quien está en zona rural. Es la factura que no
+    // aparece en ninguna declaración.
+    costos: [
+      ["Alojar a mi personal en el sitio", "habitación, cama, lencería"],
+      ["Darle de comer a mi personal", "tres comidas, todos los días"],
+      ["Lavandería y lencería", "la del negocio y la de quien trabaja aquí"],
+      ["Combustible para llegar y para moverse", ""],
+      ["Planta eléctrica y su mantenimiento", "porque la luz no llega o no se queda"],
+      ["Traer o potabilizar el agua", ""],
+      ["Transporte del personal desde el pueblo", ""],
+      ["Traer los insumos desde la ciudad", "cada compra es un viaje"],
+      ["Mantener la vía de acceso", "la que nadie más arregla"],
+      ["Internet o señal propia", "antena, repetidor, satélite"],
+      ["Otro", ""],
+    ],
+
     // La pregunta puente. La primera opción no es una respuesta más: es la
     // puerta. Quien la toca pasa a las preguntas de temporada del hotelero,
     // aunque su sector no sea turístico — el médico que recibe pacientes de
@@ -1003,7 +1049,7 @@
     "Confío en que esta consulta va a cambiar algo.",
   ];
 
-  const R = { rubro: [], impuestos: [], cambios: [], inversion: [], acuerdos: {}, servicios: {}, momentos: [] };
+  const R = { rubro: [], costos: [], impuestos: [], cambios: [], inversion: [], acuerdos: {}, servicios: {}, momentos: [] };
   let idRespuesta = null;   // la llave de esta respuesta, para poder completarla después
   let af = 0;               // por cuál frase del deslizador va
   const pasos = [...document.querySelectorAll(".paso")];
@@ -1013,7 +1059,7 @@
 
   // Cada «Otro» tiene su recuadro, que solo asoma cuando se marca. Sin esto,
   // «Otro» es un agujero en el informe: se sabe que hay algo más pero no qué.
-  const OTROS = { rubro: "otroRubroCaja", impuestos: "otroImpuestosCaja", cambios: "otroCambiosCaja",
+  const OTROS = { rubro: "otroRubroCaja", costos: "otroCostosCaja", impuestos: "otroImpuestosCaja", cambios: "otroCambiosCaja",
                   inversion: "otroInversionCaja", uno: "otroUnoCaja" };
   function revisarOtro(campo) {
     const caja = $(OTROS[campo]);
@@ -1063,9 +1109,24 @@
           R[campo] = b.dataset.valor;
         }
         revisarOtro(campo);
+        if (campo === "zona") revisarZona();
         revisar();
       };
     });
+  }
+
+  // Los gastos del campo solo le tocan a quien está en el campo. Si alguien se
+  // devuelve y se cambia a la ciudad, lo marcado se cae: no tendría sentido
+  // guardarle una factura rural a una posada de avenida.
+  function revisarZona() {
+    const rural = R.zona === "En zona rural, a más de 15 km";
+    $("zonaCaja").hidden = !rural;
+    if (!rural && R.costos.length) {
+      R.costos = [];
+      document.querySelectorAll('.ops[data-campo="costos"] .op')
+              .forEach(b => b.setAttribute("aria-pressed", "false"));
+      revisarOtro("costos");
+    }
   }
 
   document.querySelectorAll(".ops[data-campo]").forEach(caja => {
@@ -1165,7 +1226,7 @@
       case "negocio":   return $("negocio").value.trim().length > 1;
       case "rubro":     return R.rubro.length > 0;
       case "vinculo":   return !!R.vinculo;
-      case "municipio": return !!R.municipio;
+      case "municipio": return !!R.municipio && !!R.zona;   // los costos quedan opcionales
       case "tamano":    return !!R.tamano;
       case "temporada": return R.momentos.length > 0 && !!R.dias && !!R.ocupacion;
       case "impuestos": return R.impuestos.length > 0;
@@ -1273,7 +1334,9 @@
     return {
       id: idRespuesta,
       rubro: R.rubro, otro_rubro: val("otro_rubro"), vinculo: R.vinculo || "",
-      municipio: R.municipio, tamano: R.tamano,
+      municipio: R.municipio, zona: R.zona || "",
+      costos: R.costos, otro_costos: val("otro_costos"),
+      tamano: R.tamano,
       momentos: R.momentos, dias: R.dias || "", ocupacion: R.ocupacion || "",
       impuestos: R.impuestos, otro_impuestos: val("otro_impuestos"),
       cambios: R.cambios, otro_cambios: val("otro_cambios"),

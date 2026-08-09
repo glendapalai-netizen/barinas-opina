@@ -88,7 +88,7 @@ export default async (req) => {
     filas.sort((a, b) => (a.cuando || 0) - (b.cuando || 0));
 
     if (url.searchParams.get("csv")) {
-      const cols = ["cuando", "rubro", "otro_rubro", "vinculo", "municipio", "tamano",
+      const cols = ["cuando", "rubro", "otro_rubro", "vinculo", "municipio", "zona", "costos", "otro_costos", "tamano",
                     "momentos", "dias", "ocupacion",
                     "impuestos", "otro_impuestos",
                     "cambios", "otro_cambios",
@@ -172,6 +172,9 @@ export default async (req) => {
       otro_rubro: corta(d.otro_rubro, 160),
       vinculo: corta(d.vinculo, 120),
       municipio: corta(d.municipio, 80),
+      zona: corta(d.zona, 80),
+      costos: lista(d.costos),
+      otro_costos: corta(d.otro_costos, 200),
       tamano: corta(d.tamano, 60),
       momentos: lista(d.momentos),
       dias: corta(d.dias, 60),

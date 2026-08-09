@@ -531,6 +531,15 @@ td.ancho { white-space:normal; min-width:200px; }
           <p class="nota">Las siete direcciones técnicas de CADTEBA. No se pregunta: se deduce del sector que cada quien marcó, según la tabla de los estatutos. Es la vista interna, para saber a qué dirección le toca cada respuesta.</p>
           <div id="gDireccion"></div>
         </div>
+        <div class="tarjeta vidrio c12" style="--acento:var(--coral)">
+          <h3>Ciudad y <em>campo</em></h3>
+          <p class="nota">A treinta kilómetros del casco urbano todo cuesta más, y eso no aparece en ninguna declaración: se paga el mismo impuesto y se arranca con la cuenta en contra.</p>
+          <div id="titularCampo"></div>
+          <div id="gZona"></div>
+          <p class="rotulo">Lo que carga el campo y la ciudad no</p>
+          <div id="gCostos"></div>
+          <div id="otrosCostos"></div>
+        </div>
         <div class="tarjeta vidrio c12" style="--acento:var(--verde)">
           <h3>Por <em>municipio</em></h3>
           <p class="nota">Los doce municipios del estado. Los que aparecen en cero todavía no han participado — sirve para saber a dónde hay que ir a buscar.</p>
@@ -1277,9 +1286,26 @@ td.ancho { white-space:normal; min-width:200px; }
       </div>` : "";
     barras($("gVinculo"), contar(conVinculo, "vinculo"), conVinculo.length);
 
+    // Ciudad y campo. Los costos se cuentan sobre los rurales y no sobre todos:
+    // a los de ciudad ni siquiera se les preguntó.
+    const ZONAS = ["En el casco urbano", "A las afueras, a menos de 15 km", "En zona rural, a más de 15 km"];
+    const conZona = filas.filter(f => f.zona);
+    const rurales = filas.filter(f => f.zona === ZONAS[2]);
+    $("titularCampo").innerHTML = rurales.length ? `
+      <div class="titular">
+        <b>${pct(rurales.length, conZona.length)}%</b>
+        <p>de quienes respondieron opera <strong>a más de quince kilómetros del casco urbano</strong>.
+          Ahí el personal vive en el sitio: hay que alojarlo, darle de comer y lavarle la ropa, y cada
+          compra es un viaje. <strong>Nada de eso lo carga una posada de avenida</strong>, y las dos
+          pagan el mismo IVA y la misma patente.</p>
+      </div>` : "";
+    barras($("gZona"), contar(conZona, "zona", ZONAS), conZona.length);
+    barras($("gCostos"), contar(rurales, "costos"), rurales.length);
+    otros($("otrosCostos"), rurales, "otro_costos");
+
     // ── La base ──
     const cols = [
-      ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["otro_rubro", "Otro sector"], ["vinculo", "Vínculo"], ["direccion", "Dirección"], ["municipio", "Municipio"],
+      ["cuando", "Fecha"], ["negocio", "Prestador"], ["rubro", "Sector"], ["otro_rubro", "Otro sector"], ["vinculo", "Vínculo"], ["direccion", "Dirección"], ["municipio", "Municipio"], ["zona", "Dónde queda"],
       ["tamano", "Tamaño"], ["dias", "Días al año"], ["ocupacion", "Ocupación"],
       ["impuestos", "Los que aprietan"], ["otro_impuestos", "Otro tributo"],
       ["uno", "Prioridad 1"], ["otro_uno", "Cuál"], ["porque_uno", "Por qué"],

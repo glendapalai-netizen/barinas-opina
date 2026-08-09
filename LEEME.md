@@ -72,7 +72,8 @@ El recorrido:
 | `portada` | por qué se está preguntando |
 | `rubro` | a qué sector pertenece — **sin pedir nombres** |
 | `vinculo` | qué tiene que ver su trabajo con el turismo — **solo a quien no atiende visitantes** |
-| `municipio` `tamano` | dónde opera y con cuánta gente |
+| `municipio` | dónde opera, y **a qué distancia del casco urbano** |
+| `tamano` | con cuánta gente |
 | `temporada` | momentos del año, días con afluencia real, ocupación |
 | `impuestos` | cuáles aprietan más (hasta tres) |
 | `cambios` | qué haría falta |
@@ -128,6 +129,15 @@ respondieron» sino «de los N que atienden al visitante», y las columnas de d�
 y ocupación se calculan sobre ese universo y no sobre el total. Al entrar
 ferreteros y farmacias a la consulta, contarlas sobre el total las desinflaría —
 y un informe que exagera se desarma con una sola pregunta en la reunión.
+
+**Ciudad y campo no son el mismo negocio, aunque paguen igual.** Se pregunta
+con distancia y no solo con la palabra «rural», porque «rural» cada quien la
+entiende a su manera y quince kilómetros son quince kilómetros. A quien está en
+zona rural se le pregunta además **qué gastos carga que un negocio de ciudad no
+carga**: alojar y darle de comer a su personal, la lavandería, la planta, traer
+el agua, mantener la vía. Sin esa segunda pregunta, «zona rural» es una
+etiqueta; con ella, es una factura. Los costos quedan opcionales, para no
+cobrarle otra pantalla obligatoria a quien ya lleva rato respondiendo.
 
 **Los tributos no son la misma lista para todos.** INATUR y las tasas del RTN
 solo se le enseñan a quien atiende al visitante: un ferretero no los paga.
