@@ -580,7 +580,16 @@ td.ancho { white-space:normal; min-width:200px; }
           <div id="gImpuestos"></div>
           <div id="otrosImpuestos"></div>
         </div>
-        <div class="tarjeta vidrio c6" style="--acento:var(--naranja)">
+        <div class="tarjeta vidrio c6" style="--acento:var(--magenta)">
+          <h3>Los que <em>no se conocen</em></h3>
+          <p class="nota">En la consulta hay un botón que dice «desconozco varios de estos impuestos». Nadie va a declararse informal en una encuesta, pero sí admite que no los conoce — y eso mide lo mismo por el lado amable.</p>
+          <div id="titularDesconoce"></div>
+          <p class="rotulo">Lo que esto quiere decir</p>
+          <div class="regla-lectura">
+            <p>Quien no sabe cuáles paga, difícilmente los está pagando todos. No es un reproche: es el tamaño de la tarea de formalización y acompañamiento que le toca a la Cámara, con número.</p>
+          </div>
+        </div>
+        <div class="tarjeta vidrio c12" style="--acento:var(--naranja)">
           <h3>El que más aprieta en <em>cada municipio</em></h3>
           <p class="nota">Los tributos municipales no se cobran igual en todas partes. Aquí se ve dónde duele cuál — que es lo que hay que llevarle a cada alcaldía.</p>
           <div class="marco"><table id="tImpMun"></table></div>
@@ -1094,7 +1103,19 @@ td.ancho { white-space:normal; min-width:200px; }
       : "";
 
     // ── Tributos ──
-    barras($("gImpuestos"), contar(filas, "impuestos"), total);
+    // «Desconozco varios» no es un tributo que apriete: es una respuesta sobre
+    // la lista misma. Mezclarla en estas barras diría que a la gente le aprieta
+    // el desconocimiento, que no es lo que se preguntó. Va aparte, en su ficha.
+    const DESCONOCE = "Desconozco varios de estos impuestos";
+    const sinEsa = ps => ps.filter(p => p[0] !== DESCONOCE);
+    const aOscuras = filas.filter(f => (f.impuestos || []).includes(DESCONOCE));
+    $("titularDesconoce").innerHTML = total ? `
+      <div class="titular">
+        <b>${pct(aOscuras.length, total)}%</b>
+        <p>de quienes respondieron dice que <strong>desconoce varios de los tributos que se le
+          nombraron</strong> — ${aOscuras.length} de ${total}.</p>
+      </div>` : "";
+    barras($("gImpuestos"), sinEsa(contar(filas, "impuestos")), total);
     barras($("gUno"), contar(filas, "uno"), total);
     barras($("gCambios"), contar(filas, "cambios"), total);
     barras($("gInversion"), contar(filas, "inversion"), total);
@@ -1102,13 +1123,13 @@ td.ancho { white-space:normal; min-width:200px; }
     otros($("otrosUno"), filas, "otro_uno");
     otros($("otrosCambios"), filas, "otro_cambios");
     otros($("otrosInversion"), filas, "otro_inversion");
-    barras($("gTop"), contar(filas, "impuestos"), total, 5);
+    barras($("gTop"), sinEsa(contar(filas, "impuestos")), total, 5);
 
     // El que más aprieta en cada municipio. Los tributos municipales no se
     // cobran igual en todas partes: esto es lo que se le lleva a cada alcaldía.
     const impMun = MUNICIPIOS.map(mun => {
       const g = filas.filter(f => f.municipio === mun);
-      const c = contar(g, "impuestos");
+      const c = sinEsa(contar(g, "impuestos"));
       return { mun, n: g.length, top: c.slice(0, 3) };
     }).sort((a, b) => b.n - a.n);
 

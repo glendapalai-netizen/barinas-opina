@@ -570,8 +570,12 @@
   <span class="cuenta"></span>
   <h2>¿En qué municipio estás?</h2>
   <div class="ops" data-campo="municipio"></div>
+</section>
 
-  <p class="rotulo">¿Y dónde queda?</p>
+<section class="paso" data-id="zona" data-grupo="Tu actividad" data-color="coral">
+  <span class="cuenta"></span>
+  <h2>¿Y <em>dónde</em> queda?</h2>
+  <p class="ayuda">La distancia al casco urbano cambia lo que cuesta trabajar.</p>
   <div class="ops" data-campo="zona"></div>
 
   <div class="otro-caja" id="zonaCaja" hidden>
@@ -958,6 +962,7 @@
       ["Impuesto municipal de vehículos", "para quien tiene flota o reparto", "mas"],
       ["Tasa de bomberos y prevención de incendios", "municipal", "mas"],
       ["Solvencias, permisos y conformidad de uso", "sanidad, ambiente, la renovación de cada año", "mas"],
+      ["Desconozco varios de estos impuestos", "decirlo también sirve, y es más común de lo que parece"],
       ["Otro", ""],
     ],
 
@@ -1069,6 +1074,15 @@
     if (!marcado) caja.querySelector("input").value = "";
   }
 
+  // Respuestas que no son una opción más de la lista: no cuentan contra el tope
+  // de tres y se dibujan de últimas. «Desconozco varios» no es un tributo que
+  // apriete —es otra cosa, y por eso no debe robarle un puesto a los que sí.
+  const DESCONOCE = "Desconozco varios de estos impuestos";
+  const SUELTA = o => {
+    const t = Array.isArray(o) ? o[0] : o;
+    return t === "Otro" || t === DESCONOCE;
+  };
+
   const tilde = '<span class="caja"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 5 5L20 7"/></svg></span>';
 
   // Arma una caja de opciones y le pone el oído. Se sacó aparte porque la de
@@ -1085,22 +1099,21 @@
 
     // Los marcados como "mas" van detrás de un renglón que se abre. Sin esto
     // son veintidós casillas de un tirón, y en un muro así la gente se rinde.
-    const suyo = o => (Array.isArray(o) ? o[0] : o) === "Otro";
-    const aLaVista = lista.filter(o => o[2] !== "mas" && !suyo(o));
+    const aLaVista = lista.filter(o => o[2] !== "mas" && !SUELTA(o));
     const plegados = lista.filter(o => o[2] === "mas");
-    const otro = lista.filter(suyo);          // «Otro» siempre de último de todos
+    const sueltas  = lista.filter(SUELTA);    // van de últimas, después del pliegue
     caja.innerHTML = aLaVista.map(boton).join("") + (plegados.length
       ? `<details class="mas-tributos"><summary>Ver los demás tributos</summary>
            <div class="ops">${plegados.map(boton).join("")}</div></details>`
-      : "") + otro.map(boton).join("");
+      : "") + sueltas.map(boton).join("");
 
     caja.querySelectorAll(".op").forEach(b => {
       b.onclick = () => {
         if (multi) {
           const ya = b.getAttribute("aria-pressed") === "true";
           const cuenta = [...caja.querySelectorAll('[aria-pressed="true"]')]
-                           .filter(x => x.dataset.valor !== "Otro").length;
-          if (!ya && b.dataset.valor !== "Otro" && tope > 1 && cuenta >= tope) return;
+                           .filter(x => !SUELTA(x.dataset.valor)).length;
+          if (!ya && !SUELTA(b.dataset.valor) && tope > 1 && cuenta >= tope) return;
           b.setAttribute("aria-pressed", ya ? "false" : "true");
           R[campo] = [...caja.querySelectorAll('[aria-pressed="true"]')].map(x => x.dataset.valor);
         } else {
@@ -1226,7 +1239,8 @@
       case "negocio":   return $("negocio").value.trim().length > 1;
       case "rubro":     return R.rubro.length > 0;
       case "vinculo":   return !!R.vinculo;
-      case "municipio": return !!R.municipio && !!R.zona;   // los costos quedan opcionales
+      case "municipio": return !!R.municipio;
+      case "zona":      return !!R.zona;      // los costos del campo quedan opcionales
       case "tamano":    return !!R.tamano;
       case "temporada": return R.momentos.length > 0 && !!R.dias && !!R.ocupacion;
       case "impuestos": return R.impuestos.length > 0;

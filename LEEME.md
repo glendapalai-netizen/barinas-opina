@@ -72,7 +72,8 @@ El recorrido:
 | `portada` | por qué se está preguntando |
 | `rubro` | a qué sector pertenece — **sin pedir nombres** |
 | `vinculo` | qué tiene que ver su trabajo con el turismo — **solo a quien no atiende visitantes** |
-| `municipio` | dónde opera, y **a qué distancia del casco urbano** |
+| `municipio` | en qué municipio opera |
+| `zona` | a qué distancia del casco urbano, y qué le cuesta estar ahí |
 | `tamano` | con cuánta gente |
 | `temporada` | momentos del año, días con afluencia real, ocupación |
 | `impuestos` | cuáles aprietan más (hasta tres) |
@@ -130,6 +131,14 @@ y ocupación se calculan sobre ese universo y no sobre el total. Al entrar
 ferreteros y farmacias a la consulta, contarlas sobre el total las desinflaría —
 y un informe que exagera se desarma con una sola pregunta en la reunión.
 
+**Una pregunta por pantalla, sin excepción.** «Dónde queda» estuvo un día
+debajo de «en qué municipio», en la misma pantalla. Con doce municipios en la
+lista, la segunda pregunta quedaba fuera de vista: la gente marcaba su
+municipio, tocaba «Seguir», no pasaba nada, y se quedaba trancada sin entender
+por qué. El botón estaba deshabilitado por una pregunta que no sabía que
+existía. Si una pantalla tiene dos preguntas y la lista es larga, son dos
+pantallas.
+
 **Ciudad y campo no son el mismo negocio, aunque paguen igual.** Se pregunta
 con distancia y no solo con la palabra «rural», porque «rural» cada quien la
 entiende a su manera y quince kilómetros son quince kilómetros. A quien está en
@@ -138,6 +147,13 @@ carga**: alojar y darle de comer a su personal, la lavandería, la planta, traer
 el agua, mantener la vía. Sin esa segunda pregunta, «zona rural» es una
 etiqueta; con ella, es una factura. Los costos quedan opcionales, para no
 cobrarle otra pantalla obligatoria a quien ya lleva rato respondiendo.
+
+**«Desconozco varios de estos impuestos» mide la informalidad por el lado
+amable.** Nadie se declara informal en una encuesta de su propio gremio, pero
+sí admite que no conoce la lista — y quien no sabe cuáles paga, difícilmente
+los está pagando todos. No cuenta contra el tope de tres y va aparte en el
+informe: no es un tributo que apriete, es una respuesta sobre la lista misma, y
+mezclarla en esas barras diría que a la gente le aprieta el desconocimiento.
 
 **Los tributos no son la misma lista para todos.** INATUR y las tasas del RTN
 solo se le enseñan a quien atiende al visitante: un ferretero no los paga.
