@@ -37,11 +37,16 @@ async function secreto() {
   return enMemoria = s;
 }
 
-// Los dos de la directiva. Si mañana entra alguien más, se agrega aquí y en el
-// próximo despliegue aparece con su clave de estreno.
+// Quienes pueden ver el informe. Si mañana entra alguien más, se agrega aquí y
+// en el próximo despliegue aparece con su clave de estreno.
+//
+// Agregar un nombre aquí NO le toca la cuenta a nadie más: cada quien tiene su
+// sal y su huella guardadas aparte, y solo se crea la de quien no existía.
 const GENTE = {
   cle:      "Glenda Palai",
   humberto: "Humberto",
+  vicky:    "Vicky",
+  ally:     "Allyson",
 };
 
 const b64 = b => Buffer.from(b).toString("base64url");
